@@ -1,0 +1,26 @@
+{
+  "name": "agentic-commerce-recovery-server",
+  "version": "1.0.0",
+  "description": "Backend for AI Commerce & Revenue Recovery Agent",
+  "main": "dist/server/src/index.js",
+  "scripts": {
+    "dev": "node ./node_modules/tsx/dist/cli.mjs watch src/index.ts",
+    "build": "node ./node_modules/typescript/bin/tsc",
+    "start": "node dist/server/src/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "razorpay": "^2.9.4",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.0",
+    "@types/uuid": "^9.0.8",
+    "tsx": "^4.11.0",
+    "typescript": "^5.4.5"
+  }
+}

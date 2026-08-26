@@ -1,0 +1,110 @@
+import { Product } from '../../../shared/types/commerce';
+import { db } from './db';
+import { auditLogger } from './audit-logger';
+
+export const SEED_PRODUCTS: Product[] = [
+  {
+    id: 'prod_1',
+    name: 'AeroPulse ANC Pro Wireless Headphones',
+    description: 'Flagship active noise-cancelling headphones with 45h battery life, spatial audio, and ultra-low latency mode.',
+    price: 4999,
+    currency: 'INR',
+    category: 'Audio & Wearables',
+    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',
+    inStock: true,
+    inventoryCount: 14,
+    tags: ['headphones', 'bluetooth', 'noise cancelling', 'audio', 'wireless', 'music'],
+    features: ['Hybrid Active Noise Cancelling', '45-Hour Playback', 'Multipoint Bluetooth 5.3', 'Fast Charging (10m = 5h)'],
+    rating: 4.8,
+    reviewCount: 342
+  },
+  {
+    id: 'prod_2',
+    name: 'NomadShield Waterproof Tech Backpack',
+    description: 'Weatherproof 28L urban travel backpack with dedicated 16-inch padded laptop vault and RFID-blocking quick-access passport pocket.',
+    price: 2799,
+    currency: 'INR',
+    category: 'Travel & Bags',
+    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80',
+    inStock: true,
+    inventoryCount: 22,
+    tags: ['backpack', 'travel', 'laptop', 'waterproof', 'bag', 'tech'],
+    features: ['IPX5 Water Resistant Cordura Fabric', '16" Suspended Laptop Cradle', 'Integrated USB Pass-Through', 'Ergonomic Air-Mesh Backing'],
+    rating: 4.9,
+    reviewCount: 518
+  },
+  {
+    id: 'prod_3',
+    name: 'Lumix Glow Minimalist Smart Desk Lamp',
+    description: 'Eye-care LED desk lamp with touch slider dimming, wireless Qi fast charging base, and tunable circadian color temp.',
+    price: 1899,
+    currency: 'INR',
+    category: 'Workspace & Smart Home',
+    image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&q=80',
+    inStock: true,
+    inventoryCount: 8,
+    tags: ['desk', 'lamp', 'smart home', 'lighting', 'workspace', 'charger'],
+    features: ['15W Fast Wireless Charging Base', 'Stepless Dimming & 5 Color Temps', 'Auto Sleep Timer', 'CRI > 95 True Color Rendering'],
+    rating: 4.7,
+    reviewCount: 189
+  },
+  {
+    id: 'prod_4',
+    name: 'Chronos Ultra Titanium Smartwatch',
+    description: 'Sapphire glass rugged smartwatch with dual-band GPS, continuous VO2 max monitoring, and 14-day battery reserve.',
+    price: 6499,
+    currency: 'INR',
+    category: 'Audio & Wearables',
+    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
+    inStock: true,
+    inventoryCount: 6,
+    tags: ['watch', 'smartwatch', 'fitness', 'gps', 'health', 'wearable'],
+    features: ['Aerospace Titanium Bezel', 'Dual-Frequency GPS Tracking', '100+ Pro Sport Modes', '5ATM Water Resistance'],
+    rating: 4.9,
+    reviewCount: 420
+  },
+  {
+    id: 'prod_5',
+    name: 'VoltStream 100W GaN Fast Charging Station',
+    description: 'Compact 4-port Gallium Nitride high-efficiency desktop charger capable of powering 2 laptops and 2 phones simultaneously.',
+    price: 2199,
+    currency: 'INR',
+    category: 'Electronics & Power',
+    image: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=800&q=80',
+    inStock: true,
+    inventoryCount: 35,
+    tags: ['charger', 'gan', 'power', 'usbc', 'fast charging', 'adapter'],
+    features: ['100W Total GaN III Output', '3x USB-C + 1x USB-A Ports', 'Dynamic Power Allocation', 'Overheat & Surge Protection'],
+    rating: 4.8,
+    reviewCount: 275
+  },
+  {
+    id: 'prod_6',
+    name: 'ErgoKey Mechanical Wireless Keyboard',
+    description: '75% gasket-mounted hot-swappable tactile keyboard with lubricated switches, sound dampening silicone, and RGB per-key backlight.',
+    price: 3899,
+    currency: 'INR',
+    category: 'Workspace & Smart Home',
+    image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80',
+    inStock: true,
+    inventoryCount: 11,
+    tags: ['keyboard', 'mechanical', 'rgb', 'gaming', 'workspace', 'typing'],
+    features: ['Gasket Mount Acoustic Dampening', 'Hot-Swappable Gateron Switches', 'Tri-Mode: 2.4G / BT 5.0 / USB-C', 'Mac & Windows Layout Switch'],
+    rating: 4.9,
+    reviewCount: 610
+  }
+];
+
+export function seedDatabase() {
+  const current = db.getProducts();
+  if (!current || current.length === 0) {
+    db.setProducts(SEED_PRODUCTS);
+    auditLogger.record({
+      actor: 'MERCHANT_ADMIN',
+      action: 'PRODUCT_SEARCH',
+      summary: 'Catalog initialized with 6 curated flagship products.',
+      metadata: { productCount: SEED_PRODUCTS.length }
+    });
+    console.log('✅ Catalog seeded successfully.');
+  }
+}

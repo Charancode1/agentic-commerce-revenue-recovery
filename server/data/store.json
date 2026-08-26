@@ -1,0 +1,1570 @@
+{
+  "products": [
+    {
+      "id": "prod_1",
+      "name": "AeroPulse ANC Pro Wireless Headphones",
+      "description": "Flagship active noise-cancelling headphones with 45h battery life, spatial audio, and ultra-low latency mode.",
+      "price": 4999,
+      "currency": "INR",
+      "category": "Audio & Wearables",
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+      "inStock": true,
+      "inventoryCount": 14,
+      "tags": [
+        "headphones",
+        "bluetooth",
+        "noise cancelling",
+        "audio",
+        "wireless",
+        "music"
+      ],
+      "features": [
+        "Hybrid Active Noise Cancelling",
+        "45-Hour Playback",
+        "Multipoint Bluetooth 5.3",
+        "Fast Charging (10m = 5h)"
+      ],
+      "rating": 4.8,
+      "reviewCount": 342
+    },
+    {
+      "id": "prod_2",
+      "name": "NomadShield Waterproof Tech Backpack",
+      "description": "Weatherproof 28L urban travel backpack with dedicated 16-inch padded laptop vault and RFID-blocking quick-access passport pocket.",
+      "price": 2799,
+      "currency": "INR",
+      "category": "Travel & Bags",
+      "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
+      "inStock": true,
+      "inventoryCount": 22,
+      "tags": [
+        "backpack",
+        "travel",
+        "laptop",
+        "waterproof",
+        "bag",
+        "tech"
+      ],
+      "features": [
+        "IPX5 Water Resistant Cordura Fabric",
+        "16\" Suspended Laptop Cradle",
+        "Integrated USB Pass-Through",
+        "Ergonomic Air-Mesh Backing"
+      ],
+      "rating": 4.9,
+      "reviewCount": 518
+    },
+    {
+      "id": "prod_3",
+      "name": "Lumix Glow Minimalist Smart Desk Lamp",
+      "description": "Eye-care LED desk lamp with touch slider dimming, wireless Qi fast charging base, and tunable circadian color temp.",
+      "price": 1899,
+      "currency": "INR",
+      "category": "Workspace & Smart Home",
+      "image": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&q=80",
+      "inStock": true,
+      "inventoryCount": 8,
+      "tags": [
+        "desk",
+        "lamp",
+        "smart home",
+        "lighting",
+        "workspace",
+        "charger"
+      ],
+      "features": [
+        "15W Fast Wireless Charging Base",
+        "Stepless Dimming & 5 Color Temps",
+        "Auto Sleep Timer",
+        "CRI > 95 True Color Rendering"
+      ],
+      "rating": 4.7,
+      "reviewCount": 189
+    },
+    {
+      "id": "prod_4",
+      "name": "Chronos Ultra Titanium Smartwatch",
+      "description": "Sapphire glass rugged smartwatch with dual-band GPS, continuous VO2 max monitoring, and 14-day battery reserve.",
+      "price": 6499,
+      "currency": "INR",
+      "category": "Audio & Wearables",
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80",
+      "inStock": true,
+      "inventoryCount": 6,
+      "tags": [
+        "watch",
+        "smartwatch",
+        "fitness",
+        "gps",
+        "health",
+        "wearable"
+      ],
+      "features": [
+        "Aerospace Titanium Bezel",
+        "Dual-Frequency GPS Tracking",
+        "100+ Pro Sport Modes",
+        "5ATM Water Resistance"
+      ],
+      "rating": 4.9,
+      "reviewCount": 420
+    },
+    {
+      "id": "prod_5",
+      "name": "VoltStream 100W GaN Fast Charging Station",
+      "description": "Compact 4-port Gallium Nitride high-efficiency desktop charger capable of powering 2 laptops and 2 phones simultaneously.",
+      "price": 2199,
+      "currency": "INR",
+      "category": "Electronics & Power",
+      "image": "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=800&q=80",
+      "inStock": true,
+      "inventoryCount": 35,
+      "tags": [
+        "charger",
+        "gan",
+        "power",
+        "usbc",
+        "fast charging",
+        "adapter"
+      ],
+      "features": [
+        "100W Total GaN III Output",
+        "3x USB-C + 1x USB-A Ports",
+        "Dynamic Power Allocation",
+        "Overheat & Surge Protection"
+      ],
+      "rating": 4.8,
+      "reviewCount": 275
+    },
+    {
+      "id": "prod_6",
+      "name": "ErgoKey Mechanical Wireless Keyboard",
+      "description": "75% gasket-mounted hot-swappable tactile keyboard with lubricated switches, sound dampening silicone, and RGB per-key backlight.",
+      "price": 3899,
+      "currency": "INR",
+      "category": "Workspace & Smart Home",
+      "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80",
+      "inStock": true,
+      "inventoryCount": 11,
+      "tags": [
+        "keyboard",
+        "mechanical",
+        "rgb",
+        "gaming",
+        "workspace",
+        "typing"
+      ],
+      "features": [
+        "Gasket Mount Acoustic Dampening",
+        "Hot-Swappable Gateron Switches",
+        "Tri-Mode: 2.4G / BT 5.0 / USB-C",
+        "Mac & Windows Layout Switch"
+      ],
+      "rating": 4.9,
+      "reviewCount": 610
+    }
+  ],
+  "orders": [
+    {
+      "id": "ord_8913d62b",
+      "orderNumber": "RZP-705899",
+      "razorpayOrderId": "order_b5ac9860911249",
+      "customerName": "Sarah Jenkins",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones with 45h battery life, spatial audio, and ultra-low latency mode.",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones",
+              "bluetooth",
+              "noise cancelling",
+              "audio",
+              "wireless",
+              "music"
+            ],
+            "features": [
+              "Hybrid Active Noise Cancelling",
+              "45-Hour Playback",
+              "Multipoint Bluetooth 5.3",
+              "Fast Charging (10m = 5h)"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "failed",
+      "createdAt": "2026-08-26T15:11:56.322Z",
+      "updatedAt": "2026-08-26T15:11:56.334Z"
+    },
+    {
+      "id": "ord_552ddf92",
+      "orderNumber": "RZP-228317",
+      "razorpayOrderId": "order_da2e8c5289d64f",
+      "customerName": "Alex Rivera",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones"
+            ],
+            "features": [
+              "Active Noise Cancelling"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "failed",
+      "createdAt": "2026-08-26T15:06:41.027Z",
+      "updatedAt": "2026-08-26T15:06:41.039Z"
+    },
+    {
+      "id": "ord_47507f43",
+      "orderNumber": "RZP-492879",
+      "razorpayOrderId": "order_12138e8e1e4149",
+      "customerName": "Alex Rivera",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones"
+            ],
+            "features": [
+              "Active Noise Cancelling"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "failed",
+      "createdAt": "2026-08-26T15:03:38.792Z",
+      "updatedAt": "2026-08-26T15:03:38.807Z"
+    },
+    {
+      "id": "ord_fd1ae101",
+      "orderNumber": "RZP-970768",
+      "razorpayOrderId": "order_554b503d147f49",
+      "customerName": "Sarah Jenkins",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones with 45h battery life, spatial audio, and ultra-low latency mode.",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones",
+              "bluetooth",
+              "noise cancelling",
+              "audio",
+              "wireless",
+              "music"
+            ],
+            "features": [
+              "Hybrid Active Noise Cancelling",
+              "45-Hour Playback",
+              "Multipoint Bluetooth 5.3",
+              "Fast Charging (10m = 5h)"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "failed",
+      "createdAt": "2026-08-26T14:57:50.154Z",
+      "updatedAt": "2026-08-26T14:57:50.190Z"
+    },
+    {
+      "id": "ord_e952a39f",
+      "orderNumber": "RZP-993729",
+      "razorpayOrderId": "order_ec13cd0826e843",
+      "customerName": "Sarah Jenkins",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones with 45h battery life, spatial audio, and ultra-low latency mode.",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones",
+              "bluetooth",
+              "noise cancelling",
+              "audio",
+              "wireless",
+              "music"
+            ],
+            "features": [
+              "Hybrid Active Noise Cancelling",
+              "45-Hour Playback",
+              "Multipoint Bluetooth 5.3",
+              "Fast Charging (10m = 5h)"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "failed",
+      "createdAt": "2026-08-26T14:50:32.713Z",
+      "updatedAt": "2026-08-26T14:50:32.743Z"
+    },
+    {
+      "id": "ord_ca2cc89d",
+      "orderNumber": "RZP-655773",
+      "razorpayOrderId": "order_0702aa95604e48",
+      "customerName": "Alex Rivera",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones"
+            ],
+            "features": [
+              "Active Noise Cancelling"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "failed",
+      "createdAt": "2026-08-26T14:40:32.024Z",
+      "updatedAt": "2026-08-26T14:40:32.035Z"
+    },
+    {
+      "id": "ord_0ffa32c0",
+      "orderNumber": "RZP-737861",
+      "razorpayOrderId": "order_dfa3b407766c43",
+      "customerName": "Sarah Jenkins",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones with 45h battery life, spatial audio, and ultra-low latency mode.",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones",
+              "bluetooth",
+              "noise cancelling",
+              "audio",
+              "wireless",
+              "music"
+            ],
+            "features": [
+              "Hybrid Active Noise Cancelling",
+              "45-Hour Playback",
+              "Multipoint Bluetooth 5.3",
+              "Fast Charging (10m = 5h)"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "recovered",
+      "createdAt": "2026-08-26T14:32:18.670Z",
+      "updatedAt": "2026-08-26T14:33:51.965Z"
+    }
+  ],
+  "recoveries": [
+    {
+      "id": "inc_9d02f92b",
+      "orderId": "ord_8913d62b",
+      "orderNumber": "RZP-705899",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 4999,
+      "failureCategory": "BANK_OTP_TIMEOUT",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "Simulated Bank 2FA / OTP Gateway Timeout",
+      "status": "CONSENT_PENDING",
+      "recoveryProposal": {
+        "incidentId": "inc_9d02f92b",
+        "orderId": "ord_8913d62b",
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "detectedReason": "Bank OTP Timeout / SMS Delay",
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "headline": "Bank OTP Delay Detected",
+        "customerMessage": "We noticed your bank 2FA timed out. We have reserved your items! Switch to instant 1-tap UPI (GPay / PhonePe / Paytm) with a 1-click Razorpay payment link.",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_6339",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI",
+        "expiryTimestamp": "2026-08-26T15:31:56.340Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate."
+      },
+      "createdAt": "2026-08-26T15:11:56.341Z",
+      "updatedAt": "2026-08-26T15:11:56.341Z"
+    },
+    {
+      "id": "inc_ec31c660",
+      "orderId": "ord_552ddf92",
+      "orderNumber": "RZP-228317",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 4999,
+      "failureCategory": "CARD_DECLINED_INSUFFICIENT_FUNDS",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "Issuing bank returned `CARD_LIMIT_REACHED`. Customer cannot complete full balance on card.",
+      "status": "CONSENT_PENDING",
+      "recoveryProposal": {
+        "incidentId": "inc_ec31c660",
+        "orderId": "ord_552ddf92",
+        "failureCategory": "CARD_DECLINED_INSUFFICIENT_FUNDS",
+        "detectedReason": "Card Declined / Daily Limit Reached",
+        "strategy": "BOUNDED_CONCESSION_DISCOUNT",
+        "headline": "Card Declined / Limit Notice",
+        "customerMessage": "Your card issuer declined the transaction. To help you complete your purchase, we've applied a time-sensitive concession to your cart!",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 400,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4599,
+          "promoCode": "RECOVER_400_1044",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "PAYMENT_LINK",
+        "expiryTimestamp": "2026-08-26T15:26:41.045Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "Shopper encountered card ceiling. Providing a bounded 8% concession with alternative payment modes increases conversion by 38%."
+      },
+      "createdAt": "2026-08-26T15:06:41.048Z",
+      "updatedAt": "2026-08-26T15:06:41.048Z"
+    },
+    {
+      "id": "inc_17537f7b",
+      "orderId": "ord_47507f43",
+      "orderNumber": "RZP-492879",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 4999,
+      "failureCategory": "CARD_DECLINED_INSUFFICIENT_FUNDS",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "Issuing bank returned `CARD_LIMIT_REACHED`. Customer cannot complete full balance on card.",
+      "status": "CONSENT_PENDING",
+      "recoveryProposal": {
+        "incidentId": "inc_17537f7b",
+        "orderId": "ord_47507f43",
+        "failureCategory": "CARD_DECLINED_INSUFFICIENT_FUNDS",
+        "detectedReason": "Card Declined / Daily Limit Reached",
+        "strategy": "BOUNDED_CONCESSION_DISCOUNT",
+        "headline": "Card Declined / Limit Notice",
+        "customerMessage": "Your card issuer declined the transaction. To help you complete your purchase, we've applied a time-sensitive concession to your cart!",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 400,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4599,
+          "promoCode": "RECOVER_400_8813",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "PAYMENT_LINK",
+        "expiryTimestamp": "2026-08-26T15:23:38.815Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "Shopper encountered card ceiling. Providing a bounded 8% concession with alternative payment modes increases conversion by 38%."
+      },
+      "createdAt": "2026-08-26T15:03:38.817Z",
+      "updatedAt": "2026-08-26T15:03:38.817Z"
+    },
+    {
+      "id": "inc_05597fbe",
+      "orderId": "ord_fd1ae101",
+      "orderNumber": "RZP-970768",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 4999,
+      "failureCategory": "BANK_OTP_TIMEOUT",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "Simulated Bank 2FA / OTP Gateway Timeout",
+      "status": "CONSENT_PENDING",
+      "recoveryProposal": {
+        "incidentId": "inc_05597fbe",
+        "orderId": "ord_fd1ae101",
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "detectedReason": "Bank OTP Timeout / SMS Delay",
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "headline": "Bank OTP Delay Detected",
+        "customerMessage": "We noticed your bank 2FA timed out. We have reserved your items! Switch to instant 1-tap UPI (GPay / PhonePe / Paytm) with a 1-click Razorpay payment link.",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_0197",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI",
+        "expiryTimestamp": "2026-08-26T15:17:50.200Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate."
+      },
+      "createdAt": "2026-08-26T14:57:50.202Z",
+      "updatedAt": "2026-08-26T14:57:50.202Z"
+    },
+    {
+      "id": "inc_558c35a0",
+      "orderId": "ord_e952a39f",
+      "orderNumber": "RZP-993729",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 4999,
+      "failureCategory": "BANK_OTP_TIMEOUT",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "Simulated Bank 2FA / OTP Gateway Timeout",
+      "status": "CONSENT_PENDING",
+      "recoveryProposal": {
+        "incidentId": "inc_558c35a0",
+        "orderId": "ord_e952a39f",
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "detectedReason": "Bank OTP Timeout / SMS Delay",
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "headline": "Bank OTP Delay Detected",
+        "customerMessage": "We noticed your bank 2FA timed out. We have reserved your items! Switch to instant 1-tap UPI (GPay / PhonePe / Paytm) with a 1-click Razorpay payment link.",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_2745",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI",
+        "expiryTimestamp": "2026-08-26T15:10:32.746Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate."
+      },
+      "createdAt": "2026-08-26T14:50:32.748Z",
+      "updatedAt": "2026-08-26T14:50:32.748Z"
+    },
+    {
+      "id": "inc_8be78954",
+      "orderId": "ord_ca2cc89d",
+      "orderNumber": "RZP-655773",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 4999,
+      "failureCategory": "CARD_DECLINED_INSUFFICIENT_FUNDS",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "Issuing bank returned `CARD_LIMIT_REACHED`. Customer cannot complete full balance on card.",
+      "status": "CONSENT_PENDING",
+      "recoveryProposal": {
+        "incidentId": "inc_8be78954",
+        "orderId": "ord_ca2cc89d",
+        "failureCategory": "CARD_DECLINED_INSUFFICIENT_FUNDS",
+        "detectedReason": "Card Declined / Daily Limit Reached",
+        "strategy": "BOUNDED_CONCESSION_DISCOUNT",
+        "headline": "Card Declined / Limit Notice",
+        "customerMessage": "Your card issuer declined the transaction. To help you complete your purchase, we've applied a time-sensitive concession to your cart!",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 400,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4599,
+          "promoCode": "RECOVER_400_2038",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "PAYMENT_LINK",
+        "expiryTimestamp": "2026-08-26T15:00:32.039Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "Shopper encountered card ceiling. Providing a bounded 8% concession with alternative payment modes increases conversion by 38%."
+      },
+      "createdAt": "2026-08-26T14:40:32.039Z",
+      "updatedAt": "2026-08-26T14:40:32.039Z"
+    },
+    {
+      "id": "inc_cede4238",
+      "orderId": "ord_0ffa32c0",
+      "orderNumber": "RZP-737861",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 4999,
+      "failureCategory": "BANK_OTP_TIMEOUT",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "Simulated Bank 2FA / OTP Gateway Timeout",
+      "status": "RECOVERED",
+      "recoveryProposal": {
+        "incidentId": "inc_cede4238",
+        "orderId": "ord_0ffa32c0",
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "detectedReason": "Bank OTP Timeout / SMS Delay",
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "headline": "Bank OTP Delay Detected",
+        "customerMessage": "We noticed your bank 2FA timed out. We have reserved your items! Switch to instant 1-tap UPI (GPay / PhonePe / Paytm) with a 1-click Razorpay payment link.",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_8702",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI",
+        "expiryTimestamp": "2026-08-26T14:52:18.703Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+        "razorpayPaymentLinkId": "plink_a5b8a4c42ac946",
+        "razorpayPaymentLinkUrl": "http://localhost:5173/?recovery_plink=plink_a5b8a4c42ac946&ref=inc_cede4238"
+      },
+      "createdAt": "2026-08-26T14:32:18.704Z",
+      "updatedAt": "2026-08-26T14:33:51.964Z",
+      "razorpayPaymentLinkId": "plink_a5b8a4c42ac946",
+      "recoveredAmount": 4999,
+      "razorpayPaymentId": "pay_rec_54831956"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "audit_594d0571",
+      "timestamp": "2026-08-26T15:11:56.342Z",
+      "incidentId": "inc_9d02f92b",
+      "orderId": "ord_8913d62b",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_6339",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI"
+      },
+      "hash": "82873c5f4b218843a82151e5f43185da0dba1c7d7310a8de8b08c3c10f9a94cd"
+    },
+    {
+      "id": "audit_fed84e25",
+      "timestamp": "2026-08-26T15:11:56.340Z",
+      "incidentId": "inc_9d02f92b",
+      "orderId": "ord_8913d62b",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: SWITCH_TO_UPI_INTENT. Reason: High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_6339",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "3025eb4802064e1c1c0f72bedd3c0bf78b68e5617a11938f3d33247abbba4fe1"
+    },
+    {
+      "id": "audit_f4a431f9",
+      "timestamp": "2026-08-26T15:11:56.339Z",
+      "incidentId": "inc_9d02f92b",
+      "orderId": "ord_8913d62b",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹0 applied on ₹4999. (Approved: true)",
+      "metadata": {
+        "originalAmount": 4999,
+        "finalAmount": 4999,
+        "calculatedDiscount": 0,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "d8117ab0fa031cc8e95c91f6de0d45c9b0b935e7f897003e737832c714eb08ad"
+    },
+    {
+      "id": "audit_e8c9ed15",
+      "timestamp": "2026-08-26T15:11:56.337Z",
+      "incidentId": "inc_9d02f92b",
+      "orderId": "ord_8913d62b",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹4999 on Order #RZP-705899",
+      "metadata": {
+        "amountAtRisk": 4999
+      },
+      "hash": "d0d99b31747303416076be08bf548a53e8ed141cb6d07d76eddba7ec34535c8e"
+    },
+    {
+      "id": "audit_d97c7157",
+      "timestamp": "2026-08-26T15:11:56.336Z",
+      "incidentId": "inc_9d02f92b",
+      "orderId": "ord_8913d62b",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-705899 (₹4999). Reason: Bank OTP Timeout / SMS Delay",
+      "metadata": {
+        "amountAtRisk": 4999,
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "Simulated Bank 2FA / OTP Gateway Timeout"
+      },
+      "hash": "b2a82e709e8d2891f3d876182068420b4953b99b11a9fda713a47d893771c100"
+    },
+    {
+      "id": "audit_91c25776",
+      "timestamp": "2026-08-26T15:11:56.323Z",
+      "orderId": "ord_8913d62b",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-705899 for ₹4999 with Razorpay Order ID: order_b5ac9860911249",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_b5ac9860911249",
+        "isSimulated": true,
+        "itemCount": 1
+      },
+      "hash": "4f0d2474d5b730a2dd7e102d9934848f76d8eb9d70bf5384fb1056a859b4244e"
+    },
+    {
+      "id": "audit_9a1c1a24",
+      "timestamp": "2026-08-26T15:06:41.050Z",
+      "incidentId": "inc_ec31c660",
+      "orderId": "ord_552ddf92",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "BOUNDED_CONCESSION_DISCOUNT",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 400,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4599,
+          "promoCode": "RECOVER_400_1044",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "PAYMENT_LINK"
+      },
+      "hash": "e50404dfd2ab816a9d0dd4da14a7fbd14ec2134702731f23daeac6d4548a4cf1"
+    },
+    {
+      "id": "audit_4c0dc39d",
+      "timestamp": "2026-08-26T15:06:41.046Z",
+      "incidentId": "inc_ec31c660",
+      "orderId": "ord_552ddf92",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: BOUNDED_CONCESSION_DISCOUNT. Reason: Shopper encountered card ceiling. Providing a bounded 8% concession with alternative payment modes increases conversion by 38%.",
+      "metadata": {
+        "strategy": "BOUNDED_CONCESSION_DISCOUNT",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 400,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4599,
+          "promoCode": "RECOVER_400_1044",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "cfcb8fe273e48e1d078433a6476c77c372e11cc469ef99d4ffdd94241e77daec"
+    },
+    {
+      "id": "audit_67a0c7eb",
+      "timestamp": "2026-08-26T15:06:41.044Z",
+      "incidentId": "inc_ec31c660",
+      "orderId": "ord_552ddf92",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹400 applied on ₹4999. (Approved: true)",
+      "metadata": {
+        "originalAmount": 4999,
+        "finalAmount": 4599,
+        "calculatedDiscount": 400,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "f7d69dbd44d26115c593ba93edc483d57adaedabb82caad5d72444e696ed9fba"
+    },
+    {
+      "id": "audit_32ef7b38",
+      "timestamp": "2026-08-26T15:06:41.042Z",
+      "incidentId": "inc_ec31c660",
+      "orderId": "ord_552ddf92",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹4999 on Order #RZP-228317",
+      "metadata": {
+        "amountAtRisk": 4999
+      },
+      "hash": "49478842d24666af8ec16b940caf4de2216ff0c21330cf360a6588f9cda6d517"
+    },
+    {
+      "id": "audit_c304b846",
+      "timestamp": "2026-08-26T15:06:41.041Z",
+      "incidentId": "inc_ec31c660",
+      "orderId": "ord_552ddf92",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-228317 (₹4999). Reason: Card Declined / Daily Limit Reached",
+      "metadata": {
+        "amountAtRisk": 4999,
+        "failureCategory": "CARD_DECLINED_INSUFFICIENT_FUNDS",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "Issuing bank returned `CARD_LIMIT_REACHED`. Customer cannot complete full balance on card."
+      },
+      "hash": "c0ef137dc327dd788146618b5ee16a2e0b209663744e22666417148abbefee40"
+    },
+    {
+      "id": "audit_d89aa292",
+      "timestamp": "2026-08-26T15:06:41.029Z",
+      "orderId": "ord_552ddf92",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-228317 for ₹4999 with Razorpay Order ID: order_da2e8c5289d64f",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_da2e8c5289d64f",
+        "isSimulated": true,
+        "itemCount": 1
+      },
+      "hash": "6067e0286d7a13926bed5b2da776ded9c84a77954c81247bf2e91cf7d23cd3e2"
+    },
+    {
+      "id": "audit_cb86d6b4",
+      "timestamp": "2026-08-26T15:03:38.818Z",
+      "incidentId": "inc_17537f7b",
+      "orderId": "ord_47507f43",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "BOUNDED_CONCESSION_DISCOUNT",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 400,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4599,
+          "promoCode": "RECOVER_400_8813",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "PAYMENT_LINK"
+      },
+      "hash": "f9d9800999f1499407f2b8584e5143076182eb20fd28ecfb84b4525e0464b801"
+    },
+    {
+      "id": "audit_bd3d7585",
+      "timestamp": "2026-08-26T15:03:38.815Z",
+      "incidentId": "inc_17537f7b",
+      "orderId": "ord_47507f43",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: BOUNDED_CONCESSION_DISCOUNT. Reason: Shopper encountered card ceiling. Providing a bounded 8% concession with alternative payment modes increases conversion by 38%.",
+      "metadata": {
+        "strategy": "BOUNDED_CONCESSION_DISCOUNT",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 400,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4599,
+          "promoCode": "RECOVER_400_8813",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "d064f616952c9406ee102b6a845f5977a1e9903f9311dcb29c47bc114512163c"
+    },
+    {
+      "id": "audit_ddcb3171",
+      "timestamp": "2026-08-26T15:03:38.813Z",
+      "incidentId": "inc_17537f7b",
+      "orderId": "ord_47507f43",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹400 applied on ₹4999. (Approved: true)",
+      "metadata": {
+        "originalAmount": 4999,
+        "finalAmount": 4599,
+        "calculatedDiscount": 400,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "d7cfa48410541d78fdf3d0712db137e3b9e2858609190107997c8528549f79ad"
+    },
+    {
+      "id": "audit_cc90417d",
+      "timestamp": "2026-08-26T15:03:38.811Z",
+      "incidentId": "inc_17537f7b",
+      "orderId": "ord_47507f43",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹4999 on Order #RZP-492879",
+      "metadata": {
+        "amountAtRisk": 4999
+      },
+      "hash": "994004e64c4d58e586331cdcd26ca42ddfdf8f9962cdb64fafcefb4d9ef08d90"
+    },
+    {
+      "id": "audit_a4bcfdd8",
+      "timestamp": "2026-08-26T15:03:38.809Z",
+      "incidentId": "inc_17537f7b",
+      "orderId": "ord_47507f43",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-492879 (₹4999). Reason: Card Declined / Daily Limit Reached",
+      "metadata": {
+        "amountAtRisk": 4999,
+        "failureCategory": "CARD_DECLINED_INSUFFICIENT_FUNDS",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "Issuing bank returned `CARD_LIMIT_REACHED`. Customer cannot complete full balance on card."
+      },
+      "hash": "6576352da7cff9da2bf6c2249e651a20acd2a6252f19d9b7868fd14da5aeb420"
+    },
+    {
+      "id": "audit_2772cdb4",
+      "timestamp": "2026-08-26T15:03:38.794Z",
+      "orderId": "ord_47507f43",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-492879 for ₹4999 with Razorpay Order ID: order_12138e8e1e4149",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_12138e8e1e4149",
+        "isSimulated": true,
+        "itemCount": 1
+      },
+      "hash": "02b33465187d69a0399515b4d511cc6bf4b5c998633df9a36ec4838e66efeaa7"
+    },
+    {
+      "id": "audit_2a21ad06",
+      "timestamp": "2026-08-26T14:57:50.205Z",
+      "incidentId": "inc_05597fbe",
+      "orderId": "ord_fd1ae101",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_0197",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI"
+      },
+      "hash": "ee1e86f236566bd58021ac8b600a8296d976bf2b5eaa99f09226dc737f2e6567"
+    },
+    {
+      "id": "audit_9397813d",
+      "timestamp": "2026-08-26T14:57:50.200Z",
+      "incidentId": "inc_05597fbe",
+      "orderId": "ord_fd1ae101",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: SWITCH_TO_UPI_INTENT. Reason: High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_0197",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "71bddc03878c933522549a9bcaa246e3df345372e9070301491f0c31fd812eda"
+    },
+    {
+      "id": "audit_eaba8c8e",
+      "timestamp": "2026-08-26T14:57:50.197Z",
+      "incidentId": "inc_05597fbe",
+      "orderId": "ord_fd1ae101",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹0 applied on ₹4999. (Approved: true)",
+      "metadata": {
+        "originalAmount": 4999,
+        "finalAmount": 4999,
+        "calculatedDiscount": 0,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "c1cd3d3332deb70a10a4f6aa267d1c8a6e93a1745d1dda38e105029921985a12"
+    },
+    {
+      "id": "audit_d2a7911a",
+      "timestamp": "2026-08-26T14:57:50.196Z",
+      "incidentId": "inc_05597fbe",
+      "orderId": "ord_fd1ae101",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹4999 on Order #RZP-970768",
+      "metadata": {
+        "amountAtRisk": 4999
+      },
+      "hash": "eb5633a25bd338ce1bfacb2201fe1ac8542e6eb583a839f5fef38eee84166b08"
+    },
+    {
+      "id": "audit_c83662f8",
+      "timestamp": "2026-08-26T14:57:50.193Z",
+      "incidentId": "inc_05597fbe",
+      "orderId": "ord_fd1ae101",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-970768 (₹4999). Reason: Bank OTP Timeout / SMS Delay",
+      "metadata": {
+        "amountAtRisk": 4999,
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "Simulated Bank 2FA / OTP Gateway Timeout"
+      },
+      "hash": "749997c1852bbc1341f34eeeee9fb8975d0860149ea20753c9758a67d47420c4"
+    },
+    {
+      "id": "audit_06c63e85",
+      "timestamp": "2026-08-26T14:57:50.161Z",
+      "orderId": "ord_fd1ae101",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-970768 for ₹4999 with Razorpay Order ID: order_554b503d147f49",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_554b503d147f49",
+        "isSimulated": true,
+        "itemCount": 1
+      },
+      "hash": "62cb28a2bfd0fde7e17f92705b6441cf1deed8f9323c9205155cec24c64cb87e"
+    },
+    {
+      "id": "audit_a5a37e44",
+      "timestamp": "2026-08-26T14:50:32.749Z",
+      "incidentId": "inc_558c35a0",
+      "orderId": "ord_e952a39f",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_2745",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI"
+      },
+      "hash": "fe4bba0033af8334ed05bee20ac0da775022d2e0aae5369bdb4c82a371be11f7"
+    },
+    {
+      "id": "audit_da194f86",
+      "timestamp": "2026-08-26T14:50:32.746Z",
+      "incidentId": "inc_558c35a0",
+      "orderId": "ord_e952a39f",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: SWITCH_TO_UPI_INTENT. Reason: High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_2745",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "d529c2ed76af04f2f2dabb1e9546ddc28854463d318fa804405c80f3563b08f3"
+    },
+    {
+      "id": "audit_f77e3b50",
+      "timestamp": "2026-08-26T14:50:32.745Z",
+      "incidentId": "inc_558c35a0",
+      "orderId": "ord_e952a39f",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹0 applied on ₹4999. (Approved: true)",
+      "metadata": {
+        "originalAmount": 4999,
+        "finalAmount": 4999,
+        "calculatedDiscount": 0,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "363efa2e5668ea4e8c72c0ae3da41fa5dda7af96fc48f8dc722311637a5dbfac"
+    },
+    {
+      "id": "audit_e0a9ebd8",
+      "timestamp": "2026-08-26T14:50:32.745Z",
+      "incidentId": "inc_558c35a0",
+      "orderId": "ord_e952a39f",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹4999 on Order #RZP-993729",
+      "metadata": {
+        "amountAtRisk": 4999
+      },
+      "hash": "fa8fa1873055ffc964852abb6d82418e4222a08d8bee6fe12ebce9107c512cb7"
+    },
+    {
+      "id": "audit_3220ec23",
+      "timestamp": "2026-08-26T14:50:32.744Z",
+      "incidentId": "inc_558c35a0",
+      "orderId": "ord_e952a39f",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-993729 (₹4999). Reason: Bank OTP Timeout / SMS Delay",
+      "metadata": {
+        "amountAtRisk": 4999,
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "Simulated Bank 2FA / OTP Gateway Timeout"
+      },
+      "hash": "64d02e79d0af64fce6a375db6f4f3a4759dbb318ab2964049ab0051d08759775"
+    },
+    {
+      "id": "audit_0b9408d6",
+      "timestamp": "2026-08-26T14:50:32.714Z",
+      "orderId": "ord_e952a39f",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-993729 for ₹4999 with Razorpay Order ID: order_ec13cd0826e843",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_ec13cd0826e843",
+        "isSimulated": true,
+        "itemCount": 1
+      },
+      "hash": "61b217d91c11002514aca068596ddf5e66a9cc01b6f5decdc657162b029b5e55"
+    },
+    {
+      "id": "audit_e289fecf",
+      "timestamp": "2026-08-26T14:40:32.040Z",
+      "incidentId": "inc_8be78954",
+      "orderId": "ord_ca2cc89d",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "BOUNDED_CONCESSION_DISCOUNT",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 400,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4599,
+          "promoCode": "RECOVER_400_2038",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "PAYMENT_LINK"
+      },
+      "hash": "57b52f8d3b1e05de558c4ca772ec454e8d0e7cfea07ba3d81c56cb948d7026a1"
+    },
+    {
+      "id": "audit_d2e8445d",
+      "timestamp": "2026-08-26T14:40:32.039Z",
+      "incidentId": "inc_8be78954",
+      "orderId": "ord_ca2cc89d",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: BOUNDED_CONCESSION_DISCOUNT. Reason: Shopper encountered card ceiling. Providing a bounded 8% concession with alternative payment modes increases conversion by 38%.",
+      "metadata": {
+        "strategy": "BOUNDED_CONCESSION_DISCOUNT",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 400,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4599,
+          "promoCode": "RECOVER_400_2038",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "6f14a8d4ae1a3b3de4766c597e03b8e703497dfe763a5fcbc8d5b2993f91fa72"
+    },
+    {
+      "id": "audit_62941462",
+      "timestamp": "2026-08-26T14:40:32.038Z",
+      "incidentId": "inc_8be78954",
+      "orderId": "ord_ca2cc89d",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹400 applied on ₹4999. (Approved: true)",
+      "metadata": {
+        "originalAmount": 4999,
+        "finalAmount": 4599,
+        "calculatedDiscount": 400,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "3e7c83c6777fd46dc6f9d09d7feed28cc1df7762a830208553eb452239c8965b"
+    },
+    {
+      "id": "audit_16f07fa7",
+      "timestamp": "2026-08-26T14:40:32.037Z",
+      "incidentId": "inc_8be78954",
+      "orderId": "ord_ca2cc89d",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹4999 on Order #RZP-655773",
+      "metadata": {
+        "amountAtRisk": 4999
+      },
+      "hash": "5d6e54fa51c550b4b01834a844dd210fa3e5525987a18eaff18d21b1b7265c37"
+    },
+    {
+      "id": "audit_58be9d4e",
+      "timestamp": "2026-08-26T14:40:32.036Z",
+      "incidentId": "inc_8be78954",
+      "orderId": "ord_ca2cc89d",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-655773 (₹4999). Reason: Card Declined / Daily Limit Reached",
+      "metadata": {
+        "amountAtRisk": 4999,
+        "failureCategory": "CARD_DECLINED_INSUFFICIENT_FUNDS",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "Issuing bank returned `CARD_LIMIT_REACHED`. Customer cannot complete full balance on card."
+      },
+      "hash": "3243e041efa287f18592893c82cdf33d55fa26964ae65c8c6b3f76cbb53f574c"
+    },
+    {
+      "id": "audit_bfdd27de",
+      "timestamp": "2026-08-26T14:40:32.025Z",
+      "orderId": "ord_ca2cc89d",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-655773 for ₹4999 with Razorpay Order ID: order_0702aa95604e48",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_0702aa95604e48",
+        "isSimulated": true,
+        "itemCount": 1
+      },
+      "hash": "8ffdf8460fcbb53f1c641a503cbbd6de2759d60b62d5af9639bae8a8209bb99b"
+    },
+    {
+      "id": "audit_111e5965",
+      "timestamp": "2026-08-26T14:33:51.967Z",
+      "incidentId": "inc_cede4238",
+      "orderId": "ord_0ffa32c0",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_RECOVERED_CONFIRMED",
+      "summary": "🎉 Successfully recovered ₹4999 of ₹4999 at risk!",
+      "metadata": {
+        "recoveredAmount": 4999,
+        "originalRisk": 4999,
+        "razorpayPaymentId": "pay_rec_54831956"
+      },
+      "hash": "1b04abe63f0f3526283d03acabb467bb9a3e84cbb3ef1f7b8b4bc157a0674731"
+    },
+    {
+      "id": "audit_07bce651",
+      "timestamp": "2026-08-26T14:33:51.966Z",
+      "incidentId": "inc_cede4238",
+      "orderId": "ord_0ffa32c0",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_LINK_PAID",
+      "summary": "Payment captured via Razorpay for recovery link! Payment ID: pay_rec_54831956",
+      "metadata": {
+        "razorpayPaymentId": "pay_rec_54831956",
+        "recoveredAmount": 4999
+      },
+      "hash": "da34d39b8c0aa80f53c582b1166600c187a21d12b645c55e740859575fe59efd"
+    },
+    {
+      "id": "audit_57fbdefc",
+      "timestamp": "2026-08-26T14:33:02.673Z",
+      "incidentId": "inc_cede4238",
+      "orderId": "ord_0ffa32c0",
+      "actor": "RECOVERY_AGENT",
+      "action": "RAZORPAY_PAYMENT_LINK_ISSUED",
+      "summary": "Razorpay Recovery Payment Link issued: plink_a5b8a4c42ac946 (Amount: ₹4999)",
+      "metadata": {
+        "paymentLinkId": "plink_a5b8a4c42ac946",
+        "paymentLinkUrl": "http://localhost:5173/?recovery_plink=plink_a5b8a4c42ac946&ref=inc_cede4238",
+        "finalAmount": 4999,
+        "isSimulated": true
+      },
+      "hash": "ee602e03e6ba89d69f0cd872949f9cfa82db1f625953074273bbf051c3859b13"
+    },
+    {
+      "id": "audit_62c45d3f",
+      "timestamp": "2026-08-26T14:33:02.671Z",
+      "incidentId": "inc_cede4238",
+      "orderId": "ord_0ffa32c0",
+      "actor": "CUSTOMER",
+      "action": "CUSTOMER_CONSENT_GRANTED",
+      "summary": "Shopper accepted recovery proposal for Order #RZP-737861. Generating Razorpay Smart Link.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT"
+      },
+      "hash": "56f38b7db8c8347ebafcb06a254efc9a4c6bce3abcff71d28a570d5f64f936ad"
+    },
+    {
+      "id": "audit_7fd68902",
+      "timestamp": "2026-08-26T14:32:18.706Z",
+      "incidentId": "inc_cede4238",
+      "orderId": "ord_0ffa32c0",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_8702",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI"
+      },
+      "hash": "a7db6b8a59adbd83465e0ac11e2a94842e5bf291c2e0e530176b4405cfae8a0c"
+    },
+    {
+      "id": "audit_c1558a1a",
+      "timestamp": "2026-08-26T14:32:18.703Z",
+      "incidentId": "inc_cede4238",
+      "orderId": "ord_0ffa32c0",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: SWITCH_TO_UPI_INTENT. Reason: High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_8702",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "24c0561e6bb3f7a944695f8f70a8eee609f95de294938f21dda0cac63aa93507"
+    },
+    {
+      "id": "audit_90f12864",
+      "timestamp": "2026-08-26T14:32:18.702Z",
+      "incidentId": "inc_cede4238",
+      "orderId": "ord_0ffa32c0",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹0 applied on ₹4999. (Approved: true)",
+      "metadata": {
+        "originalAmount": 4999,
+        "finalAmount": 4999,
+        "calculatedDiscount": 0,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "e9119a9b359b1a55280b58e921e0f59a0116f4a78b0035895b5b2aa9231be50a"
+    },
+    {
+      "id": "audit_153dc4ea",
+      "timestamp": "2026-08-26T14:32:18.700Z",
+      "incidentId": "inc_cede4238",
+      "orderId": "ord_0ffa32c0",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹4999 on Order #RZP-737861",
+      "metadata": {
+        "amountAtRisk": 4999
+      },
+      "hash": "74857df42fde2b1a4fc4bb36c6c3224a05906cdd4c47d26e11c5c672cd6e8652"
+    },
+    {
+      "id": "audit_c658559a",
+      "timestamp": "2026-08-26T14:32:18.700Z",
+      "incidentId": "inc_cede4238",
+      "orderId": "ord_0ffa32c0",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-737861 (₹4999). Reason: Bank OTP Timeout / SMS Delay",
+      "metadata": {
+        "amountAtRisk": 4999,
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "Simulated Bank 2FA / OTP Gateway Timeout"
+      },
+      "hash": "15a5f82bebc731368d9458a20b062e69978b6bb60e8f5a9acf150a35a7be5726"
+    },
+    {
+      "id": "audit_92db5286",
+      "timestamp": "2026-08-26T14:32:18.671Z",
+      "orderId": "ord_0ffa32c0",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-737861 for ₹4999 with Razorpay Order ID: order_dfa3b407766c43",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_dfa3b407766c43",
+        "isSimulated": true,
+        "itemCount": 1
+      },
+      "hash": "32704962dfe4a94de82c9cf68ff27e33df65a8a536b25e924e811823207fd031"
+    },
+    {
+      "id": "audit_1eb99151",
+      "timestamp": "2026-08-26T14:30:34.829Z",
+      "actor": "COMMERCE_AGENT",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Commerce Agent recommended 3 product(s) for query: \"show headphones under 5000\"",
+      "metadata": {
+        "recommendedProductIds": [
+          "prod_1",
+          "prod_2",
+          "prod_3"
+        ],
+        "responseLength": 187
+      },
+      "hash": "3914c4a3c2b878a5f7b5443cf4f99a79d03c8929ed23043755b1a1c46f469be4"
+    },
+    {
+      "id": "audit_3c85d443",
+      "timestamp": "2026-08-26T14:30:34.798Z",
+      "actor": "CUSTOMER",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Shopper query: \"Show headphones under 5000\"",
+      "metadata": {
+        "query": "Show headphones under 5000"
+      },
+      "hash": "adc8e755afbbfbd7a0756cfb8576afb89717578d57a1df8e23b689529baa2a81"
+    },
+    {
+      "id": "audit_75201986",
+      "timestamp": "2026-08-26T14:29:31.587Z",
+      "actor": "MERCHANT_ADMIN",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Catalog initialized with 6 curated flagship products.",
+      "metadata": {
+        "productCount": 6
+      },
+      "hash": "00c465f7ddf068587e1d6496f0ac98d27125402e11b76a657a43b8c6eba19099"
+    }
+  ],
+  "settings": {
+    "maxDiscountCapPercent": 12,
+    "maxDiscountCapAmount": 500,
+    "autoRecoveryEnabled": true
+  }
+}
