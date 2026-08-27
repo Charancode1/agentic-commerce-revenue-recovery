@@ -157,6 +157,7 @@ export const App: React.FC = () => {
             <div style={{ position: 'sticky', top: '90px' }}>
               <CommerceChat
                 onAddToCart={handleAddToCart}
+                onRemoveFromCart={handleRemoveItem}
                 onProceedToCheckout={() => setIsCartOpen(true)}
                 externalPrompt={chatPrompt}
                 onClearExternalPrompt={() => setChatPrompt('')}

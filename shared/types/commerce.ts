@@ -51,9 +51,13 @@ export interface ChatMessage {
   sender: 'user' | 'agent' | 'system';
   text: string;
   timestamp: string;
+  cartAction?: {
+    type: 'add_to_cart' | 'remove_from_cart';
+    productId: string;
+  };
   suggestedActions?: {
     label: string;
-    action: 'add_to_cart' | 'view_product' | 'checkout' | 'quick_reply';
+    action: 'add_to_cart' | 'remove_from_cart' | 'view_product' | 'checkout' | 'quick_reply';
     payload?: any;
   }[];
   recommendedProducts?: Product[];

@@ -5,6 +5,7 @@ import { Send, Sparkles, Bot, User, ShoppingCart, ArrowRight, CornerDownLeft } f
 
 interface CommerceChatProps {
   onAddToCart: (product: Product) => void;
+  onRemoveFromCart?: (productId: string) => void;
   onProceedToCheckout: () => void;
   externalPrompt?: string;
   onClearExternalPrompt?: () => void;
@@ -12,6 +13,7 @@ interface CommerceChatProps {
 
 export const CommerceChat: React.FC<CommerceChatProps> = ({
   onAddToCart,
+  onRemoveFromCart,
   onProceedToCheckout,
   externalPrompt,
   onClearExternalPrompt
@@ -68,6 +70,13 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
       const history = messages.map(m => ({ sender: m.sender, text: m.text }));
       const response = await api.chatWithAgent(messageText, history);
       setMessages(prev => [...prev, response]);
+
+      // Automatically execute cart actions returned by the agent
+      if (response.cartAction) {
+        if (response.cartAction.type === 'remove_from_cart' && onRemoveFromCart) {
+          onRemoveFromCart(response.cartAction.productId);
+        }
+      }
     } catch (e) {
       console.error('Chat send error:', e);
       setMessages(prev => [
@@ -90,6 +99,11 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
     } else if (action.action === 'add_to_cart') {
       if (action.payload) {
         onAddToCart(action.payload);
+      }
+    } else if (action.action === 'remove_from_cart') {
+      const prodId = typeof action.payload === 'string' ? action.payload : action.payload?.id;
+      if (prodId && onRemoveFromCart) {
+        onRemoveFromCart(prodId);
       }
     } else if (action.action === 'checkout') {
       onProceedToCheckout();

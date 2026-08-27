@@ -1,17 +1,54 @@
+import { GoogleGenAI, Type } from '@google/genai';
 import { db } from '../db/db';
 import { Product, ChatMessage } from '../../../shared/types/commerce';
 import { auditLogger } from '../db/audit-logger';
 import { ENV } from '../config/env';
 
+interface GeminiCommerceResponse {
+  replyMessage: string;
+  matchedProductIds: string[];
+  cartAction?: {
+    type: 'add_to_cart' | 'remove_from_cart';
+    productId: string;
+  };
+  suggestedActions: {
+    label: string;
+    action: 'add_to_cart' | 'remove_from_cart' | 'view_product' | 'checkout' | 'quick_reply';
+    payload?: string;
+  }[];
+}
+
 export class CommerceAgent {
+  private static geminiClient: GoogleGenAI | null = null;
+
+  /**
+   * Initializes the Google GenAI SDK instance if an API key is available.
+   */
+  private static getGeminiClient(): GoogleGenAI | null {
+    if (this.geminiClient) return this.geminiClient;
+    if (ENV.GEMINI_API_KEY && ENV.GEMINI_API_KEY.trim().length > 0) {
+      try {
+        this.geminiClient = new GoogleGenAI({ apiKey: ENV.GEMINI_API_KEY.trim() });
+        return this.geminiClient;
+      } catch (err) {
+        console.warn('⚠️ Failed to initialize GoogleGenAI client, falling back to heuristics:', err);
+        return null;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Primary entry point for processing customer shopping queries.
+   * Uses Gemini AI with structured schema, falling back gracefully to heuristic catalog search.
+   */
   public static async processMessage(
     userMessage: string,
     history: { sender: string; text: string }[] = []
   ): Promise<ChatMessage> {
     const products = db.getProducts();
-    const query = userMessage.toLowerCase().trim();
 
-    // Log the user interaction in the audit trail
+    // Log the user interaction in the immutable audit trail
     auditLogger.record({
       actor: 'CUSTOMER',
       action: 'PRODUCT_SEARCH',
@@ -19,7 +56,253 @@ export class CommerceAgent {
       metadata: { query: userMessage }
     });
 
-    // Check for direct keywords and price constraints
+    const ai = this.getGeminiClient();
+
+    if (ai) {
+      try {
+        const geminiResult = await this.processWithGemini(ai, userMessage, history, products);
+        if (geminiResult) {
+          return geminiResult;
+        }
+      } catch (error) {
+        console.warn('⚠️ Gemini processing error, using heuristic fallback:', error);
+      }
+    }
+
+    // Fallback if GEMINI_API_KEY is empty or if API call fails
+    return this.processWithHeuristics(userMessage, products);
+  }
+
+  /**
+   * Processes the user query using Gemini 3.6 Flash with structured output and strict catalog grounding.
+   */
+  private static async processWithGemini(
+    ai: GoogleGenAI,
+    userMessage: string,
+    history: { sender: string; text: string }[],
+    products: Product[]
+  ): Promise<ChatMessage | null> {
+    // 1. Prepare Grounded Catalog Context for Gemini (Gemini must NOT invent items)
+    const catalogContext = products.map(p => ({
+      id: p.id,
+      name: p.name,
+      category: p.category,
+      price: p.price,
+      currency: p.currency,
+      inStock: p.inStock,
+      inventoryCount: p.inventoryCount,
+      features: p.features,
+      tags: p.tags,
+      description: p.description
+    }));
+
+    const systemInstruction = `You are the AI Commerce Assistant for the Razorpay Agentic Commerce store.
+Your mission is to understand shopper intent, provide helpful and concise product recommendations, manage cart actions, and guide shoppers smoothly to checkout.
+
+STRICT GROUNDING & ACTION RULES:
+1. You must ONLY recommend products from the official Store Catalog provided below.
+2. NEVER invent fake products, fake product IDs, or alter catalog prices.
+3. In "matchedProductIds", only output valid product IDs (e.g. "prod_1", "prod_2") from the catalog that best match the shopper's intent (maximum 3 products).
+4. CART MANAGEMENT: When the shopper explicitly asks to remove, delete, or take out a product from their cart (e.g., "remove headphones from cart", "delete backpack", "remove prod_1 from cart"), identify the exact matching catalog product ID and set:
+   "cartAction": { "type": "remove_from_cart", "productId": "<exact_catalog_product_id>" }
+   and confirm in "replyMessage" that the product has been removed from their cart.
+5. In "suggestedActions", offer 2-3 relevant interactive button choices (e.g., adding to cart, removing from cart, quick replies, or proceeding to checkout).
+6. Format your "replyMessage" with clear markdown (bolding key product names and prices in INR).
+
+OFFICIAL STORE CATALOG:
+${JSON.stringify(catalogContext, null, 2)}`;
+
+    // 2. Format conversation history
+    const conversationTurns = history.slice(-6).map(h => ({
+      role: h.sender === 'user' ? 'user' : 'model',
+      parts: [{ text: h.text }]
+    }));
+
+    conversationTurns.push({
+      role: 'user',
+      parts: [{ text: userMessage }]
+    });
+
+    // 3. Call Gemini with Structured JSON Schema
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.6-flash',
+      contents: conversationTurns,
+      config: {
+        systemInstruction,
+        temperature: 0.3,
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            replyMessage: {
+              type: Type.STRING,
+              description: 'Helpful, persuasive response directly addressing the user inquiry.'
+            },
+            matchedProductIds: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+              description: 'Array of exact product IDs from the catalog that match user intent.'
+            },
+            cartAction: {
+              type: Type.OBJECT,
+              properties: {
+                type: {
+                  type: Type.STRING,
+                  description: 'One of: add_to_cart, remove_from_cart'
+                },
+                productId: {
+                  type: Type.STRING,
+                  description: 'The exact catalog product ID (e.g. prod_1, prod_2) to modify in cart.'
+                }
+              },
+              required: ['type', 'productId'],
+              description: 'Structured cart action if the user requested to add or remove an item.'
+            },
+            suggestedActions: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  label: { type: Type.STRING, description: 'Action button label' },
+                  action: {
+                    type: Type.STRING,
+                    description: 'One of: add_to_cart, remove_from_cart, quick_reply, checkout, view_product'
+                  },
+                  payload: {
+                    type: Type.STRING,
+                    description: 'Optional payload (product ID or query text)'
+                  }
+                },
+                required: ['label', 'action']
+              }
+            }
+          },
+          required: ['replyMessage', 'matchedProductIds', 'suggestedActions']
+        }
+      }
+    });
+
+    const rawJson = response.text?.trim();
+    if (!rawJson) return null;
+
+    const parsed: GeminiCommerceResponse = JSON.parse(rawJson);
+
+    // 4. Validate Grounding: Ensure matched products exist in our database
+    const matchedProducts: Product[] = [];
+    for (const pid of parsed.matchedProductIds || []) {
+      const prod = products.find(p => p.id === pid);
+      if (prod && !matchedProducts.some(mp => mp.id === prod.id)) {
+        matchedProducts.push(prod);
+      }
+    }
+
+    // 5. Validate and Ground Cart Action
+    let validatedCartAction: ChatMessage['cartAction'] = undefined;
+    if (parsed.cartAction && (parsed.cartAction.type === 'remove_from_cart' || parsed.cartAction.type === 'add_to_cart')) {
+      const targetProduct = products.find(p => p.id === parsed.cartAction?.productId);
+      if (targetProduct) {
+        validatedCartAction = {
+          type: parsed.cartAction.type,
+          productId: targetProduct.id
+        };
+      }
+    }
+
+    // 6. Format suggested actions with live product payloads
+    const formattedActions = (parsed.suggestedActions || []).map(act => {
+      if (act.action === 'add_to_cart') {
+        const targetProd = (act.payload ? products.find(p => p.id === act.payload) : null) || matchedProducts[0] || products[0];
+        return {
+          label: act.label,
+          action: 'add_to_cart' as const,
+          payload: targetProd
+        };
+      }
+      if (act.action === 'remove_from_cart') {
+        const targetProd = (act.payload ? products.find(p => p.id === act.payload) : null) || (validatedCartAction ? products.find(p => p.id === validatedCartAction?.productId) : null) || matchedProducts[0] || products[0];
+        return {
+          label: act.label,
+          action: 'remove_from_cart' as const,
+          payload: targetProd ? targetProd.id : act.payload
+        };
+      }
+      return {
+        label: act.label,
+        action: act.action,
+        payload: act.payload
+      };
+    });
+
+    const agentMessage: ChatMessage = {
+      id: `msg_gemini_${Date.now()}`,
+      sender: 'agent',
+      text: parsed.replyMessage,
+      timestamp: new Date().toISOString(),
+      cartAction: validatedCartAction,
+      suggestedActions: formattedActions,
+      recommendedProducts: matchedProducts
+    };
+
+    // Log the successful AI agent reasoning to the audit trail
+    auditLogger.record({
+      actor: 'COMMERCE_AGENT',
+      action: validatedCartAction ? 'CART_MODIFIED' : 'PRODUCT_SEARCH',
+      summary: validatedCartAction
+        ? `Gemini AI executed cartAction: ${validatedCartAction.type} (${validatedCartAction.productId})`
+        : `Gemini AI recommended ${matchedProducts.length} product(s) for: "${userMessage.substring(0, 60)}"`,
+      metadata: {
+        engine: 'GEMINI_3_6_FLASH',
+        cartAction: validatedCartAction,
+        recommendedProductIds: matchedProducts.map(p => p.id),
+        responseLength: parsed.replyMessage.length
+      }
+    });
+
+    return agentMessage;
+  }
+
+  /**
+   * Deterministic Heuristic Fallback Engine.
+   * Runs seamlessly if GEMINI_API_KEY is not configured or in offline environments.
+   */
+  private static processWithHeuristics(userMessage: string, products: Product[]): ChatMessage {
+    const query = userMessage.toLowerCase().trim();
+
+    // Check for explicit cart removal queries in fallback mode
+    if (query.includes('remove') || query.includes('delete') || query.includes('take out') || query.includes('discard') || query.includes('drop')) {
+      const matched = this.searchCatalog(query, products);
+      const targetProd = matched[0] || products[0];
+
+      const responseText = `I've removed the **${targetProd.name}** from your cart. Would you like to explore other items or view your updated checkout?`;
+      const agentMessage: ChatMessage = {
+        id: `msg_fallback_${Date.now()}`,
+        sender: 'agent',
+        text: responseText,
+        timestamp: new Date().toISOString(),
+        cartAction: {
+          type: 'remove_from_cart',
+          productId: targetProd.id
+        },
+        suggestedActions: [
+          { label: '🛍️ View Products', action: 'quick_reply', payload: 'Show me all products' },
+          { label: '💳 Go to Checkout', action: 'checkout' }
+        ],
+        recommendedProducts: []
+      };
+
+      auditLogger.record({
+        actor: 'COMMERCE_AGENT',
+        action: 'CART_MODIFIED',
+        summary: `Commerce Agent (Fallback) removed product ${targetProd.id} (${targetProd.name}) from cart`,
+        metadata: {
+          engine: 'HEURISTIC_FALLBACK',
+          productId: targetProd.id
+        }
+      });
+
+      return agentMessage;
+    }
+
     const matchedProducts = this.searchCatalog(query, products);
 
     let responseText = '';
@@ -50,7 +333,6 @@ export class CommerceAgent {
         { label: '⚡ Fast Chargers', action: 'quick_reply', payload: 'Show chargers' }
       ];
     } else {
-      // Default conversational overview
       recommendedProducts = products.slice(0, 3);
       responseText = `Hello! I'm your AI Commerce Assistant. I can help you discover products, compare specs, check stock, and set up your Razorpay checkout in seconds.\n\nHere are some of our trending customer favorites:`;
       suggestedActions = [
@@ -61,7 +343,7 @@ export class CommerceAgent {
     }
 
     const agentMessage: ChatMessage = {
-      id: `msg_${Date.now()}`,
+      id: `msg_fallback_${Date.now()}`,
       sender: 'agent',
       text: responseText,
       timestamp: new Date().toISOString(),
@@ -72,8 +354,9 @@ export class CommerceAgent {
     auditLogger.record({
       actor: 'COMMERCE_AGENT',
       action: 'PRODUCT_SEARCH',
-      summary: `Commerce Agent recommended ${recommendedProducts.length} product(s) for query: "${query}"`,
+      summary: `Commerce Agent (Fallback) recommended ${recommendedProducts.length} product(s) for query: "${query}"`,
       metadata: {
+        engine: 'HEURISTIC_FALLBACK',
         recommendedProductIds: recommendedProducts.map(p => p.id),
         responseLength: responseText.length
       }
@@ -82,8 +365,10 @@ export class CommerceAgent {
     return agentMessage;
   }
 
+  /**
+   * Keyword and category search for heuristic fallback.
+   */
   private static searchCatalog(query: string, products: Product[]): Product[] {
-    // Extract price limits if mentioned (e.g. "under 3000" or "below 5000")
     const priceUnderMatch = query.match(/(?:under|below|less than|within|around)\s*(?:rs\.?|inr|₹)?\s*(\d+)/i);
     const maxPrice = priceUnderMatch ? parseInt(priceUnderMatch[1], 10) : null;
 
@@ -93,7 +378,6 @@ export class CommerceAgent {
       const lowerDesc = product.description.toLowerCase();
       const lowerCat = product.category.toLowerCase();
 
-      // Check category match
       if (query.includes('audio') || query.includes('headphone') || query.includes('earphone') || query.includes('music')) {
         if (product.category.includes('Audio') || product.tags.includes('headphones')) score += 10;
       }
@@ -113,7 +397,6 @@ export class CommerceAgent {
         if (product.tags.includes('keyboard')) score += 10;
       }
 
-      // Keyword matches
       const tokens = query.split(/\s+/).filter(t => t.length > 2);
       for (const token of tokens) {
         if (lowerName.includes(token)) score += 5;
@@ -122,7 +405,6 @@ export class CommerceAgent {
         if (lowerCat.includes(token)) score += 3;
       }
 
-      // Price filter penalty/boost
       if (maxPrice) {
         if (product.price <= maxPrice) {
           score += 6;

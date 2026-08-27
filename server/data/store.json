@@ -165,6 +165,147 @@
   ],
   "orders": [
     {
+      "id": "ord_f4424939",
+      "orderNumber": "RZP-692971",
+      "razorpayOrderId": "order_5f86208f98844d",
+      "customerName": "Sarah Jenkins",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones with 45h battery life, spatial audio, and ultra-low latency mode.",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones",
+              "bluetooth",
+              "noise cancelling",
+              "audio",
+              "wireless",
+              "music"
+            ],
+            "features": [
+              "Hybrid Active Noise Cancelling",
+              "45-Hour Playback",
+              "Multipoint Bluetooth 5.3",
+              "Fast Charging (10m = 5h)"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "recovered",
+      "createdAt": "2026-08-26T16:07:04.150Z",
+      "updatedAt": "2026-08-26T16:08:11.567Z"
+    },
+    {
+      "id": "ord_58b53a6b",
+      "orderNumber": "RZP-211210",
+      "razorpayOrderId": "order_672b3e9b894746",
+      "customerName": "Sarah Jenkins",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones with 45h battery life, spatial audio, and ultra-low latency mode.",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones",
+              "bluetooth",
+              "noise cancelling",
+              "audio",
+              "wireless",
+              "music"
+            ],
+            "features": [
+              "Hybrid Active Noise Cancelling",
+              "45-Hour Playback",
+              "Multipoint Bluetooth 5.3",
+              "Fast Charging (10m = 5h)"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "paid",
+      "createdAt": "2026-08-26T15:58:40.830Z",
+      "updatedAt": "2026-08-26T15:58:41.957Z"
+    },
+    {
+      "id": "ord_f204cb1a",
+      "orderNumber": "RZP-304371",
+      "razorpayOrderId": "order_a63593c7118c47",
+      "customerName": "Sarah Jenkins",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones with 45h battery life, spatial audio, and ultra-low latency mode.",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones",
+              "bluetooth",
+              "noise cancelling",
+              "audio",
+              "wireless",
+              "music"
+            ],
+            "features": [
+              "Hybrid Active Noise Cancelling",
+              "45-Hour Playback",
+              "Multipoint Bluetooth 5.3",
+              "Fast Charging (10m = 5h)"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "paid",
+      "createdAt": "2026-08-26T15:55:27.548Z",
+      "updatedAt": "2026-08-26T15:56:15.696Z"
+    },
+    {
       "id": "ord_8913d62b",
       "orderNumber": "RZP-705899",
       "razorpayOrderId": "order_b5ac9860911249",
@@ -472,6 +613,47 @@
   ],
   "recoveries": [
     {
+      "id": "inc_dbda5cb9",
+      "orderId": "ord_f4424939",
+      "orderNumber": "RZP-692971",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 4999,
+      "failureCategory": "BANK_OTP_TIMEOUT",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "Simulated Bank 2FA / OTP Gateway Timeout",
+      "status": "RECOVERED",
+      "recoveryProposal": {
+        "incidentId": "inc_dbda5cb9",
+        "orderId": "ord_f4424939",
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "detectedReason": "Bank OTP Timeout / SMS Delay",
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "headline": "Bank OTP Delay Detected",
+        "customerMessage": "We noticed your bank 2FA timed out. We have reserved your items! Switch to instant 1-tap UPI (GPay / PhonePe / Paytm) with a 1-click Razorpay payment link.",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_5325",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI",
+        "expiryTimestamp": "2026-08-26T16:27:05.327Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+        "razorpayPaymentLinkId": "plink_0a8c76097f5440",
+        "razorpayPaymentLinkUrl": "http://localhost:5173/?recovery_plink=plink_0a8c76097f5440&ref=inc_dbda5cb9"
+      },
+      "createdAt": "2026-08-26T16:07:05.328Z",
+      "updatedAt": "2026-08-26T16:08:11.566Z",
+      "razorpayPaymentLinkId": "plink_0a8c76097f5440",
+      "recoveredAmount": 4999,
+      "razorpayPaymentId": "pay_rec_60491562"
+    },
+    {
       "id": "inc_9d02f92b",
       "orderId": "ord_8913d62b",
       "orderNumber": "RZP-705899",
@@ -730,6 +912,470 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "audit_8d62fb0c",
+      "timestamp": "2026-08-27T16:13:20.915Z",
+      "actor": "COMMERCE_AGENT",
+      "action": "CART_MODIFIED",
+      "summary": "Gemini AI executed cartAction: remove_from_cart (prod_5)",
+      "metadata": {
+        "engine": "GEMINI_3_6_FLASH",
+        "cartAction": {
+          "type": "remove_from_cart",
+          "productId": "prod_5"
+        },
+        "recommendedProductIds": [
+          "prod_2"
+        ],
+        "responseLength": 158
+      },
+      "hash": "475df0783cd0a853195ccbc7d81848056c766ca9676b1d429b08ff4ee53701ca"
+    },
+    {
+      "id": "audit_38a2c9c4",
+      "timestamp": "2026-08-27T16:13:15.462Z",
+      "actor": "CUSTOMER",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Shopper query: \"Remove the charger from my cart. I only want the waterproof backpack.\"",
+      "metadata": {
+        "query": "Remove the charger from my cart. I only want the waterproof backpack."
+      },
+      "hash": "b23e4ac9578d02c4bb26fa16de7b8655f66731c8596a47394ffa00541bc0dbb7"
+    },
+    {
+      "id": "audit_53bcba42",
+      "timestamp": "2026-08-27T16:05:39.224Z",
+      "actor": "COMMERCE_AGENT",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Gemini AI recommended 1 product(s) for: \"Remove the charger. I only want the waterproof backpack.\"",
+      "metadata": {
+        "engine": "GEMINI_3_6_FLASH",
+        "recommendedProductIds": [
+          "prod_2"
+        ],
+        "responseLength": 233
+      },
+      "hash": "7cca4ae018a96d7854e0124e746cb5593f105a411c60a9e98825b51790b67fbe"
+    },
+    {
+      "id": "audit_7a9a3078",
+      "timestamp": "2026-08-27T16:05:33.069Z",
+      "actor": "CUSTOMER",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Shopper query: \"Remove the charger. I only want the waterproof backpack.\"",
+      "metadata": {
+        "query": "Remove the charger. I only want the waterproof backpack."
+      },
+      "hash": "047272080ec888e4fd8ba5db5d75b368471449123b781421d65067b4e6ae01cd"
+    },
+    {
+      "id": "audit_ee138e20",
+      "timestamp": "2026-08-27T15:55:24.900Z",
+      "actor": "COMMERCE_AGENT",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Gemini AI recommended 1 product(s) for: \"Actually, I also need something to keep my laptop and electr\"",
+      "metadata": {
+        "engine": "GEMINI_3_6_FLASH",
+        "recommendedProductIds": [
+          "prod_2"
+        ],
+        "responseLength": 299
+      },
+      "hash": "6d14e7ca623761d016b2205cd84acd83289cc0cf35eff8823b163f261f788017"
+    },
+    {
+      "id": "audit_3a70f5f3",
+      "timestamp": "2026-08-27T15:55:10.961Z",
+      "actor": "CUSTOMER",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Shopper query: \"Actually, I also need something to keep my laptop and electronics safe from rain\"",
+      "metadata": {
+        "query": "Actually, I also need something to keep my laptop and electronics safe from rain. Add the best option under ₹3000."
+      },
+      "hash": "1e7b270a3bde071bdf58ecd1cbc2cebf70bf436adc51b21c04728e7b4c9160ab"
+    },
+    {
+      "id": "audit_2a3fcea5",
+      "timestamp": "2026-08-27T15:52:42.291Z",
+      "actor": "COMMERCE_AGENT",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Gemini AI recommended 2 product(s) for: \"I need a gift for someone who travels frequently, budget und\"",
+      "metadata": {
+        "engine": "GEMINI_3_6_FLASH",
+        "recommendedProductIds": [
+          "prod_5",
+          "prod_2"
+        ],
+        "responseLength": 444
+      },
+      "hash": "7d47a37dd2230f1455d1066c3d6b82c31d677f32a3adcb9bc5126d2422592a2d"
+    },
+    {
+      "id": "audit_d0890103",
+      "timestamp": "2026-08-27T15:52:34.857Z",
+      "actor": "CUSTOMER",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Shopper query: \"I need a gift for someone who travels frequently, budget under ₹3000, and it sho\"",
+      "metadata": {
+        "query": "I need a gift for someone who travels frequently, budget under ₹3000, and it should be useful for charging devices.  Then send it."
+      },
+      "hash": "e61e65954a745a8d0547cb38041e42c346e7b5a624171a41ecfc9aa6dcf740f7"
+    },
+    {
+      "id": "audit_a0eced51",
+      "timestamp": "2026-08-27T15:47:55.844Z",
+      "actor": "COMMERCE_AGENT",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Gemini AI recommended 2 product(s) for: \"I travel a lot and need something to keep my electronics cha\"",
+      "metadata": {
+        "engine": "GEMINI_3_6_FLASH",
+        "recommendedProductIds": [
+          "prod_2",
+          "prod_5"
+        ],
+        "responseLength": 488
+      },
+      "hash": "688758cd885aa3542343b9df79616244cfa2331b8a4859c21e624ef488256077"
+    },
+    {
+      "id": "audit_6bc7a535",
+      "timestamp": "2026-08-27T15:47:48.676Z",
+      "actor": "CUSTOMER",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Shopper query: \"I travel a lot and need something to keep my electronics charged and safe from r\"",
+      "metadata": {
+        "query": "I travel a lot and need something to keep my electronics charged and safe from rain"
+      },
+      "hash": "add0b039824d7bc74817c2a2d7a28216b06a92858510df2bf47acb691c5416bc"
+    },
+    {
+      "id": "audit_43bd91a4",
+      "timestamp": "2026-08-27T15:28:14.461Z",
+      "actor": "COMMERCE_AGENT",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Commerce Agent (Fallback) recommended 3 product(s) for query: \"i travel a lot and need something to keep my electronics charged and safe from rain\"",
+      "metadata": {
+        "engine": "HEURISTIC_FALLBACK",
+        "recommendedProductIds": [
+          "prod_2",
+          "prod_5",
+          "prod_3"
+        ],
+        "responseLength": 186
+      },
+      "hash": "28074f0470e29f5f07f3049484fb8ed69ef8aef5d077777e59ba9469da6e8d38"
+    },
+    {
+      "id": "audit_096b1718",
+      "timestamp": "2026-08-27T15:28:13.921Z",
+      "actor": "CUSTOMER",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Shopper query: \"I travel a lot and need something to keep my electronics charged and safe from r\"",
+      "metadata": {
+        "query": "I travel a lot and need something to keep my electronics charged and safe from rain"
+      },
+      "hash": "353675be1faef564eca7000bf607a1d25c2bd5ceadd58f9e63f960820a2d87ff"
+    },
+    {
+      "id": "audit_6694ac3f",
+      "timestamp": "2026-08-26T16:08:11.570Z",
+      "incidentId": "inc_dbda5cb9",
+      "orderId": "ord_f4424939",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_RECOVERED_CONFIRMED",
+      "summary": "🎉 Successfully recovered ₹4999 of ₹4999 at risk!",
+      "metadata": {
+        "recoveredAmount": 4999,
+        "originalRisk": 4999,
+        "razorpayPaymentId": "pay_rec_60491562"
+      },
+      "hash": "7b2345ea300a075dd0db972f5ead29c1eb5410f5ebb696b8025a8017ec6852cf"
+    },
+    {
+      "id": "audit_88fe011e",
+      "timestamp": "2026-08-26T16:08:11.568Z",
+      "incidentId": "inc_dbda5cb9",
+      "orderId": "ord_f4424939",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_LINK_PAID",
+      "summary": "Payment captured via Razorpay for recovery link! Payment ID: pay_rec_60491562",
+      "metadata": {
+        "razorpayPaymentId": "pay_rec_60491562",
+        "recoveredAmount": 4999
+      },
+      "hash": "fcd91f11144f4a9513604a5c4c60212f3a7f252a612b43cc9ab419716fbbf6f4"
+    },
+    {
+      "id": "audit_a4fc797f",
+      "timestamp": "2026-08-26T16:07:40.707Z",
+      "incidentId": "inc_dbda5cb9",
+      "orderId": "ord_f4424939",
+      "actor": "RECOVERY_AGENT",
+      "action": "RAZORPAY_PAYMENT_LINK_ISSUED",
+      "summary": "Razorpay Recovery Payment Link issued: plink_0a8c76097f5440 (Amount: ₹4999)",
+      "metadata": {
+        "paymentLinkId": "plink_0a8c76097f5440",
+        "paymentLinkUrl": "http://localhost:5173/?recovery_plink=plink_0a8c76097f5440&ref=inc_dbda5cb9",
+        "finalAmount": 4999,
+        "isSimulated": true
+      },
+      "hash": "c73047407c9d2fb7b41356c236e1889b4243a077ce9b00b31b5ec24576d009bb"
+    },
+    {
+      "id": "audit_b8145082",
+      "timestamp": "2026-08-26T16:07:40.704Z",
+      "incidentId": "inc_dbda5cb9",
+      "orderId": "ord_f4424939",
+      "actor": "CUSTOMER",
+      "action": "CUSTOMER_CONSENT_GRANTED",
+      "summary": "Shopper accepted recovery proposal for Order #RZP-692971. Generating Razorpay Smart Link.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT"
+      },
+      "hash": "63a7c0103900ccf76096e48f66086206d20bf71896752a764908c00e05d0efec"
+    },
+    {
+      "id": "audit_86c86e68",
+      "timestamp": "2026-08-26T16:07:05.330Z",
+      "incidentId": "inc_dbda5cb9",
+      "orderId": "ord_f4424939",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_5325",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI"
+      },
+      "hash": "a17c9ad7370d2189317dbebb77f1058a681ed9ca99e9d30920b5a5350b6fb22a"
+    },
+    {
+      "id": "audit_84a6702a",
+      "timestamp": "2026-08-26T16:07:05.327Z",
+      "incidentId": "inc_dbda5cb9",
+      "orderId": "ord_f4424939",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: SWITCH_TO_UPI_INTENT. Reason: High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_5325",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "f30b4ae60c341fb6e481036677156e309c2c954b5ec1f3b8b57a0526ea0c143e"
+    },
+    {
+      "id": "audit_59df7b01",
+      "timestamp": "2026-08-26T16:07:05.325Z",
+      "incidentId": "inc_dbda5cb9",
+      "orderId": "ord_f4424939",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹0 applied on ₹4999. (Approved: true)",
+      "metadata": {
+        "originalAmount": 4999,
+        "finalAmount": 4999,
+        "calculatedDiscount": 0,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "222c695c75246cb8d67d072f76be626445c706040013bf30c5605c278156543f"
+    },
+    {
+      "id": "audit_4af0eaa0",
+      "timestamp": "2026-08-26T16:07:05.323Z",
+      "incidentId": "inc_dbda5cb9",
+      "orderId": "ord_f4424939",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹4999 on Order #RZP-692971",
+      "metadata": {
+        "amountAtRisk": 4999
+      },
+      "hash": "395c8699a224c00856c9913c6dccd7b1a441b7fd02ec7f6ad1bd173b7679607a"
+    },
+    {
+      "id": "audit_06e2816d",
+      "timestamp": "2026-08-26T16:07:05.321Z",
+      "incidentId": "inc_dbda5cb9",
+      "orderId": "ord_f4424939",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-692971 (₹4999). Reason: Bank OTP Timeout / SMS Delay",
+      "metadata": {
+        "amountAtRisk": 4999,
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "Simulated Bank 2FA / OTP Gateway Timeout"
+      },
+      "hash": "d034177fc5d41fca5ffc75034b7bc9c74903e4c057bf7bdcd3907e8c685a686e"
+    },
+    {
+      "id": "audit_f164aa51",
+      "timestamp": "2026-08-26T16:07:04.152Z",
+      "orderId": "ord_f4424939",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-692971 for ₹4999 with Razorpay Order ID: order_5f86208f98844d",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_5f86208f98844d",
+        "isSimulated": true,
+        "itemCount": 1
+      },
+      "hash": "9108a1bcf12fdb3b81d260511b3be46feb83ae45840ad9094323aec1d7bb984f"
+    },
+    {
+      "id": "audit_18428bc5",
+      "timestamp": "2026-08-26T16:06:56.704Z",
+      "actor": "COMMERCE_AGENT",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Commerce Agent recommended 3 product(s) for query: \"show headphones under 5000\"",
+      "metadata": {
+        "recommendedProductIds": [
+          "prod_1",
+          "prod_2",
+          "prod_3"
+        ],
+        "responseLength": 187
+      },
+      "hash": "de22dbed7c35c88c5d2da483af0b252b8017fd99f93af99eee8431e337480d30"
+    },
+    {
+      "id": "audit_cdf4eda6",
+      "timestamp": "2026-08-26T16:06:56.703Z",
+      "actor": "CUSTOMER",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Shopper query: \"Show headphones under 5000\"",
+      "metadata": {
+        "query": "Show headphones under 5000"
+      },
+      "hash": "a1aefca6fd8134a846571626a629a5db1b85ea30def6a94971ca50b229721dba"
+    },
+    {
+      "id": "audit_01ec94a0",
+      "timestamp": "2026-08-26T15:58:41.959Z",
+      "orderId": "ord_58b53a6b",
+      "actor": "CUSTOMER",
+      "action": "PAYMENT_ATTEMPTED",
+      "summary": "Payment verified successfully for Order #RZP-211210 (₹4999) via Razorpay ID: pay_sim_59921953",
+      "metadata": {
+        "razorpayPaymentId": "pay_sim_59921953",
+        "razorpayOrderId": "order_672b3e9b894746"
+      },
+      "hash": "8c5df7c17f0ff493ceb21ef6327bf5f1d868d2bca24398f938f797bef70a9635"
+    },
+    {
+      "id": "audit_3744c424",
+      "timestamp": "2026-08-26T15:58:40.831Z",
+      "orderId": "ord_58b53a6b",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-211210 for ₹4999 with Razorpay Order ID: order_672b3e9b894746",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_672b3e9b894746",
+        "isSimulated": true,
+        "itemCount": 1
+      },
+      "hash": "039d49c908b0e761a587f71d6b1fde892c270510b94389c5bf2a5e3bd9a31d1d"
+    },
+    {
+      "id": "audit_602a8b75",
+      "timestamp": "2026-08-26T15:58:34.734Z",
+      "actor": "COMMERCE_AGENT",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Commerce Agent recommended 3 product(s) for query: \"show headphones under 5000\"",
+      "metadata": {
+        "recommendedProductIds": [
+          "prod_1",
+          "prod_2",
+          "prod_3"
+        ],
+        "responseLength": 187
+      },
+      "hash": "9b90a43e40569c901a451255d718e03246d098add89ba98bc7a972942728a4d3"
+    },
+    {
+      "id": "audit_7b21077e",
+      "timestamp": "2026-08-26T15:58:34.732Z",
+      "actor": "CUSTOMER",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Shopper query: \"Show headphones under 5000\"",
+      "metadata": {
+        "query": "Show headphones under 5000"
+      },
+      "hash": "e0f31aa9b5180c2eac36384671a537d00df6a61b1d5b976cf4ab30df2c49325c"
+    },
+    {
+      "id": "audit_f3ee640c",
+      "timestamp": "2026-08-26T15:56:15.699Z",
+      "orderId": "ord_f204cb1a",
+      "actor": "CUSTOMER",
+      "action": "PAYMENT_ATTEMPTED",
+      "summary": "Payment verified successfully for Order #RZP-304371 (₹4999) via Razorpay ID: pay_sim_59775686",
+      "metadata": {
+        "razorpayPaymentId": "pay_sim_59775686",
+        "razorpayOrderId": "order_a63593c7118c47"
+      },
+      "hash": "b2c57b9b448dedeca13012dea3ac325815c29a4a2a24b28691e4fa0caadc1c26"
+    },
+    {
+      "id": "audit_d3cb9c71",
+      "timestamp": "2026-08-26T15:55:27.549Z",
+      "orderId": "ord_f204cb1a",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-304371 for ₹4999 with Razorpay Order ID: order_a63593c7118c47",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_a63593c7118c47",
+        "isSimulated": true,
+        "itemCount": 1
+      },
+      "hash": "53ce0ec08bcdc125214bd490311fc09c13579d99d39ff4db51249f642d5667d5"
+    },
+    {
+      "id": "audit_308dc78e",
+      "timestamp": "2026-08-26T15:54:45.660Z",
+      "actor": "COMMERCE_AGENT",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Commerce Agent recommended 3 product(s) for query: \"show headphones under 5000\"",
+      "metadata": {
+        "recommendedProductIds": [
+          "prod_1",
+          "prod_2",
+          "prod_3"
+        ],
+        "responseLength": 187
+      },
+      "hash": "0be231c2e9ca70974b029007334f0636b3abefe4440a546bc6fbb2b9c07cefee"
+    },
+    {
+      "id": "audit_e37386b9",
+      "timestamp": "2026-08-26T15:54:45.657Z",
+      "actor": "CUSTOMER",
+      "action": "PRODUCT_SEARCH",
+      "summary": "Shopper query: \"Show headphones under 5000\"",
+      "metadata": {
+        "query": "Show headphones under 5000"
+      },
+      "hash": "57b775d9186b99a62697248978e374eb72a87b914b4c099e4a90cbadf4e8b878"
+    },
     {
       "id": "audit_594d0571",
       "timestamp": "2026-08-26T15:11:56.342Z",
