@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DashboardMetrics, RecoveryIncident } from '../../../shared/types/recovery';
+import { Order } from '../../../shared/types/commerce';
 import { AuditLogEntry } from '../../../shared/types/audit';
 import { api } from '../../services/api';
 import {
@@ -17,7 +18,9 @@ import {
   ChevronRight,
   Filter,
   RefreshCw,
-  Hash
+  Hash,
+  ShoppingBag,
+  CreditCard
 } from 'lucide-react';
 
 interface MerchantDashboardProps {
@@ -28,20 +31,23 @@ export const MerchantDashboard: React.FC<MerchantDashboardProps> = ({ onSelectIn
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
   const [recoveries, setRecoveries] = useState<RecoveryIncident[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'incidents' | 'audit'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'incidents' | 'audit'>('orders');
   const [selectedAuditLog, setSelectedAuditLog] = useState<AuditLogEntry | null>(null);
 
   const fetchData = async () => {
     try {
-      const [m, recs, logs] = await Promise.all([
+      const [m, recs, logs, ords] = await Promise.all([
         api.getDashboardMetrics(),
         api.getActiveRecoveries(),
-        api.getAuditTrail(50)
+        api.getAuditTrail(50),
+        api.getOrders()
       ]);
       setMetrics(m);
       setRecoveries(recs);
       setAuditLogs(logs);
+      setOrders(ords);
     } catch (e) {
       console.error('Failed to load dashboard data:', e);
     } finally {
@@ -69,6 +75,17 @@ export const MerchantDashboard: React.FC<MerchantDashboardProps> = ({ onSelectIn
         });
         // Refresh metrics whenever a recovery changes
         api.getDashboardMetrics().then(setMetrics);
+      },
+      onOrder: updatedOrder => {
+        setOrders(prev => {
+          const idx = prev.findIndex(o => o.id === updatedOrder.id);
+          if (idx >= 0) {
+            const next = [...prev];
+            next[idx] = updatedOrder;
+            return next;
+          }
+          return [updatedOrder, ...prev];
+        });
       }
     });
 
@@ -220,6 +237,29 @@ export const MerchantDashboard: React.FC<MerchantDashboardProps> = ({ onSelectIn
         gap: '16px'
       }}>
         <button
+          onClick={() => setActiveTab('orders')}
+          style={{
+            padding: '12px 16px',
+            background: 'transparent',
+            border: 'none',
+            borderBottom: activeTab === 'orders' ? '2px solid var(--accent-cyan)' : '2px solid transparent',
+            color: activeTab === 'orders' ? '#38BDF8' : 'var(--text-muted)',
+            fontWeight: 700,
+            fontSize: '0.9rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}
+        >
+          <ShoppingBag size={16} />
+          <span>Store Orders & Payments</span>
+          <span className="badge badge-cyan" style={{ padding: '2px 6px', fontSize: '0.65rem' }}>
+            {orders.length}
+          </span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('overview')}
           style={{
             padding: '12px 16px',
@@ -277,6 +317,82 @@ export const MerchantDashboard: React.FC<MerchantDashboardProps> = ({ onSelectIn
           <span>Financial Audit Trail</span>
         </button>
       </div>
+
+      {/* TAB 0: STORE ORDERS */}
+      {activeTab === 'orders' && (
+        <div className="glass-card" style={{ padding: '20px', overflowX: 'auto' }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <ShoppingBag size={18} color="#38BDF8" />
+            <span>Store Orders & Razorpay Verification Status</span>
+          </h3>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-subtle)' }}>
+                <th style={{ padding: '12px' }}>ORDER NUMBER</th>
+                <th style={{ padding: '12px' }}>CUSTOMER</th>
+                <th style={{ padding: '12px' }}>AMOUNT</th>
+                <th style={{ padding: '12px' }}>STATUS</th>
+                <th style={{ padding: '12px' }}>PROVIDER</th>
+                <th style={{ padding: '12px' }}>RAZORPAY PAYMENT ID</th>
+                <th style={{ padding: '12px' }}>CREATED AT</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.length === 0 ? (
+                <tr>
+                  <td colSpan={7} style={{ padding: '30px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                    No orders recorded yet.
+                  </td>
+                </tr>
+              ) : (
+                orders.map(ord => {
+                  let badgeClass = 'badge-cyan';
+                  if (ord.status === 'paid' || ord.status === 'recovered') badgeClass = 'badge-emerald';
+                  if (ord.status === 'failed') badgeClass = 'badge-rose';
+
+                  return (
+                    <tr key={ord.id} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}>
+                      <td style={{ padding: '14px 12px' }}>
+                        <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>#{ord.orderNumber}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>{ord.id}</div>
+                      </td>
+                      <td style={{ padding: '14px 12px' }}>
+                        <div style={{ fontWeight: 600 }}>{ord.customerName}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>{ord.customerEmail}</div>
+                      </td>
+                      <td style={{ padding: '14px 12px', fontWeight: 800, color: '#38BDF8' }}>
+                        ₹{ord.amount.toLocaleString('en-IN')}
+                      </td>
+                      <td style={{ padding: '14px 12px' }}>
+                        <span className={`badge ${badgeClass}`}>{ord.status.toUpperCase()}</span>
+                      </td>
+                      <td style={{ padding: '14px 12px', fontWeight: 600, color: '#38BDF8' }}>
+                        Razorpay
+                      </td>
+                      <td style={{ padding: '14px 12px' }}>
+                        {ord.razorpayPaymentId ? (
+                          <code style={{ fontSize: '0.75rem', color: '#34D399', backgroundColor: 'rgba(52, 211, 153, 0.1)', padding: '2px 6px', borderRadius: '4px' }}>
+                            {ord.razorpayPaymentId}
+                          </code>
+                        ) : ord.razorpayOrderId ? (
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>
+                            Ord: {ord.razorpayOrderId}
+                          </span>
+                        ) : (
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>—</span>
+                        )}
+                      </td>
+                      <td style={{ padding: '14px 12px', fontSize: '0.75rem', color: 'var(--text-subtle)' }}>
+                        {new Date(ord.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* TAB 1: OVERVIEW & FAILURE TAXONOMY */}
       {activeTab === 'overview' && (

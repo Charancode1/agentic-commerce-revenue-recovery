@@ -165,6 +165,101 @@
   ],
   "orders": [
     {
+      "id": "ord_f1fa72d8",
+      "orderNumber": "RZP-714553",
+      "razorpayOrderId": "order_TW0CtLQhg3OSie",
+      "customerName": "Sarah Jenkins",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_5",
+          "product": {
+            "id": "prod_5",
+            "name": "VoltStream 100W GaN Fast Charging Station",
+            "description": "Compact 4-port Gallium Nitride high-efficiency desktop charger capable of powering 2 laptops and 2 phones simultaneously.",
+            "price": 2199,
+            "currency": "INR",
+            "category": "Electronics & Power",
+            "image": "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 35,
+            "tags": [
+              "charger",
+              "gan",
+              "power",
+              "usbc",
+              "fast charging",
+              "adapter"
+            ],
+            "features": [
+              "100W Total GaN III Output",
+              "3x USB-C + 1x USB-A Ports",
+              "Dynamic Power Allocation",
+              "Overheat & Surge Protection"
+            ],
+            "rating": 4.8,
+            "reviewCount": 275
+          },
+          "quantity": 1,
+          "selectedPrice": 2199
+        }
+      ],
+      "amount": 2199,
+      "currency": "INR",
+      "status": "paid",
+      "createdAt": "2026-08-30T13:45:25.548Z",
+      "updatedAt": "2026-08-30T13:45:47.015Z",
+      "razorpayPaymentId": "pay_TW0CzaQ1HdqDwz"
+    },
+    {
+      "id": "ord_e0e3b161",
+      "orderNumber": "RZP-129592",
+      "razorpayOrderId": "order_TVywTqH9z0uFGr",
+      "customerName": "Sarah Jenkins",
+      "customerEmail": "sarah.jenkins@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_2",
+          "product": {
+            "id": "prod_2",
+            "name": "NomadShield Waterproof Tech Backpack",
+            "description": "Weatherproof 28L urban travel backpack with dedicated 16-inch padded laptop vault and RFID-blocking quick-access passport pocket.",
+            "price": 2799,
+            "currency": "INR",
+            "category": "Travel & Bags",
+            "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 22,
+            "tags": [
+              "backpack",
+              "travel",
+              "laptop",
+              "waterproof",
+              "bag",
+              "tech"
+            ],
+            "features": [
+              "IPX5 Water Resistant Cordura Fabric",
+              "16\" Suspended Laptop Cradle",
+              "Integrated USB Pass-Through",
+              "Ergonomic Air-Mesh Backing"
+            ],
+            "rating": 4.9,
+            "reviewCount": 518
+          },
+          "quantity": 1,
+          "selectedPrice": 2799
+        }
+      ],
+      "amount": 2799,
+      "currency": "INR",
+      "status": "paid",
+      "createdAt": "2026-08-30T12:31:11.797Z",
+      "updatedAt": "2026-08-30T13:01:51.049Z"
+    },
+    {
       "id": "ord_f4424939",
       "orderNumber": "RZP-692971",
       "razorpayOrderId": "order_5f86208f98844d",
@@ -912,6 +1007,62 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "audit_ed290b07",
+      "timestamp": "2026-08-30T13:45:47.017Z",
+      "orderId": "ord_f1fa72d8",
+      "actor": "CUSTOMER",
+      "action": "PAYMENT_ATTEMPTED",
+      "summary": "Payment verified successfully for Order #RZP-714553 (₹2199) via Razorpay ID: pay_TW0CzaQ1HdqDwz",
+      "metadata": {
+        "razorpayPaymentId": "pay_TW0CzaQ1HdqDwz",
+        "razorpayOrderId": "order_TW0CtLQhg3OSie"
+      },
+      "hash": "f6a9c21a3f4a94cf1ef81732068d4844a27a67e9150b8f59532ca74dfe11ea0f"
+    },
+    {
+      "id": "audit_2e53285f",
+      "timestamp": "2026-08-30T13:45:25.550Z",
+      "orderId": "ord_f1fa72d8",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-714553 for ₹2199 with Razorpay Order ID: order_TW0CtLQhg3OSie",
+      "metadata": {
+        "amount": 2199,
+        "razorpayOrderId": "order_TW0CtLQhg3OSie",
+        "isSimulated": false,
+        "itemCount": 1
+      },
+      "hash": "47f38f89cd79943b757f068a33642e8f45a973beb749f27518093bcd931f0308"
+    },
+    {
+      "id": "audit_a6bdd535",
+      "timestamp": "2026-08-30T13:01:51.051Z",
+      "orderId": "ord_e0e3b161",
+      "actor": "CUSTOMER",
+      "action": "PAYMENT_ATTEMPTED",
+      "summary": "Payment verified successfully for Order #RZP-129592 (₹2799) via Razorpay ID: pay_TVzRoVIUTjaOEg",
+      "metadata": {
+        "razorpayPaymentId": "pay_TVzRoVIUTjaOEg",
+        "razorpayOrderId": "order_TVywTqH9z0uFGr"
+      },
+      "hash": "57d817bd7e7153acf88d2b861ec6660174a0685531032cccdfa2f003fbdb2de2"
+    },
+    {
+      "id": "audit_192d5524",
+      "timestamp": "2026-08-30T12:31:11.800Z",
+      "orderId": "ord_e0e3b161",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-129592 for ₹2799 with Razorpay Order ID: order_TVywTqH9z0uFGr",
+      "metadata": {
+        "amount": 2799,
+        "razorpayOrderId": "order_TVywTqH9z0uFGr",
+        "isSimulated": false,
+        "itemCount": 1
+      },
+      "hash": "2e1ecc9c5ec97919167165e3c53c12023149971194eb9399e779fc25e2fbb391"
+    },
     {
       "id": "audit_8d62fb0c",
       "timestamp": "2026-08-27T16:13:20.915Z",

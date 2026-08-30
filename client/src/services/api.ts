@@ -76,6 +76,12 @@ export const api = {
     return res.json();
   },
 
+  async getOrders(): Promise<Order[]> {
+    const res = await fetch(`${API_BASE}/checkout/orders`);
+    const data = await res.json();
+    return data.orders || [];
+  },
+
   // Recovery
   async getActiveRecoveries(): Promise<RecoveryIncident[]> {
     const res = await fetch(`${API_BASE}/recovery/active`);

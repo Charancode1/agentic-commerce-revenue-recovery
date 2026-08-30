@@ -110,7 +110,10 @@ export class CheckoutController {
       }
 
       order.status = 'paid';
+      order.razorpayPaymentId = razorpayPaymentId;
       db.upsertOrder(order);
+
+      console.log(`✅ Razorpay payment verified: Order ${order.orderNumber} | Payment ${razorpayPaymentId} | Amount ₹${order.amount}`);
 
       auditLogger.record({
         actor: 'CUSTOMER',
@@ -127,6 +130,15 @@ export class CheckoutController {
       });
     } catch (e: any) {
       console.error('Verify payment error:', e);
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
+
+  public static async getOrders(req: Request, res: Response) {
+    try {
+      const orders = db.getOrders();
+      return res.json({ success: true, count: orders.length, orders });
+    } catch (e: any) {
       return res.status(500).json({ success: false, error: e.message });
     }
   }
