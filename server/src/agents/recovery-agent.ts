@@ -299,6 +299,11 @@ export class RecoveryAgent {
       throw new Error(`Incident ${params.incidentId} not found`);
     }
 
+    if (incident.status === 'RECOVERED') {
+      console.log(`ℹ️ Incident ${params.incidentId} is already marked RECOVERED (Idempotent call ignored).`);
+      return incident;
+    }
+
     const order = db.getOrderById(incident.orderId);
     const finalAmount = incident.recoveryProposal?.concession?.finalRecoveryAmount || incident.amountAtRisk;
 

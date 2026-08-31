@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RecoveryIncident } from '../../../shared/types/recovery';
 import { api } from '../../services/api';
 import { ShieldCheck, Zap, Clock, ArrowRight, X, CheckCircle, CreditCard, Smartphone, Sparkles, ExternalLink } from 'lucide-react';
@@ -17,6 +17,17 @@ export const RecoveryPromptModal: React.FC<RecoveryPromptModalProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [executedLink, setExecutedLink] = useState<{ id: string; url: string } | null>(null);
   const [isPaid, setIsPaid] = useState(false);
+
+  useEffect(() => {
+    if (incident?.recoveryProposal?.razorpayPaymentLinkId) {
+      setExecutedLink({
+        id: incident.recoveryProposal.razorpayPaymentLinkId,
+        url: incident.recoveryProposal.razorpayPaymentLinkUrl || '#'
+      });
+    } else {
+      setExecutedLink(null);
+    }
+  }, [incident]);
 
   if (!incident || !incident.recoveryProposal) return null;
 
@@ -249,6 +260,29 @@ export const RecoveryPromptModal: React.FC<RecoveryPromptModalProps> = ({
             <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
               Link ID: <code>{executedLink.id}</code>
             </div>
+
+            {executedLink.url && executedLink.url !== '#' && (
+              <a
+                href={executedLink.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary"
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  textDecoration: 'none',
+                  background: 'linear-gradient(135deg, #00BAF2 0%, #0088CC 100%)',
+                  boxShadow: 'var(--shadow-glow-cyan)'
+                }}
+              >
+                <ExternalLink size={18} />
+                <span>Open Razorpay Recovery Link</span>
+              </a>
+            )}
 
             <button
               onClick={handleSimulateLinkPayment}

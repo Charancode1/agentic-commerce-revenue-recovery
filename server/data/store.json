@@ -165,6 +165,123 @@
   ],
   "orders": [
     {
+      "id": "ord_08c2583f",
+      "orderNumber": "RZP-741055",
+      "razorpayOrderId": "order_TWRWzP9XGxEtie",
+      "customerName": "Alex Rivera",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones",
+            "price": 2799,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones"
+            ],
+            "features": [
+              "Active Noise Cancelling"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 2799
+        }
+      ],
+      "amount": 2799,
+      "currency": "INR",
+      "status": "recovered",
+      "createdAt": "2026-08-31T16:29:10.411Z",
+      "updatedAt": "2026-08-31T16:34:49.309Z"
+    },
+    {
+      "id": "ord_11627985",
+      "orderNumber": "RZP-463508",
+      "razorpayOrderId": "order_TWRR3qkjz5ZTRm",
+      "customerName": "Alex Rivera",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones"
+            ],
+            "features": [
+              "Active Noise Cancelling"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "failed",
+      "createdAt": "2026-08-31T16:23:33.733Z",
+      "updatedAt": "2026-08-31T16:23:33.741Z"
+    },
+    {
+      "id": "ord_e3129605",
+      "orderNumber": "RZP-409078",
+      "razorpayOrderId": "order_TWRQWRXB2sQGHr",
+      "customerName": "Alex Rivera",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones"
+            ],
+            "features": [
+              "Active Noise Cancelling"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "failed",
+      "createdAt": "2026-08-31T16:23:03.105Z",
+      "updatedAt": "2026-08-31T16:23:03.114Z"
+    },
+    {
       "id": "ord_f1fa72d8",
       "orderNumber": "RZP-714553",
       "razorpayOrderId": "order_TW0CtLQhg3OSie",
@@ -708,6 +825,122 @@
   ],
   "recoveries": [
     {
+      "id": "inc_933cf8a1",
+      "orderId": "ord_08c2583f",
+      "orderNumber": "RZP-741055",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 2799,
+      "failureCategory": "BANK_OTP_TIMEOUT",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "Customer did not receive bank OTP SMS within 120 seconds. Gateway flagged as timeout.",
+      "status": "RECOVERED",
+      "recoveryProposal": {
+        "incidentId": "inc_933cf8a1",
+        "orderId": "ord_08c2583f",
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "detectedReason": "Bank OTP Timeout / SMS Delay",
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "headline": "Bank OTP Delay Detected",
+        "customerMessage": "We noticed your bank 2FA timed out. We have reserved your items! Switch to instant 1-tap UPI (GPay / PhonePe / Paytm) with a 1-click Razorpay payment link.",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 2799,
+          "promoCode": "RECOVER_0_0422",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI",
+        "expiryTimestamp": "2026-08-31T16:49:10.422Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+        "razorpayPaymentLinkId": "plink_TWRX9WE8PK4hpZ",
+        "razorpayPaymentLinkUrl": "https://rzp.io/rzp/sZzliHiX"
+      },
+      "createdAt": "2026-08-31T16:29:10.423Z",
+      "updatedAt": "2026-08-31T16:34:49.306Z",
+      "razorpayPaymentLinkId": "plink_TWRX9WE8PK4hpZ",
+      "recoveredAmount": 2799,
+      "razorpayPaymentId": "pay_TWRbncRJrBjdYR"
+    },
+    {
+      "id": "inc_3c846545",
+      "orderId": "ord_11627985",
+      "orderNumber": "RZP-463508",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 4999,
+      "failureCategory": "BANK_OTP_TIMEOUT",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "Customer did not receive bank OTP SMS within 120 seconds. Gateway flagged as timeout.",
+      "status": "EXECUTED",
+      "recoveryProposal": {
+        "incidentId": "inc_3c846545",
+        "orderId": "ord_11627985",
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "detectedReason": "Bank OTP Timeout / SMS Delay",
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "headline": "Bank OTP Delay Detected",
+        "customerMessage": "We noticed your bank 2FA timed out. We have reserved your items! Switch to instant 1-tap UPI (GPay / PhonePe / Paytm) with a 1-click Razorpay payment link.",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_3743",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI",
+        "expiryTimestamp": "2026-08-31T16:43:33.744Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+        "razorpayPaymentLinkId": "plink_TWRRtAnyyP4e8N",
+        "razorpayPaymentLinkUrl": "https://rzp.io/rzp/1fRIawd"
+      },
+      "createdAt": "2026-08-31T16:23:33.745Z",
+      "updatedAt": "2026-08-31T16:24:21.411Z",
+      "razorpayPaymentLinkId": "plink_TWRRtAnyyP4e8N"
+    },
+    {
+      "id": "inc_48eacb5b",
+      "orderId": "ord_e3129605",
+      "orderNumber": "RZP-409078",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 4999,
+      "failureCategory": "BANK_OTP_TIMEOUT",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "Customer did not receive bank OTP SMS within 120 seconds. Gateway flagged as timeout.",
+      "status": "CONSENT_PENDING",
+      "recoveryProposal": {
+        "incidentId": "inc_48eacb5b",
+        "orderId": "ord_e3129605",
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "detectedReason": "Bank OTP Timeout / SMS Delay",
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "headline": "Bank OTP Delay Detected",
+        "customerMessage": "We noticed your bank 2FA timed out. We have reserved your items! Switch to instant 1-tap UPI (GPay / PhonePe / Paytm) with a 1-click Razorpay payment link.",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_3116",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI",
+        "expiryTimestamp": "2026-08-31T16:43:03.117Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate."
+      },
+      "createdAt": "2026-08-31T16:23:03.118Z",
+      "updatedAt": "2026-08-31T16:23:03.118Z"
+    },
+    {
       "id": "inc_dbda5cb9",
       "orderId": "ord_f4424939",
       "orderNumber": "RZP-692971",
@@ -1007,6 +1240,408 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "audit_c8cef448",
+      "timestamp": "2026-08-31T16:34:49.312Z",
+      "incidentId": "inc_933cf8a1",
+      "orderId": "ord_08c2583f",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_RECOVERED_CONFIRMED",
+      "summary": "🎉 Successfully recovered ₹2799 of ₹2799 at risk!",
+      "metadata": {
+        "recoveredAmount": 2799,
+        "originalRisk": 2799,
+        "razorpayPaymentId": "pay_TWRbncRJrBjdYR"
+      },
+      "hash": "cc2ab767ae8be41eed8b25f7209a8df9389ffe95b990f6e8c844c0bca7a8d8c9"
+    },
+    {
+      "id": "audit_5e2081fb",
+      "timestamp": "2026-08-31T16:34:49.311Z",
+      "incidentId": "inc_933cf8a1",
+      "orderId": "ord_08c2583f",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_LINK_PAID",
+      "summary": "Payment captured via Razorpay for recovery link! Payment ID: pay_TWRbncRJrBjdYR",
+      "metadata": {
+        "razorpayPaymentId": "pay_TWRbncRJrBjdYR",
+        "recoveredAmount": 2799
+      },
+      "hash": "de975d3bb380e08048808bb92a1ab781f4cc753543387d51532f429babb765cd"
+    },
+    {
+      "id": "audit_fd81e972",
+      "timestamp": "2026-08-31T16:29:19.879Z",
+      "incidentId": "inc_933cf8a1",
+      "orderId": "ord_08c2583f",
+      "actor": "RECOVERY_AGENT",
+      "action": "RAZORPAY_PAYMENT_LINK_ISSUED",
+      "summary": "Razorpay Recovery Payment Link issued: plink_TWRX9WE8PK4hpZ (Amount: ₹2799)",
+      "metadata": {
+        "paymentLinkId": "plink_TWRX9WE8PK4hpZ",
+        "paymentLinkUrl": "https://rzp.io/rzp/sZzliHiX",
+        "finalAmount": 2799,
+        "isSimulated": false
+      },
+      "hash": "e61d827c1f29582ba17d57096e7f3f57f5d75345b8df1dba493c40aa10d7789f"
+    },
+    {
+      "id": "audit_c7487dbe",
+      "timestamp": "2026-08-31T16:29:18.763Z",
+      "incidentId": "inc_933cf8a1",
+      "orderId": "ord_08c2583f",
+      "actor": "CUSTOMER",
+      "action": "CUSTOMER_CONSENT_GRANTED",
+      "summary": "Shopper accepted recovery proposal for Order #RZP-741055. Generating Razorpay Smart Link.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT"
+      },
+      "hash": "596c934b2a31ab2e45fac550ec2f8fe3c2d5cdd221664ab1ca4b2d4d50066435"
+    },
+    {
+      "id": "audit_88f72aeb",
+      "timestamp": "2026-08-31T16:29:10.423Z",
+      "incidentId": "inc_933cf8a1",
+      "orderId": "ord_08c2583f",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 2799,
+          "promoCode": "RECOVER_0_0422",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI"
+      },
+      "hash": "b61ef1afbd2e5dd887a0683518cdf6128543585a2b2d83f95d65e08730bf840b"
+    },
+    {
+      "id": "audit_744040d6",
+      "timestamp": "2026-08-31T16:29:10.422Z",
+      "incidentId": "inc_933cf8a1",
+      "orderId": "ord_08c2583f",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: SWITCH_TO_UPI_INTENT. Reason: High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 2799,
+          "promoCode": "RECOVER_0_0422",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "e810b1f26518498ea13827244a3ae902c4ffc060bb1261af890856f253c44600"
+    },
+    {
+      "id": "audit_46c582e7",
+      "timestamp": "2026-08-31T16:29:10.422Z",
+      "incidentId": "inc_933cf8a1",
+      "orderId": "ord_08c2583f",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹0 applied on ₹2799. (Approved: true)",
+      "metadata": {
+        "originalAmount": 2799,
+        "finalAmount": 2799,
+        "calculatedDiscount": 0,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "fd26b4ab9f6cedefd22295914750f747efc96d2458a74ba52e6c154d3be6290e"
+    },
+    {
+      "id": "audit_bb36687a",
+      "timestamp": "2026-08-31T16:29:10.420Z",
+      "incidentId": "inc_933cf8a1",
+      "orderId": "ord_08c2583f",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹2799 on Order #RZP-741055",
+      "metadata": {
+        "amountAtRisk": 2799
+      },
+      "hash": "ce4aaf696c0128f5de12b551186bf29aa33bbc952a93287937a7e4da6ac8009c"
+    },
+    {
+      "id": "audit_1172f630",
+      "timestamp": "2026-08-31T16:29:10.420Z",
+      "incidentId": "inc_933cf8a1",
+      "orderId": "ord_08c2583f",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-741055 (₹2799). Reason: Bank OTP Timeout / SMS Delay",
+      "metadata": {
+        "amountAtRisk": 2799,
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "Customer did not receive bank OTP SMS within 120 seconds. Gateway flagged as timeout."
+      },
+      "hash": "82c83eea4b68af9ff856895c8e3fe915f48fae4c15fcb3c4b1db4b6e9a7cd5b9"
+    },
+    {
+      "id": "audit_b23a9f7a",
+      "timestamp": "2026-08-31T16:29:10.412Z",
+      "orderId": "ord_08c2583f",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-741055 for ₹2799 with Razorpay Order ID: order_TWRWzP9XGxEtie",
+      "metadata": {
+        "amount": 2799,
+        "razorpayOrderId": "order_TWRWzP9XGxEtie",
+        "isSimulated": false,
+        "itemCount": 1
+      },
+      "hash": "85f0b6ce2333392bcf907eb2f6e509a62399f0dd16d29ff9c759ec66501f2c38"
+    },
+    {
+      "id": "audit_27b415cf",
+      "timestamp": "2026-08-31T16:24:21.412Z",
+      "incidentId": "inc_3c846545",
+      "orderId": "ord_11627985",
+      "actor": "RECOVERY_AGENT",
+      "action": "RAZORPAY_PAYMENT_LINK_ISSUED",
+      "summary": "Razorpay Recovery Payment Link issued: plink_TWRRtAnyyP4e8N (Amount: ₹4999)",
+      "metadata": {
+        "paymentLinkId": "plink_TWRRtAnyyP4e8N",
+        "paymentLinkUrl": "https://rzp.io/rzp/1fRIawd",
+        "finalAmount": 4999,
+        "isSimulated": false
+      },
+      "hash": "ecc626e810b051967b3ce555bb30c8b83b3982e945e62d7f543171587c6a605f"
+    },
+    {
+      "id": "audit_15e5c0fa",
+      "timestamp": "2026-08-31T16:24:19.840Z",
+      "incidentId": "inc_3c846545",
+      "orderId": "ord_11627985",
+      "actor": "CUSTOMER",
+      "action": "CUSTOMER_CONSENT_GRANTED",
+      "summary": "Shopper accepted recovery proposal for Order #RZP-463508. Generating Razorpay Smart Link.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT"
+      },
+      "hash": "041274ba35518b7b1634a9d00e443a27c66224786ccb0b630ad69d196e2a0c45"
+    },
+    {
+      "id": "audit_5843e874",
+      "timestamp": "2026-08-31T16:23:33.745Z",
+      "incidentId": "inc_3c846545",
+      "orderId": "ord_11627985",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_3743",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI"
+      },
+      "hash": "4c3cf18dcef04e809c133b94c1396cf29b8b171319541bd41134af71875c65c5"
+    },
+    {
+      "id": "audit_9cb89310",
+      "timestamp": "2026-08-31T16:23:33.744Z",
+      "incidentId": "inc_3c846545",
+      "orderId": "ord_11627985",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: SWITCH_TO_UPI_INTENT. Reason: High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_3743",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "e1bf5e90cfaae5a7f67d81e29d5aeeac15533fe3e6efed2dd9ddd77f8aea4841"
+    },
+    {
+      "id": "audit_d29a84a0",
+      "timestamp": "2026-08-31T16:23:33.743Z",
+      "incidentId": "inc_3c846545",
+      "orderId": "ord_11627985",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹0 applied on ₹4999. (Approved: true)",
+      "metadata": {
+        "originalAmount": 4999,
+        "finalAmount": 4999,
+        "calculatedDiscount": 0,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "c92c467001bfee96c4d5acabfb1c112ba390cee77b993c63aa041152a1c748b2"
+    },
+    {
+      "id": "audit_0d856e9d",
+      "timestamp": "2026-08-31T16:23:33.742Z",
+      "incidentId": "inc_3c846545",
+      "orderId": "ord_11627985",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹4999 on Order #RZP-463508",
+      "metadata": {
+        "amountAtRisk": 4999
+      },
+      "hash": "5769ed3cd9dc5d857df10f509289743fc92177feba0538c412163f67e8339b73"
+    },
+    {
+      "id": "audit_1dce7acf",
+      "timestamp": "2026-08-31T16:23:33.742Z",
+      "incidentId": "inc_3c846545",
+      "orderId": "ord_11627985",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-463508 (₹4999). Reason: Bank OTP Timeout / SMS Delay",
+      "metadata": {
+        "amountAtRisk": 4999,
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "Customer did not receive bank OTP SMS within 120 seconds. Gateway flagged as timeout."
+      },
+      "hash": "f4540a27f451a1f006d8afea1e66cd9af423667f48e6bb64fe7fed15fd4aa867"
+    },
+    {
+      "id": "audit_4df9431c",
+      "timestamp": "2026-08-31T16:23:33.734Z",
+      "orderId": "ord_11627985",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-463508 for ₹4999 with Razorpay Order ID: order_TWRR3qkjz5ZTRm",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_TWRR3qkjz5ZTRm",
+        "isSimulated": false,
+        "itemCount": 1
+      },
+      "hash": "71264edd358e05fc03a1a8ce1aa949bd7f2dd3a85d3975ea49c8522fcb4e788d"
+    },
+    {
+      "id": "audit_979d2f3e",
+      "timestamp": "2026-08-31T16:23:03.119Z",
+      "incidentId": "inc_48eacb5b",
+      "orderId": "ord_e3129605",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_3116",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "UPI"
+      },
+      "hash": "0cf0faa420779c5bfb7d195ab4e2b855728062ecd1e57c13d2e361af582fc094"
+    },
+    {
+      "id": "audit_51bf27be",
+      "timestamp": "2026-08-31T16:23:03.117Z",
+      "incidentId": "inc_48eacb5b",
+      "orderId": "ord_e3129605",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: SWITCH_TO_UPI_INTENT. Reason: High probability of bank SMS delay. Switching to UPI intent bypasses bank OTP infrastructure with >92% success rate.",
+      "metadata": {
+        "strategy": "SWITCH_TO_UPI_INTENT",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_3116",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "202167107fa3ef1c976be8542bcdebe81d50b1daa099b873eed26c4081438699"
+    },
+    {
+      "id": "audit_dbc42f2d",
+      "timestamp": "2026-08-31T16:23:03.116Z",
+      "incidentId": "inc_48eacb5b",
+      "orderId": "ord_e3129605",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹0 applied on ₹4999. (Approved: true)",
+      "metadata": {
+        "originalAmount": 4999,
+        "finalAmount": 4999,
+        "calculatedDiscount": 0,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "05de991c2cda543871517acd8330a03709b30400ada505548f0075a9b639d116"
+    },
+    {
+      "id": "audit_8336f2cd",
+      "timestamp": "2026-08-31T16:23:03.115Z",
+      "incidentId": "inc_48eacb5b",
+      "orderId": "ord_e3129605",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹4999 on Order #RZP-409078",
+      "metadata": {
+        "amountAtRisk": 4999
+      },
+      "hash": "ec41982b0b0e1dd6c03e9a95e8fdfd91a1196d246dfd4e34e03254090d8fed52"
+    },
+    {
+      "id": "audit_63c494f9",
+      "timestamp": "2026-08-31T16:23:03.115Z",
+      "incidentId": "inc_48eacb5b",
+      "orderId": "ord_e3129605",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-409078 (₹4999). Reason: Bank OTP Timeout / SMS Delay",
+      "metadata": {
+        "amountAtRisk": 4999,
+        "failureCategory": "BANK_OTP_TIMEOUT",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "Customer did not receive bank OTP SMS within 120 seconds. Gateway flagged as timeout."
+      },
+      "hash": "6b1ccc401c939accaebfe65f59ddc22296cb9800627b9de2f3465bbb56e32763"
+    },
+    {
+      "id": "audit_d3d07b62",
+      "timestamp": "2026-08-31T16:23:03.106Z",
+      "orderId": "ord_e3129605",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-409078 for ₹4999 with Razorpay Order ID: order_TWRQWRXB2sQGHr",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_TWRQWRXB2sQGHr",
+        "isSimulated": false,
+        "itemCount": 1
+      },
+      "hash": "9c6a344aa4e0c273f0e6b5f94baf22651175406b74dd8ffd2049ebb726d0d52f"
+    },
     {
       "id": "audit_ed290b07",
       "timestamp": "2026-08-30T13:45:47.017Z",

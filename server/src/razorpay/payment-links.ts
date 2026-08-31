@@ -51,7 +51,9 @@ export async function createRecoveryPaymentLink(params: CreatePaymentLinkParams)
         reminder_enable: false,
         notes: params.notes || {},
         reference_id: params.referenceId,
-        expire_by: expireBy
+        expire_by: expireBy,
+        callback_url: `${ENV.CLIENT_URL}/?recovery_success=true&ref=${encodeURIComponent(params.referenceId)}`,
+        callback_method: 'get'
       });
 
       return {

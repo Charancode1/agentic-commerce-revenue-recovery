@@ -24,7 +24,28 @@ export const App: React.FC = () => {
   useEffect(() => {
     loadProducts();
     loadIncidentsCount();
+    checkRecoveryCallback();
   }, []);
+
+  const checkRecoveryCallback = async () => {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refId = urlParams.get('ref') || urlParams.get('razorpay_payment_link_reference_id');
+      const rzpPaymentId = urlParams.get('razorpay_payment_id') || undefined;
+      const isSuccess = urlParams.get('recovery_success') === 'true' || urlParams.get('razorpay_payment_link_status') === 'paid';
+
+      if (refId && isSuccess) {
+        // Clean URL query parameters so refreshes don't re-trigger
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        const finalized = await api.completeRecoveryPayment(refId, rzpPaymentId);
+        showToast(`🎉 ₹${finalized.recoveredAmount} recovered via Razorpay Smart Link!`, 'success');
+        loadIncidentsCount();
+      }
+    } catch (e) {
+      console.error('Failed to handle recovery callback URL:', e);
+    }
+  };
 
   const loadProducts = async () => {
     try {
