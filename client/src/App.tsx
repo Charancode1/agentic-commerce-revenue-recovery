@@ -31,7 +31,7 @@ export const App: React.FC = () => {
       onRecovery: updatedRec => {
         loadIncidentsCount();
 
-        // If recovery proposal is pending shopper consent, construct ShopperRecoveryContext
+        // If recovery proposal is pending shopper consent, construct ShopperRecoveryContext and switch view to shopper
         if (updatedRec.status === 'CONSENT_PENDING' && updatedRec.recoveryProposal) {
           const proposal = updatedRec.recoveryProposal;
           const context: ShopperRecoveryContext = {
@@ -50,6 +50,8 @@ export const App: React.FC = () => {
           };
 
           setShopperRecoveryContext(context);
+          setActiveRecoveryIncident(updatedRec);
+          setActiveView('shopper');
         }
       }
     });
@@ -267,7 +269,8 @@ export const App: React.FC = () => {
                 });
               }
               loadIncidentsCount();
-              showToast(`Failure injected! Recovery Agent context handed off to Shopper Copilot.`, 'alert');
+              setActiveView('shopper');
+              showToast(`Failure injected! Handoff context sent to Shopper Copilot.`, 'alert');
             }}
           />
         )}
