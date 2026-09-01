@@ -116,6 +116,15 @@ export const api = {
     return data.metrics;
   },
 
+  async resetDashboardData(): Promise<boolean> {
+    const res = await fetch(`${API_BASE}/dashboard/reset`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    return data.success;
+  },
+
   async getAuditTrail(limit: number = 50): Promise<AuditLogEntry[]> {
     const res = await fetch(`${API_BASE}/dashboard/audit-trail?limit=${limit}`);
     const data = await res.json();

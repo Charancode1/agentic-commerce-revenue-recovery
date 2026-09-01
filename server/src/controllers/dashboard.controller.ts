@@ -93,6 +93,14 @@ export class DashboardController {
     });
   }
 
+  public static resetData(req: Request, res: Response) {
+    db.resetData();
+    return res.json({
+      success: true,
+      message: 'All demo business data reset successfully.'
+    });
+  }
+
   public static streamEvents(req: Request, res: Response) {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');

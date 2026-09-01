@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage, Product } from '../../../shared/types/commerce';
 import { api } from '../../services/api';
-import { Send, Sparkles, Bot, User, ShoppingCart, ArrowRight, CornerDownLeft } from 'lucide-react';
+import { Send, Bot, User, ShoppingCart, ArrowRight, Sparkles } from 'lucide-react';
 
 interface CommerceChatProps {
   onAddToCart: (product: Product) => void;
@@ -22,7 +22,7 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
     {
       id: 'init_1',
       sender: 'agent',
-      text: "👋 Hi! I'm your **Agentic Commerce Assistant**. Tell me what you're looking for (e.g. *'Noise-cancelling headphones under ₹5,000'* or *'Best waterproof backpack for laptop'*) and I'll find the best options and prepare your Razorpay checkout!",
+      text: "👋 Welcome to **RAZORDEFENSE Store**! Tell me what you're looking for (e.g. *'Noise-cancelling headphones under ₹5,000'* or *'Best waterproof backpack'*) and I'll recommend items and assist with checkout!",
       timestamp: new Date().toISOString(),
       suggestedActions: [
         { label: '🎧 Audio Under ₹5,000', action: 'quick_reply', payload: 'Show headphones under 5000' },
@@ -63,28 +63,24 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
     };
 
     setMessages(prev => [...prev, userMsg]);
-    setInput('');
+    if (!textToSend) setInput('');
     setIsLoading(true);
 
     try {
-      const history = messages.map(m => ({ sender: m.sender, text: m.text }));
+      const history = messages
+        .filter(m => m.sender === 'user' || m.sender === 'agent')
+        .map(m => ({ sender: m.sender, text: m.text }));
+
       const response = await api.chatWithAgent(messageText, history);
       setMessages(prev => [...prev, response]);
-
-      // Automatically execute cart actions returned by the agent
-      if (response.cartAction) {
-        if (response.cartAction.type === 'remove_from_cart' && onRemoveFromCart) {
-          onRemoveFromCart(response.cartAction.productId);
-        }
-      }
-    } catch (e) {
-      console.error('Chat send error:', e);
+    } catch (error) {
+      console.error('Chat error:', error);
       setMessages(prev => [
         ...prev,
         {
           id: `err_${Date.now()}`,
           sender: 'agent',
-          text: 'I ran into a temporary hiccup connecting to the agent core. You can browse the products directly in the catalog or try asking again!',
+          text: "I encountered a minor connection issue searching the catalog. Please try again!",
           timestamp: new Date().toISOString()
         }
       ]);
@@ -93,70 +89,60 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
     }
   };
 
-  const handleActionClick = (action: any) => {
-    if (action.action === 'quick_reply') {
-      sendMessage(action.payload || action.label);
-    } else if (action.action === 'add_to_cart') {
-      if (action.payload) {
-        onAddToCart(action.payload);
-      }
-    } else if (action.action === 'remove_from_cart') {
-      const prodId = typeof action.payload === 'string' ? action.payload : action.payload?.id;
-      if (prodId && onRemoveFromCart) {
-        onRemoveFromCart(prodId);
-      }
-    } else if (action.action === 'checkout') {
-      onProceedToCheckout();
-    }
-  };
-
   return (
-    <div className="glass-card" style={{
+    <div className="saas-card" style={{
       display: 'flex',
       flexDirection: 'column',
-      height: '620px',
-      overflow: 'hidden',
-      border: '1px solid rgba(0, 186, 242, 0.2)',
-      boxShadow: 'var(--shadow-glow-cyan)'
+      height: '580px',
+      overflow: 'hidden'
     }}>
-      {/* Header */}
+      {/* Chat Header */}
       <div style={{
-        padding: '14px 18px',
-        backgroundColor: 'rgba(12, 35, 64, 0.5)',
+        padding: '14px 16px',
         borderBottom: '1px solid var(--border-subtle)',
+        backgroundColor: '#111827',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #00BAF2 0%, #6366F1 100%)',
+            width: '28px',
+            height: '28px',
+            borderRadius: '6px',
+            backgroundColor: 'rgba(2, 132, 199, 0.15)',
+            color: '#38BDF8',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <Sparkles size={18} color="#FFFFFF" />
+            <Bot size={16} />
           </div>
           <div>
-            <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-main)' }}>
-              AI Shopping Copilot
-            </div>
-            <div style={{ fontSize: '0.7rem', color: '#38BDF8', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span className="live-dot" style={{ width: '6px', height: '6px' }} />
-              Autonomous Intent & Catalog Agent
+            <h3 style={{ fontSize: '0.875rem', fontWeight: 600, margin: 0 }}>
+              RAZORDEFENSE Shopping Copilot
+            </h3>
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)' }}>
+              Grounded AI Catalog & Checkout Assistant
             </div>
           </div>
         </div>
+
+        <button
+          onClick={onProceedToCheckout}
+          className="btn-secondary"
+          style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+        >
+          <ShoppingCart size={13} />
+          <span>Checkout</span>
+        </button>
       </div>
 
       {/* Messages List */}
       <div style={{
         flexGrow: 1,
-        padding: '16px',
         overflowY: 'auto',
+        padding: '16px',
         display: 'flex',
         flexDirection: 'column',
         gap: '14px'
@@ -166,199 +152,162 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
             key={msg.id}
             style={{
               display: 'flex',
-              gap: '10px',
-              alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-              maxWidth: '88%'
+              flexDirection: 'column',
+              alignItems: msg.sender === 'user' ? 'flex-end' : 'flex-start',
+              gap: '6px'
             }}
           >
-            {msg.sender !== 'user' && (
+            <div style={{
+              display: 'flex',
+              gap: '8px',
+              maxWidth: '90%',
+              flexDirection: msg.sender === 'user' ? 'row-reverse' : 'row'
+            }}>
               <div style={{
-                width: '28px',
-                height: '28px',
-                borderRadius: '8px',
-                backgroundColor: 'rgba(0, 186, 242, 0.2)',
-                border: '1px solid rgba(0, 186, 242, 0.4)',
+                width: '24px',
+                height: '24px',
+                borderRadius: '50%',
+                backgroundColor: msg.sender === 'user' ? '#0284C7' : '#1F293D',
+                color: '#FFFFFF',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
-                marginTop: '2px'
+                fontSize: '0.7rem'
               }}>
-                <Bot size={16} color="#38BDF8" />
+                {msg.sender === 'user' ? <User size={13} /> : <Bot size={13} />}
               </div>
-            )}
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {/* Message Bubble */}
               <div style={{
-                padding: '12px 16px',
-                borderRadius: msg.sender === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-                backgroundColor: msg.sender === 'user' ? '#00BAF2' : 'rgba(255, 255, 255, 0.05)',
+                padding: '10px 12px',
+                borderRadius: '8px',
+                backgroundColor: msg.sender === 'user' ? '#0284C7' : '#1F293D',
                 color: msg.sender === 'user' ? '#FFFFFF' : 'var(--text-main)',
-                fontSize: '0.875rem',
-                lineHeight: '1.5',
-                border: msg.sender === 'user' ? 'none' : '1px solid var(--border-subtle)',
-                whiteSpace: 'pre-line'
+                fontSize: '0.8rem',
+                lineHeight: '1.4'
               }}>
                 {msg.text}
               </div>
-
-              {/* Recommended Product Cards */}
-              {msg.recommendedProducts && msg.recommendedProducts.length > 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
-                  {msg.recommendedProducts.map(prod => (
-                    <div
-                      key={prod.id}
-                      style={{
-                        padding: '10px 12px',
-                        borderRadius: '12px',
-                        backgroundColor: 'rgba(7, 9, 19, 0.6)',
-                        border: '1px solid rgba(0, 186, 242, 0.3)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: '10px'
-                      }}
-                    >
-                      <img
-                        src={prod.image}
-                        alt={prod.name}
-                        style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover' }}
-                      />
-                      <div style={{ flexGrow: 1, minWidth: 0 }}>
-                        <div style={{
-                          fontSize: '0.8rem',
-                          fontWeight: 700,
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis'
-                        }}>
-                          {prod.name}
-                        </div>
-                        <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#38BDF8' }}>
-                          ₹{prod.price.toLocaleString('en-IN')}
-                        </div>
-                      </div>
-                      <button
-                        onClick={() => onAddToCart(prod)}
-                        className="btn-primary"
-                        style={{ padding: '6px 10px', fontSize: '0.75rem', borderRadius: '8px' }}
-                      >
-                        <ShoppingCart size={14} />
-                        <span>Add</span>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              {msg.suggestedActions && msg.suggestedActions.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
-                  {msg.suggestedActions.map((action, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => handleActionClick(action)}
-                      style={{
-                        padding: '6px 12px',
-                        borderRadius: '9999px',
-                        backgroundColor: 'rgba(0, 186, 242, 0.1)',
-                        border: '1px solid rgba(0, 186, 242, 0.25)',
-                        color: '#38BDF8',
-                        fontSize: '0.75rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        transition: 'all 0.15s ease'
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(0, 186, 242, 0.2)'}
-                      onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(0, 186, 242, 0.1)'}
-                    >
-                      <span>{action.label}</span>
-                      <ArrowRight size={12} />
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
 
-            {msg.sender === 'user' && (
+            {/* Recommended Products */}
+            {msg.recommendedProducts && msg.recommendedProducts.length > 0 && (
               <div style={{
-                width: '28px',
-                height: '28px',
-                borderRadius: '8px',
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-                marginTop: '2px'
+                flexDirection: 'column',
+                gap: '8px',
+                width: '100%',
+                marginTop: '4px',
+                paddingLeft: '32px'
               }}>
-                <User size={16} color="#FFFFFF" />
+                {msg.recommendedProducts.map(p => (
+                  <div
+                    key={p.id}
+                    style={{
+                      padding: '10px',
+                      borderRadius: '8px',
+                      backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                      border: '1px solid var(--border-subtle)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px'
+                    }}
+                  >
+                    <img src={p.image} alt={p.name} style={{ width: '40px', height: '40px', borderRadius: '6px', objectFit: 'cover' }} />
+                    <div style={{ flexGrow: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: '0.775rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
+                      <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#38BDF8' }}>₹{p.price.toLocaleString('en-IN')}</div>
+                    </div>
+                    <button
+                      onClick={() => onAddToCart(p)}
+                      className="btn-primary"
+                      style={{ padding: '5px 10px', fontSize: '0.725rem' }}
+                    >
+                      <span>+ Cart</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Suggested Action Chips */}
+            {msg.suggestedActions && msg.suggestedActions.length > 0 && (
+              <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '6px',
+                marginTop: '4px',
+                paddingLeft: '32px'
+              }}>
+                {msg.suggestedActions.map((sa, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      if (sa.action === 'checkout') onProceedToCheckout();
+                      else if (sa.payload) sendMessage(sa.payload);
+                    }}
+                    style={{
+                      padding: '4px 8px',
+                      borderRadius: '6px',
+                      border: '1px solid var(--border-subtle)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                      color: 'var(--text-muted)',
+                      fontSize: '0.725rem',
+                      fontWeight: 500,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {sa.label}
+                  </button>
+                ))}
               </div>
             )}
           </div>
         ))}
 
         {isLoading && (
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-            <div className="live-dot" style={{ width: '6px', height: '6px' }} />
-            <span>Agent reasoning and scanning catalog...</span>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: 'var(--text-muted)', fontSize: '0.775rem', paddingLeft: '32px' }}>
+            <Sparkles size={14} className="animate-spin" style={{ color: '#0284C7' }} />
+            <span>Searching catalog & reasoning recommendations...</span>
           </div>
         )}
+
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Box */}
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          sendMessage();
-        }}
-        style={{
-          padding: '12px 14px',
-          borderTop: '1px solid var(--border-subtle)',
-          backgroundColor: 'rgba(7, 9, 19, 0.7)',
-          display: 'flex',
-          gap: '8px',
-          alignItems: 'center'
-        }}
-      >
+      {/* Input Area */}
+      <div style={{
+        padding: '12px',
+        borderTop: '1px solid var(--border-subtle)',
+        backgroundColor: '#111827',
+        display: 'flex',
+        gap: '8px'
+      }}>
         <input
           type="text"
           value={input}
           onChange={e => setInput(e.target.value)}
-          placeholder="Ask for recommendations, specs, or instant checkout..."
+          onKeyDown={e => e.key === 'Enter' && sendMessage()}
+          placeholder="Ask for products, features, or prices..."
           style={{
             flexGrow: 1,
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+            padding: '8px 12px',
+            borderRadius: '6px',
+            backgroundColor: 'rgba(0, 0, 0, 0.25)',
             border: '1px solid var(--border-subtle)',
-            borderRadius: '12px',
-            padding: '10px 14px',
             color: 'var(--text-main)',
-            fontSize: '0.875rem',
-            outline: 'none',
-            fontFamily: 'inherit'
+            fontSize: '0.8rem'
           }}
-          onFocus={e => e.target.style.borderColor = 'var(--accent-cyan)'}
-          onBlur={e => e.target.style.borderColor = 'var(--border-subtle)'}
         />
         <button
-          type="submit"
+          onClick={() => sendMessage()}
           disabled={!input.trim() || isLoading}
           className="btn-primary"
-          style={{
-            padding: '10px 14px',
-            borderRadius: '12px',
-            opacity: !input.trim() || isLoading ? 0.5 : 1,
-            cursor: !input.trim() || isLoading ? 'not-allowed' : 'pointer'
-          }}
+          style={{ padding: '8px 12px' }}
         >
-          <Send size={16} />
+          <Send size={15} />
         </button>
-      </form>
+      </div>
     </div>
   );
 };

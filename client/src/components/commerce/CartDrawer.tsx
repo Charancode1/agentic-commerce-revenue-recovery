@@ -58,7 +58,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           key: razorpay.keyId,
           amount: razorpay.amount,
           currency: razorpay.currency,
-          name: 'Agentic Commerce Store',
+          name: 'RAZORDEFENSE Store',
           description: `Order #${order.orderNumber}`,
           order_id: razorpay.orderId,
           prefill: {
@@ -150,22 +150,22 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div
-        className="glass-card"
+        className="saas-card"
         onClick={e => e.stopPropagation()}
         style={{
           width: '100%',
-          maxWidth: '520px',
-          maxHeight: '90vh',
+          maxWidth: '480px',
+          maxHeight: '88vh',
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: 'var(--bg-secondary)',
-          border: '1px solid rgba(0, 186, 242, 0.3)',
+          backgroundColor: '#111827',
+          border: '1px solid var(--border-subtle)',
           boxShadow: 'var(--shadow-lg)'
         }}
       >
         {/* Header */}
         <div style={{
-          padding: '18px 24px',
+          padding: '16px 20px',
           borderBottom: '1px solid var(--border-subtle)',
           display: 'flex',
           alignItems: 'center',
@@ -407,7 +407,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               fontSize: '0.75rem'
             }}>
               <Lock size={12} />
-              <span>Secured by Razorpay Test API & Autonomous AI Recovery Sentinel</span>
+              <span>Secured by Razorpay Test API & RAZORDEFENSE Sentinel</span>
             </div>
           </div>
         )}

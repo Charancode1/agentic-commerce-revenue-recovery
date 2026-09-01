@@ -1,49 +1,49 @@
 /* ==========================================================================
-   AGENTIC COMMERCE & REVENUE RECOVERY DESIGN SYSTEM
-   Theme: Razorpay Cyber-Commerce / Midnight Glassmorphism
+   RAZORDEFENSE — Autonomous Revenue Defense Platform
+   Design System: Calm, Operational, Production-Grade Financial SaaS
    ========================================================================== */
 
 :root {
-  /* Color Palette */
-  --bg-primary: #070913;
-  --bg-secondary: #0D1224;
-  --bg-card: rgba(17, 24, 48, 0.75);
-  --bg-card-hover: rgba(24, 34, 68, 0.85);
-  --bg-glass: rgba(13, 18, 36, 0.65);
+  /* Color Palette — Slate / Obsidian Financial Console */
+  --bg-primary: #0B0F17;
+  --bg-secondary: #111827;
+  --bg-card: #161F30;
+  --bg-card-hover: #1C283E;
+  --bg-elevated: #1F293D;
   
-  /* Brand Accents */
-  --accent-blue: #0C2340;
+  /* Accent Colors — Restrained & Operational */
+  --accent-blue: #0284C7;
+  --accent-blue-hover: #0369A1;
   --accent-cyan: #00BAF2;
-  --accent-cyan-glow: rgba(0, 186, 242, 0.35);
-  --accent-indigo: #6366F1;
+  --accent-indigo: #4F46E5;
   --accent-emerald: #10B981;
-  --accent-emerald-glow: rgba(16, 185, 129, 0.3);
+  --accent-emerald-bg: rgba(16, 185, 129, 0.12);
   --accent-amber: #F59E0B;
+  --accent-amber-bg: rgba(245, 158, 11, 0.12);
   --accent-rose: #F43F5E;
-  --accent-rose-glow: rgba(244, 63, 94, 0.35);
+  --accent-rose-bg: rgba(244, 63, 94, 0.12);
 
-  /* Typography Colors */
-  --text-main: #F8FAFC;
+  /* Neutral & Borders */
+  --text-main: #F1F5F9;
   --text-muted: #94A3B8;
   --text-subtle: #64748B;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-glow: rgba(0, 186, 242, 0.3);
+  --border-subtle: #1E293B;
+  --border-strong: #334155;
+  --border-focus: #0284C7;
 
-  /* Font Families */
-  --font-heading: 'Outfit', sans-serif;
-  --font-body: 'Plus Jakarta Sans', sans-serif;
+  /* Typography */
+  --font-heading: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Shadows & Glass */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
-  --shadow-glow-cyan: 0 0 24px var(--accent-cyan-glow);
-  --shadow-glow-emerald: 0 0 24px var(--accent-emerald-glow);
-  --shadow-glow-rose: 0 0 24px var(--accent-rose-glow);
-  
-  /* Animation Timings */
+  /* Elevation & Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+
+  /* Transitions */
   --transition-fast: 0.15s ease;
-  --transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.25s ease;
 }
 
 * {
@@ -54,9 +54,6 @@
 
 body {
   background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(circle at 15% 15%, rgba(0, 186, 242, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.08) 0%, transparent 40%);
   color: var(--text-main);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
@@ -69,75 +66,68 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   letter-spacing: -0.02em;
   font-weight: 700;
+  color: var(--text-main);
 }
 
 code, pre {
   font-family: var(--font-mono);
 }
 
-/* Glassmorphism Containers */
-.glass-card {
+/* Clean Professional Surface Cards */
+.glass-card, .saas-card {
   background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: var(--shadow-sm);
-  transition: all var(--transition-smooth);
+  transition: border-color var(--transition-smooth), background-color var(--transition-smooth);
 }
 
-.glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.14);
+.glass-card:hover, .saas-card:hover {
+  border-color: var(--border-strong);
 }
 
 .glass-card-interactive:hover {
-  transform: translateY(-2px);
-  border-color: var(--border-glow);
-  box-shadow: var(--shadow-glow-cyan);
+  border-color: var(--accent-blue);
+  background-color: var(--bg-card-hover);
 }
 
-/* Gradient Texts */
-.gradient-text-cyan {
-  background: linear-gradient(135deg, #38BDF8 0%, #00BAF2 50%, #6366F1 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Text Utilities */
+.text-cyan {
+  color: #38BDF8;
 }
 
-.gradient-text-emerald {
-  background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.text-emerald {
+  color: #34D399;
 }
 
-.gradient-text-rose {
-  background: linear-gradient(135deg, #FB7185 0%, #F43F5E 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.text-rose {
+  color: #FB7185;
+}
+
+.text-amber {
+  color: #FBBF24;
 }
 
 /* Buttons */
 .btn-primary {
-  background: linear-gradient(135deg, #00BAF2 0%, #0284C7 100%);
+  background: var(--accent-blue);
   color: #FFFFFF;
-  border: none;
-  padding: 10px 20px;
+  border: 1px solid transparent;
+  padding: 9px 16px;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.95rem;
-  border-radius: 12px;
+  font-size: 0.875rem;
+  border-radius: 8px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all var(--transition-smooth);
-  box-shadow: 0 4px 14px rgba(0, 186, 242, 0.3);
+  transition: all var(--transition-fast);
 }
 
 .btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(0, 186, 242, 0.45);
-  filter: brightness(1.05);
+  background: var(--accent-blue-hover);
 }
 
 .btn-primary:active {
@@ -145,101 +135,114 @@ code, pre {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-card);
   color: var(--text-main);
   border: 1px solid var(--border-subtle);
-  padding: 10px 18px;
+  padding: 8px 14px;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.95rem;
-  border-radius: 12px;
+  font-size: 0.85rem;
+  border-radius: 8px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: all var(--transition-smooth);
+  gap: 6px;
+  transition: all var(--transition-fast);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--bg-elevated);
+  border-color: var(--border-strong);
 }
 
 .btn-recovery-confirm {
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  background: #059669;
   color: #FFFFFF;
-  border: none;
-  padding: 12px 24px;
+  border: 1px solid transparent;
+  padding: 11px 20px;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1rem;
-  border-radius: 12px;
+  font-size: 0.9rem;
+  border-radius: 8px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: var(--shadow-glow-emerald);
-  transition: all var(--transition-smooth);
+  transition: all var(--transition-fast);
 }
 
 .btn-recovery-confirm:hover {
-  transform: scale(1.02);
-  filter: brightness(1.1);
+  background: #047857;
 }
 
 .btn-recovery-decline {
   background: transparent;
   color: var(--text-subtle);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 10px 18px;
-  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  padding: 9px 16px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
+  font-size: 0.85rem;
   transition: all var(--transition-fast);
 }
 
 .btn-recovery-decline:hover {
   color: var(--text-muted);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--border-strong);
 }
 
 /* Badges */
 .badge {
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.7rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  gap: 4px;
+  letter-spacing: 0.02em;
 }
 
 .badge-cyan {
-  background: rgba(0, 186, 242, 0.15);
+  background: rgba(2, 132, 199, 0.15);
   color: #38BDF8;
-  border: 1px solid rgba(0, 186, 242, 0.3);
+  border: 1px solid rgba(2, 132, 199, 0.3);
 }
 
 .badge-emerald {
-  background: rgba(16, 185, 129, 0.15);
+  background: var(--accent-emerald-bg);
   color: #34D399;
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .badge-amber {
-  background: rgba(245, 158, 11, 0.15);
+  background: var(--accent-amber-bg);
   color: #FBBF24;
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .badge-rose {
-  background: rgba(244, 63, 94, 0.15);
+  background: var(--accent-rose-bg);
   color: #FB7185;
   border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+/* Status dots */
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--accent-emerald);
+}
+
+.risk-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--accent-rose);
 }
 
 /* Custom Scrollbar */
@@ -253,59 +256,29 @@ code, pre {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: #1E293B;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-cyan);
-}
-
-/* Pulse animation for live indicators */
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.15);
-  }
-}
-
-.live-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--accent-emerald);
-  box-shadow: 0 0 10px var(--accent-emerald);
-  animation: pulse-glow 2s infinite ease-in-out;
-}
-
-.risk-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--accent-rose);
-  box-shadow: 0 0 10px var(--accent-rose);
-  animation: pulse-glow 1.5s infinite ease-in-out;
+  background: #334155;
 }
 
 /* Modal Backdrop */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(4, 7, 20, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(8, 12, 22, 0.85);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 20px;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.15s ease-out;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.98); }
+  from { opacity: 0; transform: scale(0.99); }
   to { opacity: 1; transform: scale(1); }
 }

@@ -149,6 +149,14 @@ class DatabaseManager {
     this.save();
     return this.state.settings;
   }
+
+  public resetData() {
+    this.state.orders = [];
+    this.state.recoveries = [];
+    this.state.auditLogs = [];
+    this.save();
+    liveEventBus.emit('data:reset', true);
+  }
 }
 
 export const db = new DatabaseManager();

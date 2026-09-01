@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FailureCategory, RecoveryIncident } from '../../../shared/types/recovery';
 import { api } from '../../services/api';
-import { Terminal, AlertTriangle, ShieldCheck, Zap, ArrowRight, Play, RefreshCw, Smartphone, CreditCard, WifiOff, ShoppingCart } from 'lucide-react';
+import { Terminal, ShieldCheck, Play, RefreshCw, Smartphone, CreditCard, WifiOff, ShoppingCart } from 'lucide-react';
 
 interface FailureSimulatorProps {
   onIncidentCreated: (incident: RecoveryIncident) => void;
@@ -19,46 +19,40 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
     description: string;
     icon: any;
     expectedRecovery: string;
-    color: string;
   }[] = [
     {
       category: 'BANK_OTP_TIMEOUT',
       title: 'Bank 2FA / OTP Delay Timeout',
       description: 'Customer did not receive bank OTP SMS within 120 seconds. Gateway flagged as timeout.',
       icon: Smartphone,
-      expectedRecovery: 'Auto-switches to UPI Deep Link / 1-tap QR (Bypasses Bank SMS delays)',
-      color: '#38BDF8'
+      expectedRecovery: 'Auto-switches to UPI Deep Link / 1-tap QR (Bypasses Bank SMS delays)'
     },
     {
       category: 'CARD_DECLINED_INSUFFICIENT_FUNDS',
       title: 'Card Limit Exceeded / Bank Decline',
-      description: 'Issuing bank returned `CARD_LIMIT_REACHED`. Customer cannot complete full balance on card.',
+      description: 'Issuing bank returned CARD_LIMIT_REACHED. Customer cannot complete balance on card.',
       icon: CreditCard,
-      expectedRecovery: 'Applies bounded 8% concession (₹400 max) + offers alternate payment methods',
-      color: '#F43F5E'
+      expectedRecovery: 'Applies bounded 8% concession (₹400 max) + offers alternate payment methods'
     },
     {
       category: 'NETWORK_GATEWAY_DROPOUT',
       title: 'Network Gateway Interruption',
       description: 'WiFi/Cellular dropped while browser was redirecting to payment processing page.',
       icon: WifiOff,
-      expectedRecovery: 'Generates dynamic Razorpay Smart Payment Link for instant 1-click resumption',
-      color: '#F59E0B'
+      expectedRecovery: 'Generates dynamic Razorpay Smart Payment Link for 1-click resumption'
     },
     {
       category: 'CART_ABANDONMENT_AT_CHECKOUT',
       title: 'Checkout Drop-off / Cart Abandonment',
-      description: 'Shopper clicked checkout, viewed price, but hesitated and closed checkout drawer.',
+      description: 'Shopper initiated checkout, viewed price, but closed checkout drawer before payment.',
       icon: ShoppingCart,
-      expectedRecovery: 'Triggers 20-minute Inventory Reservation badge + bounded incentive',
-      color: '#10B981'
+      expectedRecovery: 'Triggers 20-minute Inventory Reservation badge + bounded incentive'
     }
   ];
 
   const handleRunSimulation = async () => {
     setIsSimulating(true);
     try {
-      // Create a simulated order first if needed, or pass directly
       const createRes = await api.createOrder({
         items: [
           {
@@ -89,7 +83,6 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
 
       const orderId = createRes.order.id;
 
-      // Simulate the chosen failure scenario
       const simRes = await api.simulateFailure({
         orderId,
         failureCategory: selectedScenario,
@@ -108,28 +101,24 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
   };
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* Header Banner */}
-      <div className="glass-card" style={{
-        padding: '24px',
-        border: '1px solid rgba(244, 63, 94, 0.3)',
-        background: 'linear-gradient(135deg, rgba(244, 63, 94, 0.08) 0%, rgba(13, 18, 36, 0.8) 100%)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+      <div className="saas-card" style={{ padding: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{
-            padding: '8px',
-            borderRadius: '10px',
-            backgroundColor: 'rgba(244, 63, 94, 0.2)',
-            color: '#FB7185'
+            padding: '7px',
+            borderRadius: '6px',
+            backgroundColor: 'rgba(2, 132, 199, 0.12)',
+            color: '#38BDF8'
           }}>
-            <Terminal size={22} />
+            <Terminal size={18} />
           </div>
           <div>
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0 }}>
-              Payment Failure & Loss Simulation Sandbox
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0 }}>
+              Failure Injection & Operations Testing Console
             </h2>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
-              Simulate real-world payment drop-offs, gateway errors, and bank timeouts to test the Autonomous Recovery Agent.
+            <p style={{ fontSize: '0.775rem', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
+              Test RAZORDEFENSE failure classification and bounded policy enforcement under gateway error conditions.
             </p>
           </div>
         </div>
@@ -139,7 +128,7 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: '14px'
+        gap: '12px'
       }}>
         {scenarios.map(sc => {
           const Icon = sc.icon;
@@ -149,40 +138,39 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
             <div
               key={sc.category}
               onClick={() => setSelectedScenario(sc.category)}
-              className="glass-card"
+              className="saas-card"
               style={{
-                padding: '16px',
+                padding: '14px',
                 cursor: 'pointer',
-                border: isSelected ? `2px solid ${sc.color}` : '1px solid var(--border-subtle)',
-                backgroundColor: isSelected ? 'rgba(255, 255, 255, 0.06)' : 'var(--bg-card)',
-                boxShadow: isSelected ? `0 0 16px ${sc.color}40` : 'none',
+                border: isSelected ? '1px solid #0284C7' : '1px solid var(--border-subtle)',
+                backgroundColor: isSelected ? 'var(--bg-elevated)' : 'var(--bg-card)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '10px',
-                transition: 'all 0.2s ease'
+                gap: '8px',
+                transition: 'all 0.15s ease'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{
-                  padding: '8px',
-                  borderRadius: '8px',
-                  backgroundColor: `${sc.color}20`,
-                  color: sc.color
+                  padding: '6px',
+                  borderRadius: '6px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  color: isSelected ? '#38BDF8' : 'var(--text-muted)'
                 }}>
-                  <Icon size={20} />
+                  <Icon size={18} />
                 </div>
                 {isSelected && (
-                  <span className="badge" style={{ backgroundColor: `${sc.color}25`, color: sc.color, border: `1px solid ${sc.color}50` }}>
-                    Selected
+                  <span className="badge badge-cyan" style={{ fontSize: '0.65rem' }}>
+                    Active
                   </span>
                 )}
               </div>
 
               <div>
-                <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '4px' }}>
+                <h4 style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '2px' }}>
                   {sc.title}
                 </h4>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+                <p style={{ fontSize: '0.725rem', color: 'var(--text-muted)', lineHeight: '1.35' }}>
                   {sc.description}
                 </p>
               </div>
@@ -191,10 +179,10 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
                 marginTop: 'auto',
                 paddingTop: '8px',
                 borderTop: '1px solid var(--border-subtle)',
-                fontSize: '0.7rem',
+                fontSize: '0.675rem',
                 color: 'var(--text-subtle)'
               }}>
-                <span style={{ color: sc.color, fontWeight: 700 }}>Autonomous Action: </span>
+                <span style={{ color: '#0284C7', fontWeight: 600 }}>Target Action: </span>
                 {sc.expectedRecovery}
               </div>
             </div>
@@ -203,21 +191,21 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
       </div>
 
       {/* Control Panel */}
-      <div className="glass-card" style={{ padding: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Simulated Basket Value:</span>
-          <div style={{ display: 'flex', gap: '8px' }}>
+      <div className="saas-card" style={{ padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>Basket Value:</span>
+          <div style={{ display: 'flex', gap: '6px' }}>
             {[1899, 2799, 4999, 6499].map(amt => (
               <button
                 key={amt}
                 onClick={() => setSimulatedAmount(amt)}
                 style={{
-                  padding: '6px 12px',
-                  borderRadius: '8px',
-                  border: simulatedAmount === amt ? '1px solid var(--accent-cyan)' : '1px solid var(--border-subtle)',
-                  backgroundColor: simulatedAmount === amt ? 'rgba(0, 186, 242, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+                  padding: '5px 10px',
+                  borderRadius: '6px',
+                  border: simulatedAmount === amt ? '1px solid #0284C7' : '1px solid var(--border-subtle)',
+                  backgroundColor: simulatedAmount === amt ? 'rgba(2, 132, 199, 0.15)' : 'transparent',
                   color: simulatedAmount === amt ? '#38BDF8' : 'var(--text-muted)',
-                  fontSize: '0.85rem',
+                  fontSize: '0.775rem',
                   fontWeight: 600,
                   cursor: 'pointer'
                 }}
@@ -233,21 +221,19 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
           disabled={isSimulating}
           className="btn-primary"
           style={{
-            padding: '12px 24px',
-            fontSize: '1rem',
-            background: 'linear-gradient(135deg, #F43F5E 0%, #E11D48 100%)',
-            boxShadow: 'var(--shadow-glow-rose)'
+            padding: '9px 18px',
+            fontSize: '0.85rem'
           }}
         >
           {isSimulating ? (
             <>
-              <RefreshCw size={18} className="animate-spin" />
-              <span>Simulating Failure & Agent Reasoning...</span>
+              <RefreshCw size={15} className="animate-spin" />
+              <span>Evaluating Policy & Formulating Action...</span>
             </>
           ) : (
             <>
-              <Play size={18} />
-              <span>Simulate Failure Scenario</span>
+              <Play size={15} />
+              <span>Execute Failure Simulation</span>
             </>
           )}
         </button>
@@ -255,17 +241,12 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
 
       {/* Live Agent Output Inspector */}
       {lastIncident && (
-        <div className="glass-card" style={{
-          padding: '24px',
-          border: '1px solid rgba(16, 185, 129, 0.3)',
-          backgroundColor: 'rgba(13, 18, 36, 0.9)',
-          boxShadow: 'var(--shadow-glow-emerald)'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <div className="saas-card" style={{ padding: '20px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <ShieldCheck size={22} color="#34D399" />
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0 }}>
-                Autonomous Agent Response Generated
+              <ShieldCheck size={18} color="#34D399" />
+              <h3 style={{ fontSize: '0.95rem', fontWeight: 600, margin: 0 }}>
+                Autonomous Strategy Formulated & Policy Approved
               </h3>
             </div>
             <span className="badge badge-emerald">
@@ -273,28 +254,28 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '16px' }}>
-            <div style={{ padding: '12px', borderRadius: '10px', backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)' }}>REVENUE AT RISK</div>
-              <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FB7185' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px', marginBottom: '14px' }}>
+            <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'rgba(0, 0, 0, 0.25)', border: '1px solid var(--border-subtle)' }}>
+              <div style={{ fontSize: '0.675rem', color: 'var(--text-subtle)' }}>REVENUE AT RISK</div>
+              <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#FB7185' }}>
                 ₹{lastIncident.amountAtRisk.toLocaleString('en-IN')}
               </div>
             </div>
-            <div style={{ padding: '12px', borderRadius: '10px', backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)' }}>CLASSIFIED ROOT CAUSE</div>
-              <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-main)' }}>
+            <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'rgba(0, 0, 0, 0.25)', border: '1px solid var(--border-subtle)' }}>
+              <div style={{ fontSize: '0.675rem', color: 'var(--text-subtle)' }}>CLASSIFIED REASON</div>
+              <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-main)' }}>
                 {lastIncident.recoveryProposal?.detectedReason}
               </div>
             </div>
-            <div style={{ padding: '12px', borderRadius: '10px', backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)' }}>BOUNDED STRATEGY</div>
-              <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#38BDF8' }}>
+            <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'rgba(0, 0, 0, 0.25)', border: '1px solid var(--border-subtle)' }}>
+              <div style={{ fontSize: '0.675rem', color: 'var(--text-subtle)' }}>STRATEGY</div>
+              <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#38BDF8' }}>
                 {lastIncident.recoveryProposal?.strategy}
               </div>
             </div>
-            <div style={{ padding: '12px', borderRadius: '10px', backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)' }}>CONCESSION APPLIED</div>
-              <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#34D399' }}>
+            <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'rgba(0, 0, 0, 0.25)', border: '1px solid var(--border-subtle)' }}>
+              <div style={{ fontSize: '0.675rem', color: 'var(--text-subtle)' }}>CONCESSION</div>
+              <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#34D399' }}>
                 {lastIncident.recoveryProposal?.concession?.discountValue
                   ? `₹${lastIncident.recoveryProposal.concession.discountValue} OFF`
                   : 'UPI Auto-Switch (₹0)'}
@@ -302,26 +283,15 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
             </div>
           </div>
 
-          {/* AI Reasoning Log */}
           <div style={{
-            padding: '14px',
-            borderRadius: '10px',
-            backgroundColor: 'rgba(0, 186, 242, 0.08)',
-            border: '1px solid rgba(0, 186, 242, 0.2)',
-            marginBottom: '16px'
+            padding: '10px 12px',
+            borderRadius: '6px',
+            backgroundColor: 'rgba(2, 132, 199, 0.08)',
+            border: '1px solid rgba(2, 132, 199, 0.2)',
+            fontSize: '0.775rem'
           }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#38BDF8', marginBottom: '4px' }}>
-              🧠 AGENT REASONING ENGINE:
-            </div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-main)', lineHeight: '1.4' }}>
-              "{lastIncident.recoveryProposal?.agentReasoning}"
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', alignSelf: 'center' }}>
-              Switch to <strong>Shopper Storefront</strong> or <strong>Merchant Control Tower</strong> to interact with this recovery.
-            </span>
+            <span style={{ fontWeight: 600, color: '#38BDF8' }}>AGENT REASONING: </span>
+            <span style={{ color: 'var(--text-main)' }}>"{lastIncident.recoveryProposal?.agentReasoning}"</span>
           </div>
         </div>
       )}
