@@ -54,4 +54,19 @@ export class CommerceController {
       return res.status(500).json({ success: false, error: e.message });
     }
   }
+
+  public static async generateRecoveryMessage(req: Request, res: Response) {
+    const { context } = req.body;
+    if (!context || !context.incidentId) {
+      return res.status(400).json({ success: false, error: 'Valid ShopperRecoveryContext is required' });
+    }
+
+    try {
+      const response = await CommerceAgent.generateRecoveryMessage(context);
+      return res.json({ success: true, response });
+    } catch (e: any) {
+      console.error('Recovery message generation error:', e);
+      return res.status(500).json({ success: false, error: e.message });
+    }
+  }
 }

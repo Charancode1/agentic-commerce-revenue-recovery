@@ -1,6 +1,6 @@
-import { Product, Order, CartItem, ChatMessage } from '../../shared/types/commerce';
-import { RecoveryIncident, DashboardMetrics, FailureCategory } from '../../shared/types/recovery';
-import { AuditLogEntry } from '../../shared/types/audit';
+import { CartItem, ChatMessage, Order, Product } from '../../../shared/types/commerce';
+import { DashboardMetrics, FailureCategory, RecoveryIncident, ShopperRecoveryContext } from '../../../shared/types/recovery';
+import { AuditLogEntry } from '../../../shared/types/audit';
 
 const API_BASE = '/api';
 
@@ -15,11 +15,21 @@ export const api = {
     return data.products || [];
   },
 
-  async chatWithAgent(message: string, history: { sender: string; text: string }[]): Promise<ChatMessage> {
+  async chatWithAgent(message: string, history: any[] = []): Promise<ChatMessage> {
     const res = await fetch(`${API_BASE}/commerce/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message, history })
+    });
+    const data = await res.json();
+    return data.response;
+  },
+
+  async getRecoveryMessage(context: ShopperRecoveryContext): Promise<ChatMessage> {
+    const res = await fetch(`${API_BASE}/commerce/recovery-message`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ context })
     });
     const data = await res.json();
     return data.response;

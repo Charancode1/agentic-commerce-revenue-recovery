@@ -1,6 +1,7 @@
 import { GoogleGenAI, Type } from '@google/genai';
 import { db } from '../db/db';
 import { Product, ChatMessage } from '../../../shared/types/commerce';
+import { ShopperRecoveryContext } from '../../../shared/types/recovery';
 import { auditLogger } from '../db/audit-logger';
 import { ENV } from '../config/env';
 
@@ -259,6 +260,109 @@ ${JSON.stringify(catalogContext, null, 2)}`;
     });
 
     return agentMessage;
+  }
+
+  /**
+   * Formats a shopper-facing recovery message using Gemini AI with strict grounding on backend-authoritative parameters.
+   */
+  public static async generateRecoveryMessage(context: ShopperRecoveryContext): Promise<ChatMessage> {
+    auditLogger.record({
+      actor: 'COMMERCE_AGENT',
+      action: 'SHOPPER_RECOVERY_CONTEXT_CREATED',
+      orderId: context.orderId,
+      incidentId: context.incidentId,
+      summary: `Shopper Agent received recovery context for Order #${context.orderNumber} (₹${context.finalPayableAmount})`,
+      metadata: { context }
+    });
+
+    const ai = this.getGeminiClient();
+    let textMessage = '';
+
+    if (ai) {
+      try {
+        const systemInstruction = `You are the Shopper-Facing AI Commerce Agent for RAZORDEFENSE Store.
+Your task is to communicate a payment recovery option to the customer in a calm, helpful, professional tone.
+
+STRICT GROUNDING & FINANCIAL RULES:
+1. All financial numbers are STRICTLY BACKEND-AUTHORITATIVE:
+   - Order Number: #${context.orderNumber}
+   - Original Amount: ₹${context.originalAmount}
+   - Final Payable Amount: ₹${context.finalPayableAmount}
+   - Concession/Discount: ${context.discountValue > 0 ? `₹${context.discountValue} OFF` : 'None'}
+   - Classified Root Cause: ${context.detectedReason}
+   - Strategy: ${context.strategy}
+2. NEVER invent fake discounts, fake prices, or fake order numbers.
+3. Keep your response under 3-4 sentences. Clearly explain what happened to their payment (e.g. Bank 2FA delay, Card limit decline, network glitch) and reassure them that their items are safely reserved for 20 minutes.
+4. Encourage them to complete their purchase using the verified recovery option.`;
+
+        const prompt = `Payment failure occurred for Order #${context.orderNumber}.
+Reason: ${context.detectedReason}
+Original Amount: ₹${context.originalAmount}
+Discount Offered: ₹${context.discountValue}
+Final Payable: ₹${context.finalPayableAmount}
+Strategy: ${context.strategy}
+Reasoning: ${context.agentReasoning}
+
+Please format a warm, professional customer-facing recovery explanation for the shopper.`;
+
+        const response = await ai.models.generateContent({
+          model: 'gemini-3.6-flash',
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          config: {
+            systemInstruction,
+            temperature: 0.3
+          }
+        });
+
+        if (response.text && response.text.trim().length > 0) {
+          textMessage = response.text.trim();
+        }
+      } catch (err) {
+        console.warn('⚠️ Gemini recovery message generation error, using fallback:', err);
+      }
+    }
+
+    if (!textMessage) {
+      if (context.failureCategory === 'BANK_OTP_TIMEOUT') {
+        textMessage = `We noticed your bank 2FA timed out during checkout for Order #${context.orderNumber}. Don't worry, your cart is reserved! You can complete it seamlessly with instant 1-tap UPI payment.`;
+      } else if (context.failureCategory === 'CARD_DECLINED_INSUFFICIENT_FUNDS') {
+        textMessage = `Your card issuer declined the transaction for Order #${context.orderNumber}. To help you complete your purchase, we've applied a time-sensitive ₹${context.discountValue} concession to your cart!`;
+      } else if (context.failureCategory === 'CART_ABANDONMENT_AT_CHECKOUT') {
+        textMessage = `Your items in Order #${context.orderNumber} are on high demand, but we have reserved your cart for 20 minutes so you can complete your purchase!`;
+      } else {
+        textMessage = `A network glitch interrupted your payment for Order #${context.orderNumber}. Don't worry, your cart is intact. Use this direct Razorpay recovery link to complete it securely.`;
+      }
+    }
+
+    const message: ChatMessage = {
+      id: `msg_recovery_${Date.now()}`,
+      sender: 'agent',
+      text: textMessage,
+      timestamp: new Date().toISOString(),
+      suggestedActions: [
+        {
+          label: `⚡ Accept & Pay ₹${context.finalPayableAmount}`,
+          action: 'confirm_recovery' as any,
+          payload: context.incidentId
+        },
+        {
+          label: '❌ Decline Offer',
+          action: 'decline_recovery' as any,
+          payload: context.incidentId
+        }
+      ]
+    };
+
+    auditLogger.record({
+      actor: 'COMMERCE_AGENT',
+      action: 'SHOPPER_RECOVERY_MESSAGE_DELIVERED',
+      orderId: context.orderId,
+      incidentId: context.incidentId,
+      summary: `Shopper Agent delivered recovery message for Order #${context.orderNumber}`,
+      metadata: { textMessage }
+    });
+
+    return message;
   }
 
   /**

@@ -79,3 +79,19 @@ export interface DashboardMetrics {
   topFailureReasons: { category: FailureCategory; count: number; amount: number }[];
   strategyPerformance: { strategy: RecoveryStrategyType; converted: number; attempted: number }[];
 }
+
+export interface ShopperRecoveryContext {
+  incidentId: string;
+  orderId: string;
+  orderNumber: string;
+  failureCategory: FailureCategory;
+  detectedReason: string;
+  originalAmount: number;
+  strategy: RecoveryStrategyType;
+  discountValue: number;
+  finalPayableAmount: number;
+  reservationExpiry: string;
+  agentReasoning: string;
+  headline: string;
+}
+

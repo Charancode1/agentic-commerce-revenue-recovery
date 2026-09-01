@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage, Product } from '../../../shared/types/commerce';
+import { RecoveryIncident, ShopperRecoveryContext } from '../../../shared/types/recovery';
 import { api } from '../../services/api';
-import { Send, Bot, User, ShoppingCart, ArrowRight, Sparkles } from 'lucide-react';
+import { Send, Bot, User, ShoppingCart, ShieldCheck, ExternalLink, Zap, CheckCircle } from 'lucide-react';
 
 interface CommerceChatProps {
   onAddToCart: (product: Product) => void;
@@ -9,6 +10,8 @@ interface CommerceChatProps {
   onProceedToCheckout: () => void;
   externalPrompt?: string;
   onClearExternalPrompt?: () => void;
+  incomingRecoveryContext?: ShopperRecoveryContext | null;
+  onOpenRecoveryModal?: (incident: RecoveryIncident) => void;
 }
 
 export const CommerceChat: React.FC<CommerceChatProps> = ({
@@ -16,7 +19,9 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
   onRemoveFromCart,
   onProceedToCheckout,
   externalPrompt,
-  onClearExternalPrompt
+  onClearExternalPrompt,
+  incomingRecoveryContext,
+  onOpenRecoveryModal
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -34,6 +39,7 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
 
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [processingIncidentId, setProcessingIncidentId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -50,6 +56,85 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
       if (onClearExternalPrompt) onClearExternalPrompt();
     }
   }, [externalPrompt]);
+
+  // Listen for incoming recovery context from Merchant Agent handoff
+  useEffect(() => {
+    if (incomingRecoveryContext) {
+      const processContextHandoff = async () => {
+        setIsLoading(true);
+        try {
+          const recoveryMsg = await api.getRecoveryMessage(incomingRecoveryContext);
+          setMessages(prev => {
+            if (prev.some(m => m.id === recoveryMsg.id)) return prev;
+            return [...prev, recoveryMsg];
+          });
+        } catch (e) {
+          console.error('Error receiving recovery context handoff:', e);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      processContextHandoff();
+    }
+  }, [incomingRecoveryContext]);
+
+  const handleConfirmRecovery = async (incidentId: string) => {
+    setProcessingIncidentId(incidentId);
+    try {
+      const updatedIncident = await api.confirmRecovery(incidentId, true);
+      const linkUrl = updatedIncident.recoveryProposal?.razorpayPaymentLinkUrl;
+
+      setMessages(prev => [
+        ...prev,
+        {
+          id: `msg_accepted_${Date.now()}`,
+          sender: 'agent',
+          text: `✅ **Customer Consent Confirmed!** Razorpay Smart Recovery Link created for Order #${updatedIncident.orderNumber}.`,
+          timestamp: new Date().toISOString(),
+          suggestedActions: [
+            {
+              label: '🔗 Open Razorpay Recovery Link',
+              action: 'open_url' as any,
+              payload: linkUrl || '#'
+            },
+            {
+              label: '⚡ Open Recovery Modal',
+              action: 'open_modal' as any,
+              payload: updatedIncident
+            }
+          ]
+        }
+      ]);
+
+      if (onOpenRecoveryModal) {
+        onOpenRecoveryModal(updatedIncident);
+      }
+    } catch (e) {
+      console.error('Error confirming recovery:', e);
+    } finally {
+      setProcessingIncidentId(null);
+    }
+  };
+
+  const handleDeclineRecovery = async (incidentId: string) => {
+    setProcessingIncidentId(incidentId);
+    try {
+      await api.confirmRecovery(incidentId, false, 'Shopper declined offer in chat');
+      setMessages(prev => [
+        ...prev,
+        {
+          id: `msg_declined_${Date.now()}`,
+          sender: 'agent',
+          text: `Offer declined. Your order status has been updated to opted out. Let me know if you would like to explore other products!`,
+          timestamp: new Date().toISOString()
+        }
+      ]);
+    } catch (e) {
+      console.error('Error declining recovery:', e);
+    } finally {
+      setProcessingIncidentId(null);
+    }
+  };
 
   const sendMessage = async (textToSend?: string) => {
     const messageText = (textToSend || input).trim();
@@ -123,7 +208,7 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
               RAZORDEFENSE Shopping Copilot
             </h3>
             <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)' }}>
-              Grounded AI Catalog & Checkout Assistant
+              Grounded AI Catalog & Autonomous Recovery Sentinel
             </div>
           </div>
         </div>
@@ -182,10 +267,25 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
                 padding: '10px 12px',
                 borderRadius: '8px',
                 backgroundColor: msg.sender === 'user' ? '#0284C7' : '#1F293D',
+                border: msg.id.startsWith('msg_recovery_') ? '1px solid rgba(2, 132, 199, 0.4)' : 'none',
                 color: msg.sender === 'user' ? '#FFFFFF' : 'var(--text-main)',
                 fontSize: '0.8rem',
                 lineHeight: '1.4'
               }}>
+                {msg.id.startsWith('msg_recovery_') && (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    color: '#38BDF8',
+                    fontWeight: 700,
+                    fontSize: '0.725rem',
+                    marginBottom: '6px'
+                  }}>
+                    <ShieldCheck size={14} />
+                    <span>PAYMENT RECOVERY INTERVENTION</span>
+                  </div>
+                )}
                 {msg.text}
               </div>
             </div>
@@ -230,7 +330,7 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
               </div>
             )}
 
-            {/* Suggested Action Chips */}
+            {/* Suggested Action Chips & Recovery Action Buttons */}
             {msg.suggestedActions && msg.suggestedActions.length > 0 && (
               <div style={{
                 display: 'flex',
@@ -239,27 +339,99 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
                 marginTop: '4px',
                 paddingLeft: '32px'
               }}>
-                {msg.suggestedActions.map((sa, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => {
-                      if (sa.action === 'checkout') onProceedToCheckout();
-                      else if (sa.payload) sendMessage(sa.payload);
-                    }}
-                    style={{
-                      padding: '4px 8px',
-                      borderRadius: '6px',
-                      border: '1px solid var(--border-subtle)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                      color: 'var(--text-muted)',
-                      fontSize: '0.725rem',
-                      fontWeight: 500,
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {sa.label}
-                  </button>
-                ))}
+                {msg.suggestedActions.map((sa, idx) => {
+                  if (sa.action === ('confirm_recovery' as any)) {
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => handleConfirmRecovery(sa.payload)}
+                        disabled={processingIncidentId === sa.payload}
+                        className="btn-primary"
+                        style={{
+                          padding: '6px 12px',
+                          fontSize: '0.75rem',
+                          backgroundColor: '#059669'
+                        }}
+                      >
+                        <Zap size={13} />
+                        <span>{sa.label}</span>
+                      </button>
+                    );
+                  }
+                  if (sa.action === ('decline_recovery' as any)) {
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => handleDeclineRecovery(sa.payload)}
+                        disabled={processingIncidentId === sa.payload}
+                        className="btn-secondary"
+                        style={{
+                          padding: '5px 10px',
+                          fontSize: '0.725rem'
+                        }}
+                      >
+                        <span>{sa.label}</span>
+                      </button>
+                    );
+                  }
+                  if (sa.action === ('open_url' as any)) {
+                    return (
+                      <a
+                        key={idx}
+                        href={sa.payload}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-primary"
+                        style={{
+                          padding: '6px 12px',
+                          fontSize: '0.75rem',
+                          textDecoration: 'none',
+                          backgroundColor: '#0284C7'
+                        }}
+                      >
+                        <ExternalLink size={13} />
+                        <span>{sa.label}</span>
+                      </a>
+                    );
+                  }
+                  if (sa.action === ('open_modal' as any) && onOpenRecoveryModal) {
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => onOpenRecoveryModal(sa.payload)}
+                        className="btn-secondary"
+                        style={{
+                          padding: '5px 10px',
+                          fontSize: '0.725rem'
+                        }}
+                      >
+                        <span>{sa.label}</span>
+                      </button>
+                    );
+                  }
+
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        if (sa.action === 'checkout') onProceedToCheckout();
+                        else if (sa.payload) sendMessage(sa.payload);
+                      }}
+                      style={{
+                        padding: '4px 8px',
+                        borderRadius: '6px',
+                        border: '1px solid var(--border-subtle)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                        color: 'var(--text-muted)',
+                        fontSize: '0.725rem',
+                        fontWeight: 500,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {sa.label}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -268,7 +440,7 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
         {isLoading && (
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: 'var(--text-muted)', fontSize: '0.775rem', paddingLeft: '32px' }}>
             <Sparkles size={14} className="animate-spin" style={{ color: '#0284C7' }} />
-            <span>Searching catalog & reasoning recommendations...</span>
+            <span>Processing agent context & formatting message...</span>
           </div>
         )}
 

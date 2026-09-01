@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Product, CartItem } from '../../shared/types/commerce';
-import { RecoveryIncident } from '../../shared/types/recovery';
+import { RecoveryIncident, ShopperRecoveryContext } from '../../shared/types/recovery';
 import { api } from './services/api';
 import { Header } from './components/common/Header';
 import { ProductCatalog } from './components/commerce/ProductCatalog';
@@ -9,14 +9,14 @@ import { CartDrawer } from './components/commerce/CartDrawer';
 import { FailureSimulator } from './components/checkout/FailureSimulator';
 import { RecoveryPromptModal } from './components/recovery/RecoveryPromptModal';
 import { MerchantDashboard } from './components/dashboard/MerchantDashboard';
-import { Sparkles, ShieldAlert, ShoppingBag, ArrowRight } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [activeView, setActiveView] = useState<'shopper' | 'simulator' | 'merchant'>('shopper');
+  const [activeView, setActiveView] = useState<'shopper' | 'simulator' | 'merchant'>('merchant');
   const [activeRecoveryIncident, setActiveRecoveryIncident] = useState<RecoveryIncident | null>(null);
+  const [shopperRecoveryContext, setShopperRecoveryContext] = useState<ShopperRecoveryContext | null>(null);
   const [chatPrompt, setChatPrompt] = useState<string>('');
   const [activeIncidentsCount, setActiveIncidentsCount] = useState<number>(0);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'alert' } | null>(null);
@@ -25,6 +25,38 @@ export const App: React.FC = () => {
     loadProducts();
     loadIncidentsCount();
     checkRecoveryCallback();
+
+    // SSE Subscription for live Agent-to-Agent handoffs
+    const unsubscribe = api.subscribeToLiveEvents({
+      onRecovery: updatedRec => {
+        loadIncidentsCount();
+
+        // If recovery proposal is pending shopper consent, construct ShopperRecoveryContext
+        if (updatedRec.status === 'CONSENT_PENDING' && updatedRec.recoveryProposal) {
+          const proposal = updatedRec.recoveryProposal;
+          const context: ShopperRecoveryContext = {
+            incidentId: updatedRec.id,
+            orderId: updatedRec.orderId,
+            orderNumber: updatedRec.orderNumber,
+            failureCategory: updatedRec.failureCategory,
+            detectedReason: proposal.detectedReason,
+            originalAmount: updatedRec.amountAtRisk,
+            strategy: proposal.strategy,
+            discountValue: proposal.concession?.discountValue || 0,
+            finalPayableAmount: proposal.concession?.finalRecoveryAmount || updatedRec.amountAtRisk,
+            reservationExpiry: proposal.expiryTimestamp,
+            agentReasoning: proposal.agentReasoning,
+            headline: proposal.headline
+          };
+
+          setShopperRecoveryContext(context);
+        }
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const checkRecoveryCallback = async () => {
@@ -35,7 +67,6 @@ export const App: React.FC = () => {
       const isSuccess = urlParams.get('recovery_success') === 'true' || urlParams.get('razorpay_payment_link_status') === 'paid';
 
       if (refId && isSuccess) {
-        // Clean URL query parameters so refreshes don't re-trigger
         window.history.replaceState({}, document.title, window.location.pathname);
 
         const finalized = await api.completeRecoveryPayment(refId, rzpPaymentId);
@@ -68,7 +99,7 @@ export const App: React.FC = () => {
 
   const showToast = (text: string, type: 'success' | 'alert' = 'success') => {
     setToastMessage({ text, type });
-    setTimeout(() => setToastMessage(null), 3500);
+    setTimeout(() => setToastMessage(null), 4000);
   };
 
   const handleAddToCart = (product: Product) => {
@@ -113,6 +144,23 @@ export const App: React.FC = () => {
 
   const handlePaymentFailure = (incident: RecoveryIncident) => {
     setActiveRecoveryIncident(incident);
+    if (incident.recoveryProposal) {
+      const proposal = incident.recoveryProposal;
+      setShopperRecoveryContext({
+        incidentId: incident.id,
+        orderId: incident.orderId,
+        orderNumber: incident.orderNumber,
+        failureCategory: incident.failureCategory,
+        detectedReason: proposal.detectedReason,
+        originalAmount: incident.amountAtRisk,
+        strategy: proposal.strategy,
+        discountValue: proposal.concession?.discountValue || 0,
+        finalPayableAmount: proposal.concession?.finalRecoveryAmount || incident.amountAtRisk,
+        reservationExpiry: proposal.expiryTimestamp,
+        agentReasoning: proposal.agentReasoning,
+        headline: proposal.headline
+      });
+    }
     loadIncidentsCount();
   };
 
@@ -128,12 +176,12 @@ export const App: React.FC = () => {
           right: '24px',
           zIndex: 9999,
           padding: '12px 20px',
-          borderRadius: '12px',
-          backgroundColor: toastMessage.type === 'success' ? '#10B981' : '#F43F5E',
+          borderRadius: '8px',
+          backgroundColor: toastMessage.type === 'success' ? '#059669' : '#0284C7',
           color: '#FFFFFF',
-          fontWeight: 700,
-          fontSize: '0.9rem',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+          fontWeight: 600,
+          fontSize: '0.875rem',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
           animation: 'fadeIn 0.2s ease-out'
         }}>
           {toastMessage.text}
@@ -150,21 +198,28 @@ export const App: React.FC = () => {
       />
 
       {/* Main Body Content */}
-      <main style={{ flexGrow: 1, maxWidth: '1400px', margin: '0 auto', width: '100%', padding: '24px' }}>
-        {/* VIEW 1: SHOPPER STOREFRONT */}
+      <main style={{ flexGrow: 1, maxWidth: '1400px', margin: '0 auto', width: '100%', padding: '20px' }}>
+        {/* VIEW 1: MERCHANT CONTROL TOWER */}
+        {activeView === 'merchant' && (
+          <MerchantDashboard
+            onSelectIncidentForOutreach={incident => {
+              setActiveRecoveryIncident(incident);
+            }}
+          />
+        )}
+
+        {/* VIEW 2: SHOPPER STOREFRONT */}
         {activeView === 'shopper' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '24px', alignItems: 'start' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '20px', alignItems: 'start' }}>
             {/* Left: Product Catalog */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <h2 style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0 }}>
-                    Featured Catalog
-                  </h2>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
-                    Select items or speak with the AI Shopping Assistant for personalized suggestions
-                  </p>
-                </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>
+                  Featured Catalog
+                </h2>
+                <p style={{ fontSize: '0.775rem', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
+                  Browse flagship products or consult the RAZORDEFENSE Shopping Copilot for suggestions.
+                </p>
               </div>
 
               <ProductCatalog
@@ -175,34 +230,44 @@ export const App: React.FC = () => {
             </div>
 
             {/* Right: AI Shopping Copilot Chat */}
-            <div style={{ position: 'sticky', top: '90px' }}>
+            <div style={{ position: 'sticky', top: '76px' }}>
               <CommerceChat
                 onAddToCart={handleAddToCart}
                 onRemoveFromCart={handleRemoveItem}
                 onProceedToCheckout={() => setIsCartOpen(true)}
                 externalPrompt={chatPrompt}
                 onClearExternalPrompt={() => setChatPrompt('')}
+                incomingRecoveryContext={shopperRecoveryContext}
+                onOpenRecoveryModal={incident => setActiveRecoveryIncident(incident)}
               />
             </div>
           </div>
         )}
 
-        {/* VIEW 2: FAILURE SIMULATOR */}
+        {/* VIEW 3: FAILURE SIMULATOR */}
         {activeView === 'simulator' && (
           <FailureSimulator
             onIncidentCreated={incident => {
               setActiveRecoveryIncident(incident);
+              if (incident.recoveryProposal) {
+                const proposal = incident.recoveryProposal;
+                setShopperRecoveryContext({
+                  incidentId: incident.id,
+                  orderId: incident.orderId,
+                  orderNumber: incident.orderNumber,
+                  failureCategory: incident.failureCategory,
+                  detectedReason: proposal.detectedReason,
+                  originalAmount: incident.amountAtRisk,
+                  strategy: proposal.strategy,
+                  discountValue: proposal.concession?.discountValue || 0,
+                  finalPayableAmount: proposal.concession?.finalRecoveryAmount || incident.amountAtRisk,
+                  reservationExpiry: proposal.expiryTimestamp,
+                  agentReasoning: proposal.agentReasoning,
+                  headline: proposal.headline
+                });
+              }
               loadIncidentsCount();
-              showToast(`Simulated ${incident.failureCategory}. Bounded Recovery Proposal Generated!`, 'alert');
-            }}
-          />
-        )}
-
-        {/* VIEW 3: MERCHANT CONTROL TOWER */}
-        {activeView === 'merchant' && (
-          <MerchantDashboard
-            onSelectIncidentForOutreach={incident => {
-              setActiveRecoveryIncident(incident);
+              showToast(`Failure injected! Recovery Agent context handed off to Shopper Copilot.`, 'alert');
             }}
           />
         )}
