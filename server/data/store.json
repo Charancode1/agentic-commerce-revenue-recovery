@@ -163,34 +163,253 @@
       "reviewCount": 610
     }
   ],
-  "orders": [],
-  "recoveries": [],
+  "orders": [
+    {
+      "id": "ord_b9832686",
+      "orderNumber": "RZP-367282",
+      "razorpayOrderId": "order_TWrFyYPOhKblhV",
+      "customerName": "Alex Rivera",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "items": [
+        {
+          "productId": "prod_1",
+          "product": {
+            "id": "prod_1",
+            "name": "AeroPulse ANC Pro Wireless Headphones",
+            "description": "Flagship active noise-cancelling headphones",
+            "price": 4999,
+            "currency": "INR",
+            "category": "Audio & Wearables",
+            "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
+            "inStock": true,
+            "inventoryCount": 14,
+            "tags": [
+              "headphones"
+            ],
+            "features": [
+              "Active Noise Cancelling"
+            ],
+            "rating": 4.8,
+            "reviewCount": 342
+          },
+          "quantity": 1,
+          "selectedPrice": 4999
+        }
+      ],
+      "amount": 4999,
+      "currency": "INR",
+      "status": "recovered",
+      "createdAt": "2026-09-01T17:39:05.815Z",
+      "updatedAt": "2026-09-01T17:39:51.614Z"
+    }
+  ],
+  "recoveries": [
+    {
+      "id": "inc_81a5550b",
+      "orderId": "ord_b9832686",
+      "orderNumber": "RZP-367282",
+      "customerEmail": "alex.rivera@example.com",
+      "customerPhone": "+919876543210",
+      "amountAtRisk": 4999,
+      "failureCategory": "NETWORK_GATEWAY_DROPOUT",
+      "failureCode": "SIMULATED_FAIL_CODE",
+      "failureDescription": "WiFi/Cellular dropped while browser was redirecting to payment processing page.",
+      "status": "RECOVERED",
+      "recoveryProposal": {
+        "incidentId": "inc_81a5550b",
+        "orderId": "ord_b9832686",
+        "failureCategory": "NETWORK_GATEWAY_DROPOUT",
+        "detectedReason": "Network Gateway Interruption",
+        "strategy": "ONE_CLICK_PAYMENT_LINK",
+        "headline": "Payment Interrupted — Retry with 1 Click",
+        "customerMessage": "A network glitch interrupted your payment. Don't worry, your cart is intact. Use this direct Razorpay recovery link to complete it securely.",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_5826",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "PAYMENT_LINK",
+        "expiryTimestamp": "2026-09-01T17:59:05.826Z",
+        "requiresCustomerConsent": true,
+        "confidenceScore": 0.94,
+        "agentReasoning": "Network interruption detected. Direct smart payment link provides fastest re-entry without re-adding cart items.",
+        "razorpayPaymentLinkId": "plink_TWrGABRJggdWVe",
+        "razorpayPaymentLinkUrl": "https://rzp.io/rzp/pQUdF0J"
+      },
+      "createdAt": "2026-09-01T17:39:05.828Z",
+      "updatedAt": "2026-09-01T17:39:51.613Z",
+      "razorpayPaymentLinkId": "plink_TWrGABRJggdWVe",
+      "recoveredAmount": 4999,
+      "razorpayPaymentId": "pay_TWrGUQGhDYNiPs"
+    }
+  ],
   "auditLogs": [
     {
-      "id": "audit_51d6ed6a",
-      "timestamp": "2026-09-01T17:26:34.022Z",
-      "incidentId": "inc_c90e64b6",
-      "orderId": "ord_a6486f54",
-      "actor": "COMMERCE_AGENT",
-      "action": "SHOPPER_RECOVERY_MESSAGE_DELIVERED",
-      "summary": "Shopper Agent delivered recovery message for Order #RZP-253317",
+      "id": "audit_b49d8e4c",
+      "timestamp": "2026-09-01T17:39:51.615Z",
+      "incidentId": "inc_81a5550b",
+      "orderId": "ord_b9832686",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_RECOVERED_CONFIRMED",
+      "summary": "🎉 Successfully recovered ₹4999 of ₹4999 at risk!",
       "metadata": {
-        "textMessage": "We noticed your payment for Order #RZP-253317 couldn't be processed because your card reached its daily transaction limit, but rest assured, your items are safely reserved for the next 20 minutes. To help you complete your purchase smoothly, we have applied a ₹400 discount, bringing your final payable amount from ₹4999 down to ₹4599. Please complete your payment using an alternative payment method, such as UPI or Net Banking, to secure your order."
+        "recoveredAmount": 4999,
+        "originalRisk": 4999,
+        "razorpayPaymentId": "pay_TWrGUQGhDYNiPs"
       },
-      "hash": "7bce46b8e21b78d326bf3e5c1e18fbded528014f45acf317116758b4d91f954c"
+      "hash": "270b0d1ec8493af872a543a90dc892aa2b7765c22fb31aa4ca915025335380dd"
     },
     {
-      "id": "audit_14d41f11",
-      "timestamp": "2026-09-01T17:26:32.209Z",
-      "incidentId": "inc_c90e64b6",
-      "orderId": "ord_a6486f54",
-      "actor": "COMMERCE_AGENT",
-      "action": "SHOPPER_RECOVERY_MESSAGE_DELIVERED",
-      "summary": "Shopper Agent delivered recovery message for Order #RZP-253317",
+      "id": "audit_30876b93",
+      "timestamp": "2026-09-01T17:39:51.614Z",
+      "incidentId": "inc_81a5550b",
+      "orderId": "ord_b9832686",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_LINK_PAID",
+      "summary": "Payment captured via Razorpay for recovery link! Payment ID: pay_TWrGUQGhDYNiPs",
       "metadata": {
-        "textMessage": "We noticed your payment for Order #RZP-253317 didn't go through due to a card limit decline, but your items are safely reserved for the next 20 minutes. To help you complete your purchase smoothly, we have applied a ₹400 discount to your original ₹4999 total, bringing your final payable amount to ₹4599. Please complete your checkout using an alternative payment method to secure your order before the reservation expires."
+        "razorpayPaymentId": "pay_TWrGUQGhDYNiPs",
+        "recoveredAmount": 4999
       },
-      "hash": "53471c0205b61448739ff84e5c67b06417c91941c5036e5887897251ccb60948"
+      "hash": "629c98a467ef643c3d04d1c4fb477df962b3838fdafda48496c23c006284c6d9"
+    },
+    {
+      "id": "audit_22ea3ccd",
+      "timestamp": "2026-09-01T17:39:16.609Z",
+      "incidentId": "inc_81a5550b",
+      "orderId": "ord_b9832686",
+      "actor": "RECOVERY_AGENT",
+      "action": "RAZORPAY_PAYMENT_LINK_ISSUED",
+      "summary": "Razorpay Recovery Payment Link issued: plink_TWrGABRJggdWVe (Amount: ₹4999)",
+      "metadata": {
+        "paymentLinkId": "plink_TWrGABRJggdWVe",
+        "paymentLinkUrl": "https://rzp.io/rzp/pQUdF0J",
+        "finalAmount": 4999,
+        "isSimulated": false
+      },
+      "hash": "7a180ca72d2d74dc2f3a97e0898facb0f42ac5649380c53becd0b79e3a45c4c4"
+    },
+    {
+      "id": "audit_36141865",
+      "timestamp": "2026-09-01T17:39:15.355Z",
+      "incidentId": "inc_81a5550b",
+      "orderId": "ord_b9832686",
+      "actor": "CUSTOMER",
+      "action": "CUSTOMER_CONSENT_GRANTED",
+      "summary": "Shopper accepted recovery proposal for Order #RZP-367282. Generating Razorpay Smart Link.",
+      "metadata": {
+        "strategy": "ONE_CLICK_PAYMENT_LINK"
+      },
+      "hash": "a921fda9865f9e7fb6c7622c0c3ce7fdf251d324d82abaea28eb10d9504c3ad6"
+    },
+    {
+      "id": "audit_bf47ecb7",
+      "timestamp": "2026-09-01T17:39:05.828Z",
+      "incidentId": "inc_81a5550b",
+      "orderId": "ord_b9832686",
+      "actor": "RECOVERY_AGENT",
+      "action": "CUSTOMER_CONSENT_REQUESTED",
+      "summary": "Autonomous Recovery Proposal formulated. Awaiting explicit customer confirmation.",
+      "metadata": {
+        "strategy": "ONE_CLICK_PAYMENT_LINK",
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_5826",
+          "expiresInMinutes": 20
+        },
+        "recommendedPaymentMethod": "PAYMENT_LINK"
+      },
+      "hash": "2eb8a22b653d96531b65f284dfca632343d7fdb63c11b8798be2752fe2373075"
+    },
+    {
+      "id": "audit_76b38b01",
+      "timestamp": "2026-09-01T17:39:05.826Z",
+      "incidentId": "inc_81a5550b",
+      "orderId": "ord_b9832686",
+      "actor": "RECOVERY_AGENT",
+      "action": "RECOVERY_STRATEGY_FORMULATED",
+      "summary": "Strategy formulated: ONE_CLICK_PAYMENT_LINK. Reason: Network interruption detected. Direct smart payment link provides fastest re-entry without re-adding cart items.",
+      "metadata": {
+        "strategy": "ONE_CLICK_PAYMENT_LINK",
+        "confidenceScore": 0.94,
+        "concession": {
+          "discountType": "fixed",
+          "discountValue": 0,
+          "maxAllowedDiscount": 500,
+          "finalRecoveryAmount": 4999,
+          "promoCode": "RECOVER_0_5826",
+          "expiresInMinutes": 20
+        }
+      },
+      "hash": "78b4fd1cfe609a5d5265ce697f67f53f8317a67c76f8176acc4459ad6e84f7f7"
+    },
+    {
+      "id": "audit_70f5ad2d",
+      "timestamp": "2026-09-01T17:39:05.826Z",
+      "incidentId": "inc_81a5550b",
+      "orderId": "ord_b9832686",
+      "actor": "POLICY_ENGINE",
+      "action": "POLICY_GUARDRAIL_APPLIED",
+      "summary": "Policy check evaluated: Concession of ₹0 applied on ₹4999. (Approved: true)",
+      "metadata": {
+        "originalAmount": 4999,
+        "finalAmount": 4999,
+        "calculatedDiscount": 0,
+        "violations": [],
+        "isAllowed": true
+      },
+      "hash": "678b678769a6d1532ebd553454f6e8712d1df8b7eeff4f38ae49183c620f219b"
+    },
+    {
+      "id": "audit_ddc34cff",
+      "timestamp": "2026-09-01T17:39:05.825Z",
+      "incidentId": "inc_81a5550b",
+      "orderId": "ord_b9832686",
+      "actor": "RECOVERY_AGENT",
+      "action": "REVENUE_AT_RISK_REGISTERED",
+      "summary": "Revenue at Risk registered: ₹4999 on Order #RZP-367282",
+      "metadata": {
+        "amountAtRisk": 4999
+      },
+      "hash": "c1ade49a960d4e6c9a4b312d9c20b28d560d9991903e1e4802bc17adb61add08"
+    },
+    {
+      "id": "audit_7f9171bb",
+      "timestamp": "2026-09-01T17:39:05.825Z",
+      "incidentId": "inc_81a5550b",
+      "orderId": "ord_b9832686",
+      "actor": "RAZORPAY_WEBHOOK",
+      "action": "PAYMENT_FAILED_DETECTED",
+      "summary": "Payment failed for order #RZP-367282 (₹4999). Reason: Network Gateway Interruption",
+      "metadata": {
+        "amountAtRisk": 4999,
+        "failureCategory": "NETWORK_GATEWAY_DROPOUT",
+        "rawErrorCode": "SIMULATED_FAIL_CODE",
+        "rawDescription": "WiFi/Cellular dropped while browser was redirecting to payment processing page."
+      },
+      "hash": "5398d0634b5798c478fc0a6338718d586dccd4a0b8f3c87d3c74f7f74f14dbf8"
+    },
+    {
+      "id": "audit_a7b2c287",
+      "timestamp": "2026-09-01T17:39:05.816Z",
+      "orderId": "ord_b9832686",
+      "actor": "COMMERCE_AGENT",
+      "action": "ORDER_CREATED",
+      "summary": "Created Order #RZP-367282 for ₹4999 with Razorpay Order ID: order_TWrFyYPOhKblhV",
+      "metadata": {
+        "amount": 4999,
+        "razorpayOrderId": "order_TWrFyYPOhKblhV",
+        "isSimulated": false,
+        "itemCount": 1
+      },
+      "hash": "fb15334f89c3381c84ce76cf5c2fa79686d1f64e80596220e1090cbd4f9f530d"
     }
   ],
   "settings": {

@@ -81,6 +81,11 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
         customerPhone: '+919876543210'
       });
 
+      if (!createRes || !createRes.order) {
+        console.error('Failed to create order for simulation');
+        return;
+      }
+
       const orderId = createRes.order.id;
 
       const simRes = await api.simulateFailure({
@@ -89,7 +94,7 @@ export const FailureSimulator: React.FC<FailureSimulatorProps> = ({ onIncidentCr
         rawDescription: scenarios.find(s => s.category === selectedScenario)?.description
       });
 
-      if (simRes.success) {
+      if (simRes && simRes.success && simRes.incident) {
         setLastIncident(simRes.incident);
         onIncidentCreated(simRes.incident);
       }

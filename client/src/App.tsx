@@ -50,8 +50,6 @@ export const App: React.FC = () => {
           };
 
           setShopperRecoveryContext(context);
-          setActiveRecoveryIncident(updatedRec);
-          setActiveView('shopper');
         }
       }
     });
@@ -250,7 +248,6 @@ export const App: React.FC = () => {
         {activeView === 'simulator' && (
           <FailureSimulator
             onIncidentCreated={incident => {
-              setActiveRecoveryIncident(incident);
               if (incident.recoveryProposal) {
                 const proposal = incident.recoveryProposal;
                 setShopperRecoveryContext({
@@ -269,8 +266,7 @@ export const App: React.FC = () => {
                 });
               }
               loadIncidentsCount();
-              setActiveView('shopper');
-              showToast(`Failure injected! Handoff context sent to Shopper Copilot.`, 'alert');
+              showToast(`Failure injected! Recovery strategy formulated.`, 'alert');
             }}
           />
         )}

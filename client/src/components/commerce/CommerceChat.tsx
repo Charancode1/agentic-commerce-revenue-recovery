@@ -64,8 +64,11 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
         setIsLoading(true);
         try {
           const recoveryMsg = await api.getRecoveryMessage(incomingRecoveryContext);
+          if (!recoveryMsg || !recoveryMsg.id) return;
           setMessages(prev => {
-            if (prev.some(m => m.id === recoveryMsg.id)) return prev;
+            if (prev.some(m => m.id === recoveryMsg.id || (m.suggestedActions && m.suggestedActions.some((sa: any) => sa.payload === incomingRecoveryContext.incidentId)))) {
+              return prev;
+            }
             return [...prev, recoveryMsg];
           });
         } catch (e) {
@@ -136,8 +139,8 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
     }
   };
 
-  const sendMessage = async (textToSend?: string) => {
-    const messageText = (textToSend || input).trim();
+  const sendMessage = async (textToSend?: string | any) => {
+    const messageText = (typeof textToSend === 'string' ? textToSend : input).trim();
     if (!messageText || isLoading) return;
 
     const userMsg: ChatMessage = {

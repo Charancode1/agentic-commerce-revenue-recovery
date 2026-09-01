@@ -26,13 +26,38 @@ export const api = {
   },
 
   async getRecoveryMessage(context: ShopperRecoveryContext): Promise<ChatMessage> {
-    const res = await fetch(`${API_BASE}/commerce/recovery-message`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ context })
-    });
-    const data = await res.json();
-    return data.response;
+    try {
+      const res = await fetch(`${API_BASE}/commerce/recovery-message`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ context })
+      });
+      const data = await res.json();
+      if (data && data.success && data.response) {
+        return data.response;
+      }
+    } catch (e) {
+      console.error('Failed to fetch recovery message:', e);
+    }
+
+    return {
+      id: `msg_recovery_fallback_${Date.now()}`,
+      sender: 'agent',
+      text: `We noticed your payment for Order #${context.orderNumber} was interrupted (${context.detectedReason}). Don't worry, your items are safely reserved for 20 minutes!`,
+      timestamp: new Date().toISOString(),
+      suggestedActions: [
+        {
+          label: `⚡ Accept & Pay ₹${context.finalPayableAmount}`,
+          action: 'confirm_recovery' as any,
+          payload: context.incidentId
+        },
+        {
+          label: '❌ Decline Offer',
+          action: 'decline_recovery' as any,
+          payload: context.incidentId
+        }
+      ]
+    };
   },
 
   // Checkout
