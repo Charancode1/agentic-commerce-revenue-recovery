@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Product, CartItem } from '../../shared/types/commerce';
 import { RecoveryIncident, ShopperRecoveryContext } from '../../shared/types/recovery';
 import { api } from './services/api';
@@ -20,6 +20,18 @@ export const App: React.FC = () => {
   const [chatPrompt, setChatPrompt] = useState<string>('');
   const [activeIncidentsCount, setActiveIncidentsCount] = useState<number>(0);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'alert' } | null>(null);
+  const [resolvedIncidentIds, setResolvedIncidentIds] = useState<string[]>([]);
+  const resolvedIncidentIdsRef = useRef<string[]>([]);
+  resolvedIncidentIdsRef.current = resolvedIncidentIds;
+
+  const handleResolveIncident = (incidentId: string) => {
+    setResolvedIncidentIds(prev => {
+      const updated = prev.includes(incidentId) ? prev : [...prev, incidentId];
+      resolvedIncidentIdsRef.current = updated;
+      return updated;
+    });
+    setShopperRecoveryContext(prev => prev?.incidentId === incidentId ? null : prev);
+  };
 
   useEffect(() => {
     loadProducts();
@@ -31,25 +43,28 @@ export const App: React.FC = () => {
       onRecovery: updatedRec => {
         loadIncidentsCount();
 
-        // If recovery proposal is pending shopper consent, construct ShopperRecoveryContext and switch view to shopper
-        if (updatedRec.status === 'CONSENT_PENDING' && updatedRec.recoveryProposal) {
-          const proposal = updatedRec.recoveryProposal;
-          const context: ShopperRecoveryContext = {
-            incidentId: updatedRec.id,
-            orderId: updatedRec.orderId,
-            orderNumber: updatedRec.orderNumber,
-            failureCategory: updatedRec.failureCategory,
-            detectedReason: proposal.detectedReason,
-            originalAmount: updatedRec.amountAtRisk,
-            strategy: proposal.strategy,
-            discountValue: proposal.concession?.discountValue || 0,
-            finalPayableAmount: proposal.concession?.finalRecoveryAmount || updatedRec.amountAtRisk,
-            reservationExpiry: proposal.expiryTimestamp,
-            agentReasoning: proposal.agentReasoning,
-            headline: proposal.headline
-          };
+        if (updatedRec.status === 'RECOVERED' || updatedRec.status === 'OPTED_OUT') {
+          handleResolveIncident(updatedRec.id);
+        } else if (updatedRec.status === 'CONSENT_PENDING' && updatedRec.recoveryProposal) {
+          if (!resolvedIncidentIdsRef.current.includes(updatedRec.id)) {
+            const proposal = updatedRec.recoveryProposal;
+            const context: ShopperRecoveryContext = {
+              incidentId: updatedRec.id,
+              orderId: updatedRec.orderId,
+              orderNumber: updatedRec.orderNumber,
+              failureCategory: updatedRec.failureCategory,
+              detectedReason: proposal.detectedReason,
+              originalAmount: updatedRec.amountAtRisk,
+              strategy: proposal.strategy,
+              discountValue: proposal.concession?.discountValue || 0,
+              finalPayableAmount: proposal.concession?.finalRecoveryAmount || updatedRec.amountAtRisk,
+              reservationExpiry: proposal.expiryTimestamp,
+              agentReasoning: proposal.agentReasoning,
+              headline: proposal.headline
+            };
 
-          setShopperRecoveryContext(context);
+            setShopperRecoveryContext(context);
+          }
         }
       }
     });
@@ -71,6 +86,7 @@ export const App: React.FC = () => {
 
         const finalized = await api.completeRecoveryPayment(refId, rzpPaymentId);
         showToast(`🎉 ₹${finalized.recoveredAmount} recovered via Razorpay Smart Link!`, 'success');
+        handleResolveIncident(finalized.id);
         loadIncidentsCount();
       }
     } catch (e) {
@@ -209,56 +225,57 @@ export const App: React.FC = () => {
       {/* Main Body Content */}
       <main style={{ flexGrow: 1, maxWidth: '1400px', margin: '0 auto', width: '100%', padding: '20px' }}>
         {/* VIEW 1: MERCHANT CONTROL TOWER */}
-        {activeView === 'merchant' && (
+        <div style={{ display: activeView === 'merchant' ? 'block' : 'none' }}>
           <MerchantDashboard
             onSelectIncidentForOutreach={incident => {
               setActiveRecoveryIncident(incident);
             }}
           />
-        )}
+        </div>
 
         {/* VIEW 2: SHOPPER STOREFRONT */}
-        {activeView === 'shopper' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '20px', alignItems: 'start' }}>
-            {/* Left: Product Catalog */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <div>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>
-                  Featured Catalog
-                </h2>
-                <p style={{ fontSize: '0.775rem', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
-                  Browse flagship products or consult the RAZORDEFENSE Shopping Copilot for suggestions.
-                </p>
-              </div>
-
-              <ProductCatalog
-                products={products}
-                onAddToCart={handleAddToCart}
-                onAskAI={handleAskAIAboutProduct}
-              />
+        <div style={{ display: activeView === 'shopper' ? 'grid' : 'none', gridTemplateColumns: '1fr 400px', gap: '20px', alignItems: 'start' }}>
+          {/* Left: Product Catalog */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>
+                Featured Catalog
+              </h2>
+              <p style={{ fontSize: '0.775rem', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
+                Browse flagship products or consult the RAZORDEFENSE Shopping Copilot for suggestions.
+              </p>
             </div>
 
-            {/* Right: AI Shopping Copilot Chat */}
-            <div style={{ position: 'sticky', top: '76px' }}>
-              <CommerceChat
-                onAddToCart={handleAddToCart}
-                onRemoveFromCart={handleRemoveItem}
-                onProceedToCheckout={() => setIsCartOpen(true)}
-                externalPrompt={chatPrompt}
-                onClearExternalPrompt={() => setChatPrompt('')}
-                incomingRecoveryContext={shopperRecoveryContext}
-                onOpenRecoveryModal={incident => setActiveRecoveryIncident(incident)}
-              />
-            </div>
+            <ProductCatalog
+              products={products}
+              onAddToCart={handleAddToCart}
+              onAskAI={handleAskAIAboutProduct}
+            />
           </div>
-        )}
+
+          {/* Right: AI Shopping Copilot Chat */}
+          <div style={{ position: 'sticky', top: '76px' }}>
+            <CommerceChat
+              onAddToCart={handleAddToCart}
+              onRemoveFromCart={handleRemoveItem}
+              onProceedToCheckout={() => setIsCartOpen(true)}
+              externalPrompt={chatPrompt}
+              onClearExternalPrompt={() => setChatPrompt('')}
+              incomingRecoveryContext={shopperRecoveryContext}
+              onOpenRecoveryModal={incident => setActiveRecoveryIncident(incident)}
+              resolvedIncidentIds={resolvedIncidentIds}
+              onResolveIncident={handleResolveIncident}
+            />
+          </div>
+        </div>
 
         {/* VIEW 3: FAILURE SIMULATOR */}
-        {activeView === 'simulator' && (
+        <div style={{ display: activeView === 'simulator' ? 'block' : 'none' }}>
           <FailureSimulator
             onIncidentCreated={incident => {
               if (incident.recoveryProposal) {
                 const proposal = incident.recoveryProposal;
+                setResolvedIncidentIds(prev => prev.filter(id => id !== incident.id));
                 setShopperRecoveryContext({
                   incidentId: incident.id,
                   orderId: incident.orderId,
@@ -278,7 +295,7 @@ export const App: React.FC = () => {
               showToast(`Failure injected! Recovery strategy formulated.`, 'alert');
             }}
           />
-        )}
+        </div>
       </main>
 
       {/* Cart Drawer */}
@@ -298,6 +315,7 @@ export const App: React.FC = () => {
         onClose={() => setActiveRecoveryIncident(null)}
         onRecoveryCompleted={finalized => {
           showToast(`🎉 ₹${finalized.recoveredAmount} recovered via Razorpay Smart Link!`, 'success');
+          handleResolveIncident(finalized.id);
           loadIncidentsCount();
         }}
       />

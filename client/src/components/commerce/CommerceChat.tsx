@@ -12,6 +12,8 @@ interface CommerceChatProps {
   onClearExternalPrompt?: () => void;
   incomingRecoveryContext?: ShopperRecoveryContext | null;
   onOpenRecoveryModal?: (incident: RecoveryIncident) => void;
+  resolvedIncidentIds?: string[];
+  onResolveIncident?: (incidentId: string) => void;
 }
 
 export const CommerceChat: React.FC<CommerceChatProps> = ({
@@ -21,7 +23,9 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
   externalPrompt,
   onClearExternalPrompt,
   incomingRecoveryContext,
-  onOpenRecoveryModal
+  onOpenRecoveryModal,
+  resolvedIncidentIds = [],
+  onResolveIncident
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -60,6 +64,9 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
   // Listen for incoming recovery context from Merchant Agent handoff
   useEffect(() => {
     if (incomingRecoveryContext) {
+      if (resolvedIncidentIds.includes(incomingRecoveryContext.incidentId)) {
+        return;
+      }
       const processContextHandoff = async () => {
         setIsLoading(true);
         try {
@@ -79,7 +86,34 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
       };
       processContextHandoff();
     }
-  }, [incomingRecoveryContext]);
+  }, [incomingRecoveryContext, resolvedIncidentIds]);
+
+  // When an incident is marked resolved (paid or declined), immediately remove its intervention message
+  useEffect(() => {
+    if (resolvedIncidentIds.length > 0) {
+      setMessages(prev => {
+        const needsCleaning = prev.some(m =>
+          (m.id.startsWith('msg_recovery_') || m.id.startsWith('msg_accepted_')) &&
+          m.suggestedActions?.some((sa: any) =>
+            resolvedIncidentIds.includes(sa.payload) ||
+            (typeof sa.payload === 'object' && sa.payload && resolvedIncidentIds.includes(sa.payload.id))
+          )
+        );
+
+        if (!needsCleaning) return prev;
+
+        return prev.filter(m => {
+          const isTarget =
+            (m.id.startsWith('msg_recovery_') || m.id.startsWith('msg_accepted_')) &&
+            m.suggestedActions?.some((sa: any) =>
+              resolvedIncidentIds.includes(sa.payload) ||
+              (typeof sa.payload === 'object' && sa.payload && resolvedIncidentIds.includes(sa.payload.id))
+            );
+          return !isTarget;
+        });
+      });
+    }
+  }, [resolvedIncidentIds]);
 
   const handleConfirmRecovery = async (incidentId: string) => {
     setProcessingIncidentId(incidentId);
@@ -123,10 +157,16 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
     setProcessingIncidentId(incidentId);
     try {
       await api.confirmRecovery(incidentId, false, 'Shopper declined offer in chat');
+      if (onResolveIncident) {
+        onResolveIncident(incidentId);
+      }
       setMessages(prev => [
-        ...prev,
+        ...prev.filter(m => !(
+          (m.id.startsWith('msg_recovery_') || m.id.startsWith('msg_accepted_')) &&
+          m.suggestedActions?.some((sa: any) => sa.payload === incidentId)
+        )),
         {
-          id: `msg_declined_${Date.now()}`,
+          id: `msg_declined_${incidentId}`,
           sender: 'agent',
           text: `Offer declined. Your order status has been updated to opted out. Let me know if you would like to explore other products!`,
           timestamp: new Date().toISOString()
