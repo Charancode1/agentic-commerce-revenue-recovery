@@ -30,7 +30,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   if (!isOpen) return null;
 
-  const subtotal = items.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  const subtotal = (items || []).reduce((acc, item) => {
+    const price = typeof item?.product?.price === 'number' ? item.product.price : (item?.selectedPrice || 0);
+    const qty = typeof item?.quantity === 'number' ? item.quantity : 1;
+    return acc + price * qty;
+  }, 0);
 
   const handleCheckout = async () => {
     if (items.length === 0) return;
@@ -201,38 +205,49 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               Your cart is currently empty.
             </div>
           ) : (
-            items.map(item => (
-              <div
-                key={item.productId}
-                style={{
-                  display: 'flex',
-                  gap: '14px',
-                  padding: '12px',
-                  borderRadius: '12px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid var(--border-subtle)',
-                  alignItems: 'center'
-                }}
-              >
-                <img
-                  src={item.product.image}
-                  alt={item.product.name}
-                  style={{ width: '56px', height: '56px', borderRadius: '10px', objectFit: 'cover' }}
-                />
-                <div style={{ flexGrow: 1, minWidth: 0 }}>
-                  <div style={{
-                    fontSize: '0.85rem',
-                    fontWeight: 700,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }}>
-                    {item.product.name}
+            (items || []).filter(item => Boolean(item && item.productId)).map(item => {
+              const prod = item.product || { name: 'Item', price: item.selectedPrice || 0, image: '' };
+              const priceDisplay = typeof prod.price === 'number'
+                ? `₹${prod.price.toLocaleString('en-IN')}`
+                : `₹${prod.price || 0}`;
+              return (
+                <div
+                  key={item.productId}
+                  style={{
+                    display: 'flex',
+                    gap: '14px',
+                    padding: '12px',
+                    borderRadius: '12px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid var(--border-subtle)',
+                    alignItems: 'center'
+                  }}
+                >
+                  {prod.image ? (
+                    <img
+                      src={prod.image}
+                      alt={prod.name || 'Item'}
+                      style={{ width: '56px', height: '56px', borderRadius: '10px', objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <div style={{ width: '56px', height: '56px', borderRadius: '10px', backgroundColor: '#1F293D', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <CreditCard size={20} />
+                    </div>
+                  )}
+                  <div style={{ flexGrow: 1, minWidth: 0 }}>
+                    <div style={{
+                      fontSize: '0.85rem',
+                      fontWeight: 700,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}>
+                      {prod.name || 'Item'}
+                    </div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#38BDF8' }}>
+                      {priceDisplay}
+                    </div>
                   </div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#38BDF8' }}>
-                    ₹{item.product.price.toLocaleString('en-IN')}
-                  </div>
-                </div>
 
                 {/* Quantity Controls */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -288,8 +303,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   </button>
                 </div>
               </div>
-            ))
-          )}
+            );
+          })
+        )}
 
           {/* Customer Details Form */}
           {items.length > 0 && (

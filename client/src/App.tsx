@@ -103,16 +103,25 @@ export const App: React.FC = () => {
   };
 
   const handleAddToCart = (product: Product) => {
+    if (!product || !product.id) return;
     setCart(prev => {
-      const existing = prev.find(item => item.productId === product.id);
+      const existing = prev.find(item => item && item.productId === product.id);
       if (existing) {
         return prev.map(item =>
-          item.productId === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item && item.productId === product.id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
         );
       }
-      return [...prev, { productId: product.id, product, quantity: 1, selectedPrice: product.price }];
+      return [
+        ...prev,
+        {
+          productId: product.id,
+          product,
+          quantity: 1,
+          selectedPrice: typeof product.price === 'number' ? product.price : (Number(product.price) || 0)
+        }
+      ];
     });
-    showToast(`Added "${product.name}" to cart!`);
+    showToast(`Added "${product.name || 'Product'}" to cart!`);
   };
 
   const handleUpdateQuantity = (productId: string, delta: number) => {
@@ -164,7 +173,7 @@ export const App: React.FC = () => {
     loadIncidentsCount();
   };
 
-  const totalCartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const totalCartCount = (cart || []).reduce((acc, item) => acc + (item?.quantity || 0), 0);
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-primary)' }}>

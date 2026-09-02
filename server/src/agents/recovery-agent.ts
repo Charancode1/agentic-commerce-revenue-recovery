@@ -1,3 +1,4 @@
+import { GoogleGenAI, Type } from '@google/genai';
 import { v4 as uuidv4 } from 'uuid';
 import { db, liveEventBus } from '../db/db';
 import {
@@ -11,8 +12,38 @@ import { FAILURE_REASONS } from '../config/constants';
 import { PolicyEngine } from './policy-engine';
 import { createRecoveryPaymentLink } from '../razorpay/payment-links';
 import { auditLogger } from '../db/audit-logger';
+import { ENV } from '../config/env';
+
+interface GeminiRecoveryStrategyOutput {
+  strategy: RecoveryStrategyType;
+  proposedDiscountPercentage: number;
+  recommendedPaymentMethod: 'UPI' | 'CARD' | 'NETBANKING' | 'PAYMENT_LINK';
+  headline: string;
+  customerMessage: string;
+  agentReasoning: string;
+  confidenceScore: number;
+}
 
 export class RecoveryAgent {
+  private static geminiClient: GoogleGenAI | null = null;
+
+  /**
+   * Initializes the Google GenAI SDK instance if an API key is available.
+   */
+  private static getGeminiClient(): GoogleGenAI | null {
+    if (this.geminiClient) return this.geminiClient;
+    if (ENV.GEMINI_API_KEY && ENV.GEMINI_API_KEY.trim().length > 0) {
+      try {
+        this.geminiClient = new GoogleGenAI({ apiKey: ENV.GEMINI_API_KEY.trim() });
+        return this.geminiClient;
+      } catch (err) {
+        console.warn('⚠️ Failed to initialize GoogleGenAI client for RecoveryAgent, falling back to heuristics:', err);
+        return null;
+      }
+    }
+    return null;
+  }
+
   /**
    * Registers a payment failure or checkout drop-off, classifies root cause, and computes bounded recovery strategy.
    */
@@ -60,8 +91,14 @@ export class RecoveryAgent {
       metadata: { amountAtRisk: order.amount }
     });
 
-    // Formulate Strategy based on failure root cause
-    const proposal = await this.formulateStrategy(order, params.failureCategory, incidentId);
+    // Formulate Strategy based on failure root cause via Gemini AI (with heuristic fallback)
+    const proposal = await this.formulateStrategy(
+      order,
+      params.failureCategory,
+      incidentId,
+      params.rawErrorCode,
+      params.rawDescription
+    );
 
     const incident: RecoveryIncident = {
       id: incidentId,
@@ -99,13 +136,228 @@ export class RecoveryAgent {
   }
 
   /**
-   * Formulates a bounded recovery strategy for an order based on failure taxonomy.
+   * Primary entry point for formulating a recovery strategy.
+   * Uses Gemini AI with structured schema, falling back gracefully to deterministic heuristics.
    */
   private static async formulateStrategy(
     order: Order,
     failureCategory: FailureCategory,
-    incidentId: string
+    incidentId: string,
+    rawErrorCode?: string,
+    rawDescription?: string
   ): Promise<RecoveryProposal> {
+    const ai = this.getGeminiClient();
+    if (ai) {
+      try {
+        const timeoutPromise = new Promise<null>((_, reject) =>
+          setTimeout(() => reject(new Error('Gemini API call timed out after 25000ms')), 25000)
+        );
+
+        const geminiProposal = await Promise.race([
+          this.formulateWithGemini(
+            ai,
+            order,
+            failureCategory,
+            incidentId,
+            rawErrorCode,
+            rawDescription
+          ),
+          timeoutPromise
+        ]);
+
+        if (geminiProposal) {
+          return geminiProposal;
+        }
+      } catch (err) {
+        console.warn('⚠️ Gemini recovery reasoning error, falling back to deterministic heuristics:', err);
+      }
+    }
+
+    return this.formulateWithHeuristics(order, failureCategory, incidentId);
+  }
+
+  /**
+   * Formulates recovery strategy using Gemini 3.6 Flash structured reasoning.
+   */
+  private static async formulateWithGemini(
+    ai: GoogleGenAI,
+    order: Order,
+    failureCategory: FailureCategory,
+    incidentId: string,
+    rawErrorCode?: string,
+    rawDescription?: string
+  ): Promise<RecoveryProposal | null> {
+    const categoryInfo = FAILURE_REASONS[failureCategory] || FAILURE_REASONS.NETWORK_GATEWAY_DROPOUT;
+
+    const systemInstruction = `You are the Autonomous Revenue Defense & Recovery Decision Agent for RAZORDEFENSE.
+Your job is to analyze a failed transaction or checkout drop-off and autonomously determine the optimal, bounded recovery strategy from the supported strategies.
+
+SUPPORTED RECOVERY STRATEGIES:
+- SWITCH_TO_UPI_INTENT: Best for Bank OTP/2FA delays or SMS timeouts. Bypasses bank SMS delays using 1-tap UPI (GPay/PhonePe). Proposed discount: 0%.
+- BOUNDED_CONCESSION_DISCOUNT: Best for card declines (insufficient funds, daily spending limit ceiling). Propose a bounded concession percentage (e.g. 5% to 10%) to lower the barrier to re-purchase.
+- INVENTORY_RESERVATION_REMINDER: Best for cart abandonment during checkout. Reassures shopper that high-demand inventory is reserved for 20 minutes with a quick checkout link. Proposed discount: 0% to 5%.
+- ONE_CLICK_PAYMENT_LINK: Best for network glitches, gateway timeouts, or general interruptions. Issues direct 1-click Razorpay recovery payment link to resume instantly without re-adding items. Proposed discount: 0%.
+- SPLIT_PAYMENT_OFFER: Best for high-value orders where single instrument limits were breached.
+
+CRITICAL FINANCIAL & ARCHITECTURAL SAFETY RULES:
+1. You must reason using ONLY the supplied order and failure context.
+2. DO NOT invent fake order amounts, customer data, payment IDs, or fake discounts. The order amount is strictly immutable.
+3. You may PROPOSE a concession percentage (0% to 12%), but it is strictly an advisory proposal. Every proposal is deterministically evaluated and clamped by the PolicyEngine (hard 12% ceiling, ₹500 cap, ₹1,000 basket threshold).
+4. You cannot execute payments or create payment links directly. Payment link creation requires explicit customer consent and backend Razorpay API execution.
+5. In "agentReasoning", clearly articulate WHY your chosen strategy and concession offer address the specific root cause.`;
+
+    const failureContextPrompt = `Failed Order Details:
+- Order Number: #${order.orderNumber}
+- Order ID: ${order.id}
+- Order Amount: ₹${order.amount} ${order.currency}
+- Items: ${order.items.map(i => `${i.product.name} (Qty: ${i.quantity}, ₹${i.selectedPrice})`).join(', ')}
+- Customer: ${order.customerName} (${order.customerEmail})
+
+Failure Diagnostics:
+- Category: ${failureCategory}
+- Title: ${categoryInfo.title}
+- Description: ${categoryInfo.description}
+- Gateway Error Code: ${rawErrorCode || 'N/A'}
+- Gateway Error Description: ${rawDescription || 'N/A'}
+
+Analyze the failure diagnostics, select the most effective recovery strategy, determine the payment method, and propose an appropriate concession percentage.`;
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.5-flash',
+      contents: [{ role: 'user', parts: [{ text: failureContextPrompt }] }],
+      config: {
+        systemInstruction,
+        temperature: 0.2,
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            strategy: {
+              type: Type.STRING,
+              description: 'One of: SWITCH_TO_UPI_INTENT, ONE_CLICK_PAYMENT_LINK, BOUNDED_CONCESSION_DISCOUNT, INVENTORY_RESERVATION_REMINDER, SPLIT_PAYMENT_OFFER'
+            },
+            proposedDiscountPercentage: {
+              type: Type.NUMBER,
+              description: 'Proposed discount percentage (0 to 12). 0 if no concession is needed.'
+            },
+            recommendedPaymentMethod: {
+              type: Type.STRING,
+              description: 'One of: UPI, CARD, NETBANKING, PAYMENT_LINK'
+            },
+            headline: {
+              type: Type.STRING,
+              description: 'Concise summary headline for merchant and shopper recovery.'
+            },
+            customerMessage: {
+              type: Type.STRING,
+              description: 'Empathetic explanation of the failure and solution for the customer.'
+            },
+            agentReasoning: {
+              type: Type.STRING,
+              description: 'Autonomous reasoning explaining why this strategy was chosen for this failure.'
+            },
+            confidenceScore: {
+              type: Type.NUMBER,
+              description: 'Confidence in strategy suitability from 0.0 to 1.0.'
+            }
+          },
+          required: [
+            'strategy',
+            'proposedDiscountPercentage',
+            'recommendedPaymentMethod',
+            'headline',
+            'customerMessage',
+            'agentReasoning',
+            'confidenceScore'
+          ]
+        }
+      }
+    });
+
+    const rawJson = response.text?.trim();
+    if (!rawJson) return null;
+
+    const parsed: GeminiRecoveryStrategyOutput = JSON.parse(rawJson);
+
+    // Validate Strategy Enum
+    const VALID_STRATEGIES: RecoveryStrategyType[] = [
+      'SWITCH_TO_UPI_INTENT',
+      'ONE_CLICK_PAYMENT_LINK',
+      'BOUNDED_CONCESSION_DISCOUNT',
+      'INVENTORY_RESERVATION_REMINDER',
+      'SPLIT_PAYMENT_OFFER'
+    ];
+    if (!VALID_STRATEGIES.includes(parsed.strategy)) {
+      console.warn(`⚠️ Gemini returned unsupported strategy "${parsed.strategy}", falling back.`);
+      return null;
+    }
+
+    // Validate Payment Method Enum
+    const VALID_PAYMENT_METHODS = ['UPI', 'CARD', 'NETBANKING', 'PAYMENT_LINK'] as const;
+    const recommendedPaymentMethod = VALID_PAYMENT_METHODS.includes(parsed.recommendedPaymentMethod as any)
+      ? (parsed.recommendedPaymentMethod as RecoveryProposal['recommendedPaymentMethod'])
+      : 'PAYMENT_LINK';
+
+    // Safe number extraction
+    const proposedDiscount = typeof parsed.proposedDiscountPercentage === 'number' && !isNaN(parsed.proposedDiscountPercentage)
+      ? Math.max(0, parsed.proposedDiscountPercentage)
+      : 0;
+
+    // Pass Gemini's proposed concession to PolicyEngine for authoritative bounds enforcement
+    const policyResult = PolicyEngine.evaluateConcession({
+      originalAmount: order.amount,
+      requestedDiscountPercentage: proposedDiscount,
+      orderId: order.id,
+      incidentId
+    });
+
+    const confidenceScore = typeof parsed.confidenceScore === 'number' && !isNaN(parsed.confidenceScore)
+      ? Math.min(1.0, Math.max(0.1, parsed.confidenceScore))
+      : 0.92;
+
+    const proposal: RecoveryProposal = {
+      incidentId,
+      orderId: order.id,
+      failureCategory,
+      detectedReason: categoryInfo.title || 'Payment Interrupted',
+      strategy: parsed.strategy,
+      headline: parsed.headline || categoryInfo.title,
+      customerMessage: parsed.customerMessage,
+      concession: policyResult.adjustedConcession,
+      recommendedPaymentMethod,
+      expiryTimestamp: new Date(Date.now() + 20 * 60 * 1000).toISOString(),
+      requiresCustomerConsent: PolicyEngine.requiresCustomerConfirmation(),
+      confidenceScore,
+      agentReasoning: parsed.agentReasoning
+    };
+
+    auditLogger.record({
+      actor: 'RECOVERY_AGENT',
+      action: 'RECOVERY_STRATEGY_FORMULATED',
+      orderId: order.id,
+      incidentId,
+      summary: `Strategy formulated via Gemini AI: ${proposal.strategy} (${Math.round(confidenceScore * 100)}% confidence). Reason: ${proposal.agentReasoning}`,
+      metadata: {
+        engine: 'GEMINI_3_5_FLASH',
+        strategy: proposal.strategy,
+        confidenceScore,
+        proposedDiscountPercentage: proposedDiscount,
+        concession: policyResult.adjustedConcession
+      }
+    });
+
+    return proposal;
+  }
+
+  /**
+   * Deterministic Heuristic Fallback Engine.
+   * Runs seamlessly if GEMINI_API_KEY is not configured or if the Gemini API call fails.
+   */
+  private static formulateWithHeuristics(
+    order: Order,
+    failureCategory: FailureCategory,
+    incidentId: string
+  ): RecoveryProposal {
     let strategy: RecoveryStrategyType = 'SWITCH_TO_UPI_INTENT';
     let headline = '';
     let customerMessage = '';
@@ -183,8 +435,9 @@ export class RecoveryAgent {
       action: 'RECOVERY_STRATEGY_FORMULATED',
       orderId: order.id,
       incidentId,
-      summary: `Strategy formulated: ${strategy}. Reason: ${agentReasoning}`,
+      summary: `Strategy formulated via Heuristic Fallback: ${strategy}. Reason: ${agentReasoning}`,
       metadata: {
+        engine: 'HEURISTIC_FALLBACK',
         strategy,
         confidenceScore: 0.94,
         concession: policyResult.adjustedConcession

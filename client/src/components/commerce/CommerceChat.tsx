@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage, Product } from '../../../shared/types/commerce';
 import { RecoveryIncident, ShopperRecoveryContext } from '../../../shared/types/recovery';
 import { api } from '../../services/api';
-import { Send, Bot, User, ShoppingCart, ShieldCheck, ExternalLink, Zap, CheckCircle } from 'lucide-react';
+import { Send, Bot, User, ShoppingCart, ShieldCheck, ExternalLink, Zap, CheckCircle, Sparkles } from 'lucide-react';
 
 interface CommerceChatProps {
   onAddToCart: (product: Product) => void;
@@ -161,6 +161,15 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
 
       const response = await api.chatWithAgent(messageText, history);
       setMessages(prev => [...prev, response]);
+
+      if (response && response.cartAction) {
+        if (response.cartAction.type === 'add_to_cart') {
+          const toAdd = response.recommendedProducts?.find(p => p && p.id === response.cartAction?.productId);
+          if (toAdd) onAddToCart(toAdd);
+        } else if (response.cartAction.type === 'remove_from_cart' && onRemoveFromCart) {
+          onRemoveFromCart(response.cartAction.productId);
+        }
+      }
     } catch (error) {
       console.error('Chat error:', error);
       setMessages(prev => [
@@ -303,33 +312,48 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
                 marginTop: '4px',
                 paddingLeft: '32px'
               }}>
-                {msg.recommendedProducts.map(p => (
-                  <div
-                    key={p.id}
-                    style={{
-                      padding: '10px',
-                      borderRadius: '8px',
-                      backgroundColor: 'rgba(0, 0, 0, 0.25)',
-                      border: '1px solid var(--border-subtle)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px'
-                    }}
-                  >
-                    <img src={p.image} alt={p.name} style={{ width: '40px', height: '40px', borderRadius: '6px', objectFit: 'cover' }} />
-                    <div style={{ flexGrow: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '0.775rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
-                      <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#38BDF8' }}>₹{p.price.toLocaleString('en-IN')}</div>
-                    </div>
-                    <button
-                      onClick={() => onAddToCart(p)}
-                      className="btn-primary"
-                      style={{ padding: '5px 10px', fontSize: '0.725rem' }}
+                {msg.recommendedProducts.filter(p => Boolean(p && p.id)).map(p => {
+                  const priceDisplay = typeof p.price === 'number'
+                    ? `₹${p.price.toLocaleString('en-IN')}`
+                    : (p.price ? `₹${p.price}` : '');
+                  return (
+                    <div
+                      key={p.id}
+                      style={{
+                        padding: '10px',
+                        borderRadius: '8px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                        border: '1px solid var(--border-subtle)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px'
+                      }}
                     >
-                      <span>+ Cart</span>
-                    </button>
-                  </div>
-                ))}
+                      {p.image ? (
+                        <img src={p.image} alt={p.name || 'Product'} style={{ width: '40px', height: '40px', borderRadius: '6px', objectFit: 'cover' }} />
+                      ) : (
+                        <div style={{ width: '40px', height: '40px', borderRadius: '6px', backgroundColor: '#1F293D', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <ShoppingCart size={16} />
+                        </div>
+                      )}
+                      <div style={{ flexGrow: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: '0.775rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {p.name || 'Product'}
+                        </div>
+                        <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#38BDF8' }}>
+                          {priceDisplay}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => onAddToCart(p)}
+                        className="btn-primary"
+                        style={{ padding: '5px 10px', fontSize: '0.725rem' }}
+                      >
+                        <span>+ Cart</span>
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             )}
 
@@ -413,12 +437,62 @@ export const CommerceChat: React.FC<CommerceChatProps> = ({
                     );
                   }
 
+                  if (sa.action === ('add_to_cart' as any)) {
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          if (typeof sa.payload === 'object' && sa.payload !== null && (sa.payload as any).id) {
+                            onAddToCart(sa.payload as Product);
+                          } else if (typeof sa.payload === 'string') {
+                            const matched = msg.recommendedProducts?.find(p => p && p.id === sa.payload);
+                            if (matched) onAddToCart(matched);
+                          } else if (msg.recommendedProducts && msg.recommendedProducts.length > 0) {
+                            onAddToCart(msg.recommendedProducts[0]);
+                          }
+                        }}
+                        className="btn-primary"
+                        style={{
+                          padding: '5px 10px',
+                          fontSize: '0.725rem',
+                          backgroundColor: '#0284C7'
+                        }}
+                      >
+                        <ShoppingCart size={12} />
+                        <span>{sa.label}</span>
+                      </button>
+                    );
+                  }
+
+                  if (sa.action === ('remove_from_cart' as any)) {
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          const prodId = typeof sa.payload === 'object' && sa.payload !== null
+                            ? (sa.payload as any).id
+                            : sa.payload;
+                          if (prodId && onRemoveFromCart) {
+                            onRemoveFromCart(prodId);
+                          }
+                        }}
+                        className="btn-secondary"
+                        style={{
+                          padding: '5px 10px',
+                          fontSize: '0.725rem'
+                        }}
+                      >
+                        <span>{sa.label}</span>
+                      </button>
+                    );
+                  }
+
                   return (
                     <button
                       key={idx}
                       onClick={() => {
                         if (sa.action === 'checkout') onProceedToCheckout();
-                        else if (sa.payload) sendMessage(sa.payload);
+                        else if (typeof sa.payload === 'string') sendMessage(sa.payload);
                       }}
                       style={{
                         padding: '4px 8px',

@@ -61,7 +61,15 @@ export class CommerceAgent {
 
     if (ai) {
       try {
-        const geminiResult = await this.processWithGemini(ai, userMessage, history, products);
+        const timeoutPromise = new Promise<null>((_, reject) =>
+          setTimeout(() => reject(new Error('Gemini Commerce API call timed out after 25000ms')), 25000)
+        );
+
+        const geminiResult = await Promise.race([
+          this.processWithGemini(ai, userMessage, history, products),
+          timeoutPromise
+        ]);
+
         if (geminiResult) {
           return geminiResult;
         }
@@ -126,7 +134,7 @@ ${JSON.stringify(catalogContext, null, 2)}`;
 
     // 3. Call Gemini with Structured JSON Schema
     const response = await ai.models.generateContent({
-      model: 'gemini-3.6-flash',
+      model: 'gemini-3.5-flash',
       contents: conversationTurns,
       config: {
         systemInstruction,
@@ -252,7 +260,7 @@ ${JSON.stringify(catalogContext, null, 2)}`;
         ? `Gemini AI executed cartAction: ${validatedCartAction.type} (${validatedCartAction.productId})`
         : `Gemini AI recommended ${matchedProducts.length} product(s) for: "${userMessage.substring(0, 60)}"`,
       metadata: {
-        engine: 'GEMINI_3_6_FLASH',
+        engine: 'GEMINI_3_5_FLASH',
         cartAction: validatedCartAction,
         recommendedProductIds: matchedProducts.map(p => p.id),
         responseLength: parsed.replyMessage.length
@@ -305,8 +313,12 @@ Reasoning: ${context.agentReasoning}
 
 Please format a warm, professional customer-facing recovery explanation for the shopper.`;
 
-        const response = await ai.models.generateContent({
-          model: 'gemini-3.6-flash',
+        const timeoutPromise = new Promise<null>((_, reject) =>
+          setTimeout(() => reject(new Error('Gemini Recovery Message call timed out after 25000ms')), 25000)
+        );
+
+        const apiCallPromise = ai.models.generateContent({
+          model: 'gemini-3.5-flash',
           contents: [{ role: 'user', parts: [{ text: prompt }] }],
           config: {
             systemInstruction,
@@ -314,7 +326,9 @@ Please format a warm, professional customer-facing recovery explanation for the 
           }
         });
 
-        if (response.text && response.text.trim().length > 0) {
+        const response = await Promise.race([apiCallPromise, timeoutPromise]);
+
+        if (response && response.text && response.text.trim().length > 0) {
           textMessage = response.text.trim();
         }
       } catch (err) {
