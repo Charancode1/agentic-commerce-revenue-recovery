@@ -191,24 +191,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           zIndex: 0
         }} />
 
-        {/* Top Buildathon Pill */}
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '8px',
-          padding: '4px 12px',
-          borderRadius: '20px',
-          backgroundColor: 'rgba(2, 132, 199, 0.12)',
-          border: '1px solid rgba(56, 189, 248, 0.3)',
-          marginBottom: '10px',
-          zIndex: 1
-        }}>
-          <Shield size={13} color="#38BDF8" />
-          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#38BDF8', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-            Razorpay AI Buildathon 2026 • Autonomous Commerce Defense
-          </span>
-        </div>
-
         {/* Main Headline */}
         <h1 style={{
           fontSize: 'clamp(1.9rem, 3.2vw, 2.6rem)',
