@@ -2,8 +2,8 @@ import React from 'react';
 import { ShoppingBag, ShieldCheck, Shield, Store, Terminal } from 'lucide-react';
 
 interface HeaderProps {
-  activeView: 'shopper' | 'simulator' | 'merchant';
-  setActiveView: (view: 'shopper' | 'simulator' | 'merchant') => void;
+  activeView: 'landing' | 'shopper' | 'simulator' | 'merchant';
+  setActiveView: (view: 'landing' | 'shopper' | 'simulator' | 'merchant') => void;
   cartCount: number;
   onOpenCart: () => void;
   activeIncidentsCount: number;
@@ -35,7 +35,11 @@ export const Header: React.FC<HeaderProps> = ({
         gap: '16px'
       }}>
         {/* Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div
+          onClick={() => setActiveView('landing')}
+          style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
+          title="Return to RAZORDEFENSE Overview"
+        >
           <div>
             <div style={{
               width: '180px',
@@ -73,6 +77,26 @@ export const Header: React.FC<HeaderProps> = ({
           border: '1px solid var(--border-subtle)',
           gap: '2px'
         }}>
+          <button
+            onClick={() => setActiveView('landing')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '7px 14px',
+              borderRadius: '6px',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: 600,
+              fontSize: '0.825rem',
+              transition: 'all 0.15s ease',
+              backgroundColor: activeView === 'landing' ? '#0284C7' : 'transparent',
+              color: activeView === 'landing' ? '#FFFFFF' : 'var(--text-muted)'
+            }}
+          >
+            <Shield size={15} />
+            <span>Overview</span>
+          </button>
           <button
             onClick={() => setActiveView('merchant')}
             style={{

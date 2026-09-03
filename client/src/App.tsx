@@ -9,12 +9,13 @@ import { CartDrawer } from './components/commerce/CartDrawer';
 import { FailureSimulator } from './components/checkout/FailureSimulator';
 import { RecoveryPromptModal } from './components/recovery/RecoveryPromptModal';
 import { MerchantDashboard } from './components/dashboard/MerchantDashboard';
+import { LandingPage } from './components/landing/LandingPage';
 
 export const App: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [activeView, setActiveView] = useState<'shopper' | 'simulator' | 'merchant'>('merchant');
+  const [activeView, setActiveView] = useState<'landing' | 'shopper' | 'simulator' | 'merchant'>('landing');
   const [activeRecoveryIncident, setActiveRecoveryIncident] = useState<RecoveryIncident | null>(null);
   const [shopperRecoveryContext, setShopperRecoveryContext] = useState<ShopperRecoveryContext | null>(null);
   const [chatPrompt, setChatPrompt] = useState<string>('');
@@ -213,90 +214,102 @@ export const App: React.FC = () => {
         </div>
       )}
 
-      {/* Main Header */}
-      <Header
-        activeView={activeView}
-        setActiveView={setActiveView}
-        cartCount={totalCartCount}
-        onOpenCart={() => setIsCartOpen(true)}
-        activeIncidentsCount={activeIncidentsCount}
-      />
+      {/* VIEW 0: LANDING PAGE */}
+      <div style={{ display: activeView === 'landing' ? 'block' : 'none' }}>
+        <LandingPage onEnterApp={(view) => setActiveView(view || 'shopper')} />
+      </div>
 
-      {/* Main Body Content */}
-      <main style={{ flexGrow: 1, maxWidth: '1400px', margin: '0 auto', width: '100%', padding: '20px' }}>
-        {/* VIEW 1: MERCHANT CONTROL TOWER */}
-        <div style={{ display: activeView === 'merchant' ? 'block' : 'none' }}>
-          <MerchantDashboard
-            onSelectIncidentForOutreach={incident => {
-              setActiveRecoveryIncident(incident);
-            }}
-          />
-        </div>
+      {/* Main App Layout (Hidden when on Landing Page) */}
+      <div style={{
+        display: activeView !== 'landing' ? 'flex' : 'none',
+        flexDirection: 'column',
+        minHeight: '100vh'
+      }}>
+        {/* Main Header */}
+        <Header
+          activeView={activeView}
+          setActiveView={setActiveView}
+          cartCount={totalCartCount}
+          onOpenCart={() => setIsCartOpen(true)}
+          activeIncidentsCount={activeIncidentsCount}
+        />
 
-        {/* VIEW 2: SHOPPER STOREFRONT */}
-        <div style={{ display: activeView === 'shopper' ? 'grid' : 'none', gridTemplateColumns: '1fr 400px', gap: '20px', alignItems: 'start' }}>
-          {/* Left: Product Catalog */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <div>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>
-                Featured Catalog
-              </h2>
-              <p style={{ fontSize: '0.775rem', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
-                Browse flagship products or consult the RAZORDEFENSE Shopping Copilot for suggestions.
-              </p>
+        {/* Main Body Content */}
+        <main style={{ flexGrow: 1, maxWidth: '1400px', margin: '0 auto', width: '100%', padding: '20px' }}>
+          {/* VIEW 1: MERCHANT CONTROL TOWER */}
+          <div style={{ display: activeView === 'merchant' ? 'block' : 'none' }}>
+            <MerchantDashboard
+              onSelectIncidentForOutreach={incident => {
+                setActiveRecoveryIncident(incident);
+              }}
+            />
+          </div>
+
+          {/* VIEW 2: SHOPPER STOREFRONT */}
+          <div style={{ display: activeView === 'shopper' ? 'grid' : 'none', gridTemplateColumns: '1fr 400px', gap: '20px', alignItems: 'start' }}>
+            {/* Left: Product Catalog */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>
+                  Featured Catalog
+                </h2>
+                <p style={{ fontSize: '0.775rem', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
+                  Browse flagship products or consult the RAZORDEFENSE Shopping Copilot for suggestions.
+                </p>
+              </div>
+
+              <ProductCatalog
+                products={products}
+                onAddToCart={handleAddToCart}
+                onAskAI={handleAskAIAboutProduct}
+              />
             </div>
 
-            <ProductCatalog
-              products={products}
-              onAddToCart={handleAddToCart}
-              onAskAI={handleAskAIAboutProduct}
-            />
+            {/* Right: AI Shopping Copilot Chat */}
+            <div style={{ position: 'sticky', top: '76px' }}>
+              <CommerceChat
+                onAddToCart={handleAddToCart}
+                onRemoveFromCart={handleRemoveItem}
+                onProceedToCheckout={() => setIsCartOpen(true)}
+                externalPrompt={chatPrompt}
+                onClearExternalPrompt={() => setChatPrompt('')}
+                incomingRecoveryContext={shopperRecoveryContext}
+                onOpenRecoveryModal={incident => setActiveRecoveryIncident(incident)}
+                resolvedIncidentIds={resolvedIncidentIds}
+                onResolveIncident={handleResolveIncident}
+              />
+            </div>
           </div>
 
-          {/* Right: AI Shopping Copilot Chat */}
-          <div style={{ position: 'sticky', top: '76px' }}>
-            <CommerceChat
-              onAddToCart={handleAddToCart}
-              onRemoveFromCart={handleRemoveItem}
-              onProceedToCheckout={() => setIsCartOpen(true)}
-              externalPrompt={chatPrompt}
-              onClearExternalPrompt={() => setChatPrompt('')}
-              incomingRecoveryContext={shopperRecoveryContext}
-              onOpenRecoveryModal={incident => setActiveRecoveryIncident(incident)}
-              resolvedIncidentIds={resolvedIncidentIds}
-              onResolveIncident={handleResolveIncident}
+          {/* VIEW 3: FAILURE SIMULATOR */}
+          <div style={{ display: activeView === 'simulator' ? 'block' : 'none' }}>
+            <FailureSimulator
+              onIncidentCreated={incident => {
+                if (incident.recoveryProposal) {
+                  const proposal = incident.recoveryProposal;
+                  setResolvedIncidentIds(prev => prev.filter(id => id !== incident.id));
+                  setShopperRecoveryContext({
+                    incidentId: incident.id,
+                    orderId: incident.orderId,
+                    orderNumber: incident.orderNumber,
+                    failureCategory: incident.failureCategory,
+                    detectedReason: proposal.detectedReason,
+                    originalAmount: incident.amountAtRisk,
+                    strategy: proposal.strategy,
+                    discountValue: proposal.concession?.discountValue || 0,
+                    finalPayableAmount: proposal.concession?.finalRecoveryAmount || incident.amountAtRisk,
+                    reservationExpiry: proposal.expiryTimestamp,
+                    agentReasoning: proposal.agentReasoning,
+                    headline: proposal.headline
+                  });
+                }
+                loadIncidentsCount();
+                showToast(`Failure injected! Recovery strategy formulated.`, 'alert');
+              }}
             />
           </div>
-        </div>
-
-        {/* VIEW 3: FAILURE SIMULATOR */}
-        <div style={{ display: activeView === 'simulator' ? 'block' : 'none' }}>
-          <FailureSimulator
-            onIncidentCreated={incident => {
-              if (incident.recoveryProposal) {
-                const proposal = incident.recoveryProposal;
-                setResolvedIncidentIds(prev => prev.filter(id => id !== incident.id));
-                setShopperRecoveryContext({
-                  incidentId: incident.id,
-                  orderId: incident.orderId,
-                  orderNumber: incident.orderNumber,
-                  failureCategory: incident.failureCategory,
-                  detectedReason: proposal.detectedReason,
-                  originalAmount: incident.amountAtRisk,
-                  strategy: proposal.strategy,
-                  discountValue: proposal.concession?.discountValue || 0,
-                  finalPayableAmount: proposal.concession?.finalRecoveryAmount || incident.amountAtRisk,
-                  reservationExpiry: proposal.expiryTimestamp,
-                  agentReasoning: proposal.agentReasoning,
-                  headline: proposal.headline
-                });
-              }
-              loadIncidentsCount();
-              showToast(`Failure injected! Recovery strategy formulated.`, 'alert');
-            }}
-          />
-        </div>
-      </main>
+        </main>
+      </div>
 
       {/* Cart Drawer */}
       <CartDrawer
