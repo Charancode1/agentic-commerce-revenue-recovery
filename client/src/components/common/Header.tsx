@@ -36,25 +36,28 @@ export const Header: React.FC<HeaderProps> = ({
       }}>
         {/* Brand */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '8px',
-            backgroundColor: '#0284C7',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#FFFFFF'
-          }}>
-            <Shield size={20} />
-          </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h1 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0, letterSpacing: '-0.02em', color: '#F1F5F9' }}>
-                RAZOR<span style={{ color: '#0284C7' }}>DEFENSE</span>
-              </h1>
+            <div style={{
+              width: '180px',
+              height: '36px',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '4px'
+            }}>
+              <img
+                src="/images/Razordefense logo.png"
+                alt="RAZORDEFENSE"
+                style={{
+                  width: '180px',
+                  height: '180px',
+                  objectFit: 'contain',
+                  flexShrink: 0
+                }}
+              />
             </div>
-            <p style={{ fontSize: '0.72rem', color: 'var(--text-subtle)', margin: 0, fontWeight: 500 }}>
+            <p style={{ fontSize: '0.72rem', color: 'var(--text-subtle)', margin: '2px 0 0 0', fontWeight: 500 }}>
               Autonomous Revenue Defense Platform
             </p>
           </div>
