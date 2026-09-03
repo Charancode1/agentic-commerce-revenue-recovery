@@ -166,7 +166,7 @@ export const MerchantDashboard: React.FC<MerchantDashboardProps> = ({ onSelectIn
             ₹{atRisk.toLocaleString('en-IN')}
           </div>
           <div style={{ fontSize: '0.725rem', color: 'var(--text-subtle)' }}>
-            {atRisk > 0 ? `Across ${recoveries.length} failed transactions` : 'No active payment failures'}
+            {atRisk > 0 ? `Active exposure across ${metrics?.activeIncidentsCount || 1} unresolved failure${(metrics?.activeIncidentsCount || 1) === 1 ? '' : 's'}` : 'No active payment failures'}
           </div>
         </div>
 

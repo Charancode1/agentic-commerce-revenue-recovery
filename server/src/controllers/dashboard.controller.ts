@@ -1,14 +1,25 @@
 import { Request, Response } from 'express';
 import { db, liveEventBus } from '../db/db';
-import { DashboardMetrics, FailureCategory, RecoveryStrategyType } from '../../../shared/types/recovery';
+import { DashboardMetrics, FailureCategory, RecoveryStrategyType, RecoveryIncident } from '../../../shared/types/recovery';
 
 export class DashboardController {
   public static getMetrics(req: Request, res: Response) {
-    const recoveries = db.getRecoveries();
+    const rawRecoveries = db.getRecoveries();
+
+    // Deduplicate recoveries by incident id to guarantee no incident is double-counted
+    const seenIncidentIds = new Set<string>();
+    const recoveries: RecoveryIncident[] = [];
+    for (const rec of rawRecoveries) {
+      if (rec && rec.id && !seenIncidentIds.has(rec.id)) {
+        seenIncidentIds.add(rec.id);
+        recoveries.push(rec);
+      }
+    }
 
     let totalRevenueAtRisk = 0;
     let totalRecoveredRevenue = 0;
     let activeIncidentsCount = 0;
+    let totalHistoricalExposure = 0;
 
     const failureCounts: Record<FailureCategory, { count: number; amount: number }> = {
       BANK_OTP_TIMEOUT: { count: 0, amount: 0 },
@@ -28,11 +39,21 @@ export class DashboardController {
     };
 
     for (const rec of recoveries) {
-      totalRevenueAtRisk += rec.amountAtRisk;
+      totalHistoricalExposure += rec.amountAtRisk;
 
       if (rec.status === 'RECOVERED') {
-        totalRecoveredRevenue += rec.recoveredAmount || rec.amountAtRisk;
-      } else if (rec.status !== 'DECLINED_BY_CUSTOMER' && rec.status !== 'EXPIRED') {
+        const recovered = rec.recoveredAmount !== undefined ? rec.recoveredAmount : rec.amountAtRisk;
+        totalRecoveredRevenue += recovered;
+
+        // For partial recoveries, only the recovered amount is removed from Revenue at Risk
+        const remainingAtRisk = Math.max(0, rec.amountAtRisk - recovered);
+        totalRevenueAtRisk += remainingAtRisk;
+      } else if (rec.status === 'DECLINED_BY_CUSTOMER' || (rec.status as string) === 'OPTED_OUT' || rec.status === 'EXPIRED') {
+        // Customer explicitly opted out or expired:
+        // Excluded from Revenue at Risk (adds ₹0) and excluded from Recovered Revenue (adds ₹0)
+      } else {
+        // Unresolved / active incident: full amount remains at risk
+        totalRevenueAtRisk += rec.amountAtRisk;
         activeIncidentsCount += 1;
       }
 
@@ -50,7 +71,9 @@ export class DashboardController {
     }
 
     const recoveryRatePercentage =
-      totalRevenueAtRisk > 0 ? Math.round((totalRecoveredRevenue / totalRevenueAtRisk) * 1000) / 10 : 0;
+      totalHistoricalExposure > 0
+        ? Math.round((totalRecoveredRevenue / totalHistoricalExposure) * 1000) / 10
+        : 0;
 
     const topFailureReasons = Object.entries(failureCounts)
       .map(([cat, data]) => ({
