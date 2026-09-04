@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface Particle {
   x: number;
@@ -28,7 +28,6 @@ interface Spark {
 
 export const AgenticDefenseVisual: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [telemetryEvent, setTelemetryEvent] = useState<string>('Monitoring live payment flow...');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -47,14 +46,17 @@ export const AgenticDefenseVisual: React.FC = () => {
     };
     window.addEventListener('resize', handleResize);
 
-    // Nodes
+    // 9 Nodes Flow Architecture
     const getNodePos = () => ({
-      checkout: { x: width * 0.12, y: height * 0.50, label: 'Checkout', sub: 'Shopper Cart' },
-      gateway: { x: width * 0.35, y: height * 0.50, label: 'Payment Gateway', sub: 'Bank Auth' },
-      atRisk: { x: width * 0.48, y: height * 0.22, label: 'Revenue at Risk', sub: 'Intercepted' },
-      agent: { x: width * 0.68, y: height * 0.22, label: 'Recovery Agent', sub: 'Gemini AI' },
-      policy: { x: width * 0.68, y: height * 0.68, label: 'Policy Guardrails', sub: 'Bounded' },
-      recovered: { x: width * 0.90, y: height * 0.50, label: 'Recovered Revenue', sub: 'Razorpay Smart Link' }
+      checkout: { x: width * 0.08, y: height * 0.50, label: 'Checkout', sub: 'Cart Session' },
+      gateway: { x: width * 0.20, y: height * 0.50, label: 'Payment Gateway', sub: 'Bank Auth' },
+      atRisk: { x: width * 0.29, y: height * 0.22, label: 'Revenue at Risk', sub: 'Intercepted' },
+      recoveryAgent: { x: width * 0.42, y: height * 0.22, label: 'Recovery Agent', sub: 'Strategy Reasoning' },
+      shopperAgent: { x: width * 0.55, y: height * 0.22, label: 'Shopper Agent', sub: 'Customer Outreach' },
+      customerConsent: { x: width * 0.68, y: height * 0.22, label: 'Customer Consent', sub: 'Explicit Acceptance' },
+      policy: { x: width * 0.68, y: height * 0.72, label: 'Policy Guardrails', sub: 'Bounded Limits' },
+      recoveryPayment: { x: width * 0.81, y: height * 0.72, label: 'Recovery Payment', sub: 'Bounded Execution' },
+      recovered: { x: width * 0.93, y: height * 0.50, label: 'Recovered Revenue', sub: 'Defended & Verified' }
     });
 
     const particles: Particle[] = [];
@@ -72,7 +74,7 @@ export const AgenticDefenseVisual: React.FC = () => {
           targetX: nodes.gateway.x,
           targetY: nodes.gateway.y,
           progress: 0,
-          speed: 0.008 + Math.random() * 0.004,
+          speed: 0.010 + Math.random() * 0.003,
           type: 'nominal',
           color: '#38BDF8',
           size: 3.5,
@@ -88,7 +90,7 @@ export const AgenticDefenseVisual: React.FC = () => {
           targetX: nodes.gateway.x,
           targetY: nodes.gateway.y,
           progress: 0,
-          speed: 0.007,
+          speed: 0.013,
           type: 'failure',
           color: '#FB7185',
           size: 4.5,
@@ -152,18 +154,21 @@ export const AgenticDefenseVisual: React.FC = () => {
         ctx.restore();
       };
 
-      // Corridors
-      drawPath(nodes.checkout, nodes.gateway, 'rgba(56, 189, 248, 0.2)');
-      drawPath(nodes.gateway, nodes.atRisk, 'rgba(251, 113, 133, 0.3)', true);
-      drawPath(nodes.atRisk, nodes.agent, 'rgba(129, 140, 248, 0.35)');
-      drawPath(nodes.agent, nodes.policy, 'rgba(16, 185, 129, 0.3)', true);
-      drawPath(nodes.policy, nodes.recovered, 'rgba(52, 211, 153, 0.4)');
-      drawPath(nodes.gateway, nodes.recovered, 'rgba(56, 189, 248, 0.1)');
+      // Flow Corridors
+      drawPath(nodes.checkout, nodes.gateway, 'rgba(56, 189, 248, 0.25)');
+      drawPath(nodes.gateway, nodes.recovered, 'rgba(56, 189, 248, 0.08)'); // baseline nominal path
+      drawPath(nodes.gateway, nodes.atRisk, 'rgba(251, 113, 133, 0.3)', true); // failure detour
+      drawPath(nodes.atRisk, nodes.recoveryAgent, 'rgba(167, 139, 250, 0.35)');
+      drawPath(nodes.recoveryAgent, nodes.shopperAgent, 'rgba(56, 189, 248, 0.35)');
+      drawPath(nodes.shopperAgent, nodes.customerConsent, 'rgba(251, 191, 36, 0.35)');
+      drawPath(nodes.customerConsent, nodes.policy, 'rgba(52, 211, 153, 0.35)', true);
+      drawPath(nodes.policy, nodes.recoveryPayment, 'rgba(45, 212, 191, 0.4)');
+      drawPath(nodes.recoveryPayment, nodes.recovered, 'rgba(16, 185, 129, 0.45)');
 
       // Periodic spawn
       if (tick - lastSpawn > 85) {
         lastSpawn = tick;
-        if (Math.random() < 0.45) {
+        if (Math.random() < 0.5) {
           spawnParticle('failure');
         } else {
           spawnParticle('nominal');
@@ -203,10 +208,10 @@ export const AgenticDefenseVisual: React.FC = () => {
         ctx.fill();
         ctx.shadowBlur = 0;
 
-        // Waypoint transitions
+        // Waypoint transitions: Flow sequence
         if (p.progress >= 1) {
           if (p.type === 'nominal') {
-            // Normal payment reached gateway, then flows to success
+            // Normal payment reached gateway, flows directly to success
             if (p.targetX === nodes.gateway.x && p.targetY === nodes.gateway.y) {
               p.originX = nodes.gateway.x;
               p.originY = nodes.gateway.y;
@@ -218,54 +223,76 @@ export const AgenticDefenseVisual: React.FC = () => {
               particles.splice(i, 1);
             }
           } else if (p.type === 'failure') {
-            // Failed at gateway! Detour to Revenue at Risk
+            // 1. Payment failed at gateway → Intercepted as Revenue at Risk
             if (p.targetX === nodes.gateway.x && p.targetY === nodes.gateway.y) {
               addSparks(nodes.gateway.x, nodes.gateway.y, '#FB7185', 14);
-              setTelemetryEvent('⚠️ Payment failed at gateway (Card limit) → Intercepted as Revenue at Risk');
               p.originX = nodes.gateway.x;
               p.originY = nodes.gateway.y;
               p.targetX = nodes.atRisk.x;
               p.targetY = nodes.atRisk.y;
               p.progress = 0;
-              p.color = '#F43F5E';
+              p.color = '#FB7185';
             } else if (p.targetX === nodes.atRisk.x && p.targetY === nodes.atRisk.y) {
-              // Reached Revenue at Risk, agent picks it up
-              addSparks(nodes.atRisk.x, nodes.atRisk.y, '#818CF8', 8);
-              setTelemetryEvent('🧠 Gemini Recovery Agent analyzing failure context & formulating strategy...');
+              // 2. Recovery Agent analyzes failed transaction & determines recovery approach
+              addSparks(nodes.atRisk.x, nodes.atRisk.y, '#A78BFA', 10);
               p.originX = nodes.atRisk.x;
               p.originY = nodes.atRisk.y;
-              p.targetX = nodes.agent.x;
-              p.targetY = nodes.agent.y;
+              p.targetX = nodes.recoveryAgent.x;
+              p.targetY = nodes.recoveryAgent.y;
               p.progress = 0;
               p.color = '#A78BFA';
               p.type = 'recovery';
             }
           } else if (p.type === 'recovery') {
-            // Flow from Agent to Policy Guardrails
-            if (p.targetX === nodes.agent.x && p.targetY === nodes.agent.y) {
-              setTelemetryEvent('🛡️ Policy Engine evaluating: Discount capped at ₹400 (8%), within 12% guardrail');
-              addSparks(nodes.agent.x, nodes.agent.y, '#34D399', 10);
-              p.originX = nodes.agent.x;
-              p.originY = nodes.agent.y;
+            if (p.targetX === nodes.recoveryAgent.x && p.targetY === nodes.recoveryAgent.y) {
+              // 3. Shopper Agent communicates recovery opportunity to customer
+              addSparks(nodes.recoveryAgent.x, nodes.recoveryAgent.y, '#38BDF8', 10);
+              p.originX = nodes.recoveryAgent.x;
+              p.originY = nodes.recoveryAgent.y;
+              p.targetX = nodes.shopperAgent.x;
+              p.targetY = nodes.shopperAgent.y;
+              p.progress = 0;
+              p.color = '#38BDF8';
+            } else if (p.targetX === nodes.shopperAgent.x && p.targetY === nodes.shopperAgent.y) {
+              // 4. Customer explicitly provides consent
+              addSparks(nodes.shopperAgent.x, nodes.shopperAgent.y, '#FBBF24', 10);
+              p.originX = nodes.shopperAgent.x;
+              p.originY = nodes.shopperAgent.y;
+              p.targetX = nodes.customerConsent.x;
+              p.targetY = nodes.customerConsent.y;
+              p.progress = 0;
+              p.color = '#FBBF24';
+            } else if (p.targetX === nodes.customerConsent.x && p.targetY === nodes.customerConsent.y) {
+              // 5. Proposed recovery passes through Policy Guardrails
+              addSparks(nodes.customerConsent.x, nodes.customerConsent.y, '#34D399', 10);
+              p.originX = nodes.customerConsent.x;
+              p.originY = nodes.customerConsent.y;
               p.targetX = nodes.policy.x;
               p.targetY = nodes.policy.y;
               p.progress = 0;
-              p.color = '#10B981';
+              p.color = '#34D399';
             } else if (p.targetX === nodes.policy.x && p.targetY === nodes.policy.y) {
-              // Policy approved, dispatching Razorpay smart link
-              setTelemetryEvent('⚡ Customer consented: Executing Razorpay Test Mode Smart Link...');
-              addSparks(nodes.policy.x, nodes.policy.y, '#34D399', 12);
+              // 6. Bounded recovery payment is executed
+              addSparks(nodes.policy.x, nodes.policy.y, '#2DD4BF', 12);
               p.originX = nodes.policy.x;
               p.originY = nodes.policy.y;
+              p.targetX = nodes.recoveryPayment.x;
+              p.targetY = nodes.recoveryPayment.y;
+              p.progress = 0;
+              p.color = '#2DD4BF';
+              p.size = 5;
+            } else if (p.targetX === nodes.recoveryPayment.x && p.targetY === nodes.recoveryPayment.y) {
+              // 7. Revenue becomes Recovered Revenue
+              addSparks(nodes.recoveryPayment.x, nodes.recoveryPayment.y, '#10B981', 14);
+              p.originX = nodes.recoveryPayment.x;
+              p.originY = nodes.recoveryPayment.y;
               p.targetX = nodes.recovered.x;
               p.targetY = nodes.recovered.y;
               p.progress = 0;
-              p.color = '#34D399';
-              p.size = 5;
+              p.color = '#10B981';
             } else {
-              // Final arrival at Recovered Revenue!
-              addSparks(nodes.recovered.x, nodes.recovered.y, '#34D399', 24);
-              setTelemetryEvent('🎉 Revenue Defended! At-risk transaction successfully recovered via Razorpay');
+              // Final arrival at Recovered Revenue
+              addSparks(nodes.recovered.x, nodes.recovered.y, '#10B981', 24);
               particles.splice(i, 1);
             }
           }
@@ -300,7 +327,7 @@ export const AgenticDefenseVisual: React.FC = () => {
       ) => {
         // Outer glow
         const pulseFactor = pulse ? Math.sin(tick * 0.05) * 3 : 0;
-        const radius = 14 * window.devicePixelRatio + pulseFactor;
+        const radius = 13 * window.devicePixelRatio + pulseFactor;
 
         ctx.beginPath();
         ctx.arc(pos.x, pos.y, radius + 6, 0, Math.PI * 2);
@@ -322,7 +349,7 @@ export const AgenticDefenseVisual: React.FC = () => {
 
         // Inner core
         ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 5 * window.devicePixelRatio, 0, Math.PI * 2);
+        ctx.arc(pos.x, pos.y, 4.5 * window.devicePixelRatio, 0, Math.PI * 2);
         ctx.fillStyle = themeColor;
         ctx.shadowColor = themeColor;
         ctx.shadowBlur = 10 * window.devicePixelRatio;
@@ -330,22 +357,25 @@ export const AgenticDefenseVisual: React.FC = () => {
         ctx.shadowBlur = 0;
 
         // Labels
-        ctx.font = `600 ${10 * window.devicePixelRatio}px Inter, sans-serif`;
+        ctx.font = `600 ${9.5 * window.devicePixelRatio}px Inter, sans-serif`;
         ctx.fillStyle = '#F1F5F9';
         ctx.textAlign = 'center';
-        ctx.fillText(title, pos.x, pos.y + 24 * window.devicePixelRatio);
+        ctx.fillText(title, pos.x, pos.y + 23 * window.devicePixelRatio);
 
-        ctx.font = `400 ${8.5 * window.devicePixelRatio}px Inter, sans-serif`;
+        ctx.font = `400 ${8 * window.devicePixelRatio}px Inter, sans-serif`;
         ctx.fillStyle = '#94A3B8';
-        ctx.fillText(subtitle, pos.x, pos.y + 35 * window.devicePixelRatio);
+        ctx.fillText(subtitle, pos.x, pos.y + 34 * window.devicePixelRatio);
       };
 
       drawNode(nodes.checkout, 'Checkout', 'Cart Session', '#38BDF8');
       drawNode(nodes.gateway, 'Payment Gateway', 'Bank Auth', '#818CF8', true);
       drawNode(nodes.atRisk, 'Revenue at Risk', 'Intercepted', '#FB7185', true);
-      drawNode(nodes.agent, 'Recovery Agent', 'Gemini AI', '#A78BFA', true);
-      drawNode(nodes.policy, 'Policy Guardrails', 'Bounded', '#34D399');
-      drawNode(nodes.recovered, 'Recovered Revenue', 'Razorpay Smart Link', '#10B981', true);
+      drawNode(nodes.recoveryAgent, 'Recovery Agent', 'Strategy Reasoning', '#A78BFA', true);
+      drawNode(nodes.shopperAgent, 'Shopper Agent', 'Customer Outreach', '#38BDF8', true);
+      drawNode(nodes.customerConsent, 'Customer Consent', 'Explicit Consent', '#FBBF24', true);
+      drawNode(nodes.policy, 'Policy Guardrails', 'Bounded Limits', '#34D399', true);
+      drawNode(nodes.recoveryPayment, 'Recovery Payment', 'Bounded Execution', '#2DD4BF', true);
+      drawNode(nodes.recovered, 'Recovered Revenue', 'Defended & Verified', '#10B981', true);
 
       animationFrameId = requestAnimationFrame(render);
     };
@@ -412,33 +442,6 @@ export const AgenticDefenseVisual: React.FC = () => {
             display: 'block'
           }}
         />
-
-        {/* Dynamic Telemetry Status Caption */}
-        <div style={{
-          position: 'absolute',
-          bottom: '8px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          backgroundColor: 'rgba(15, 23, 42, 0.85)',
-          border: '1px solid rgba(56, 189, 248, 0.25)',
-          backdropFilter: 'blur(8px)',
-          padding: '4px 12px',
-          borderRadius: '20px',
-          fontSize: '0.7rem',
-          color: '#E2E8F0',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          pointerEvents: 'none',
-          maxWidth: '90%',
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.4)'
-        }}>
-          <span style={{ color: '#38BDF8', fontWeight: 600 }}>TELEMETRY:</span>
-          <span>{telemetryEvent}</span>
-        </div>
       </div>
     </div>
   );

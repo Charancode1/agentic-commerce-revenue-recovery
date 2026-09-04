@@ -76,64 +76,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           {/* Quick Nav Actions */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <button
-              onClick={() => onEnterApp('merchant')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '7px 14px',
-                borderRadius: '8px',
-                border: '1px solid var(--border-subtle)',
-                backgroundColor: 'rgba(22, 31, 48, 0.7)',
-                color: 'var(--text-muted)',
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all var(--transition-fast)'
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.color = '#F1F5F9';
-                e.currentTarget.style.borderColor = 'var(--border-strong)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.color = 'var(--text-muted)';
-                e.currentTarget.style.borderColor = 'var(--border-subtle)';
-              }}
-            >
-              <ShieldCheck size={15} color="#0284C7" />
-              <span>Merchant Tower</span>
-            </button>
-
-            <button
-              onClick={() => onEnterApp('simulator')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '7px 14px',
-                borderRadius: '8px',
-                border: '1px solid var(--border-subtle)',
-                backgroundColor: 'rgba(22, 31, 48, 0.7)',
-                color: 'var(--text-muted)',
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all var(--transition-fast)'
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.color = '#F1F5F9';
-                e.currentTarget.style.borderColor = 'var(--border-strong)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.color = 'var(--text-muted)';
-                e.currentTarget.style.borderColor = 'var(--border-subtle)';
-              }}
-            >
-              <Terminal size={15} color="#A78BFA" />
-              <span>Failure Simulator</span>
-            </button>
-
-            <button
               onClick={() => onEnterApp('shopper')}
               style={{
                 display: 'inline-flex',
